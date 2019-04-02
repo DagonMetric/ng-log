@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/@dagonmetric/angular-build/schemas/schema.json#",
+  "libs": [
+    {
+      "extends": "ngb:lib-default",
+      "name": "ng-logging",
+      "root": "modules/ng-logging",
+      "outputPath": "dist/packages/ng-logging",
+      "libraryName": "baf.ngLogging"
+    },
+    {
+      "extends": "ngb:lib-default",
+      "name": "ng-logging-configuration",
+      "root": "modules/ng-logging-configuration",
+      "outputPath": "dist/packages/ng-logging-configuration",
+      "libraryName": "baf.ngLoggingConfiguration",
+      "externals": {
+        "@dagonmetric/ng-logging": "baf.ngLogging",
+        "@dagonmetric/ng-config": "baf.ngConfig"
+      }
+    }
+  ],
+  "apps": []
+}
