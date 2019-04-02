@@ -1,0 +1,25 @@
+# ASP.NET Core
+# Build and test ASP.NET Core web applications targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/vsts/pipelines/languages/dotnet-core
+
+pool:
+  # other options: 'macOS-10.13', 'VS2017-Win2016'
+  vmImage: 'Ubuntu 16.04'
+
+variables:
+  buildConfiguration: 'Release'
+
+trigger:
+  - master
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+- script: |
+    yarn install
+    yarn run build
+    yarn run lint
+  displayName: 'yarn install, build and lint'
