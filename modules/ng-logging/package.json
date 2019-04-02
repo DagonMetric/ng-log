@@ -1,0 +1,21 @@
+{
+  "name": "@dagonmetric/ng-logging",
+  "version": "0.0.0-PLACEHOLDER",
+  "description": "Contains logging abstractions and a few implementations for Angular projects based on [Microsoft ASP.Net Logging](https://github.com/aspnet/Logging).",
+  "author": "",
+  "license": "",
+  "repository": "",
+  "homepage": "",
+  "keywords": [
+    "angular",
+    "logging",
+    "angular-logging",
+    "aspnet-core-angular-logging"
+  ],
+  "dependencies": {
+    "tslib": "^1.9.3"
+  },
+  "peerDependencies": {
+    "@angular/core": "^7.0.0 || ^8.0.0-beta.0"
+  }
+}
