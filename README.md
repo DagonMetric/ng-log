@@ -1,4 +1,4 @@
-# Logging Modules for Angular
+# Logging for Angular
 
 Contains logging abstractions and a few implementations for Angular.
 
@@ -12,13 +12,13 @@ Contains logging abstractions and a few implementations for Angular.
 
 npm
 
-```shell
+```bash
 npm install @dagonmetric/ng-log
 ```
 
 or yarn
 
-```shell
+```bash
 yarn add @dagonmetric/ng-log
 ```
 
