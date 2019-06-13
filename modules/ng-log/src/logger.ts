@@ -1,9 +1,17 @@
+/**
+ * @license
+ * Copyright DagonMetric. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found under the LICENSE file in the root directory of this source tree.
+ */
+
 // tslint:disable:no-any
 
 import { LogLevel } from './log-level';
 
 /**
- * The logger interface
+ * The logger interface.
  */
 export interface Logger {
     isEnabled(logLevel: LogLevel): boolean;

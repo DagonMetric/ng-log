@@ -1,4 +1,10 @@
-// tslint:disable:no-unsafe-any
+/**
+ * @license
+ * Copyright DagonMetric. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found under the LICENSE file in the root directory of this source tree.
+ */
 
 import { Inject, Injectable, Optional } from '@angular/core';
 
@@ -7,11 +13,14 @@ import { LogLevel } from './log-level';
 import { Logger } from './logger';
 import { LoggerFilterRule } from './logger-filter-rule';
 import { FilterFunc } from './logger-information';
-import { LOGGER_FILTER_OPTIONS, LoggerConfig, LoggerFilterOptions } from './logger-options';
+import { LOGGER_CONFIG, LoggerConfig, LoggerFilterOptions } from './logger-options';
 import { LOGGER_PROVIDER, LoggerProvider } from './logger-provider';
 import { NullLogger } from './null-logger';
 import { parseConfig } from './parse-config';
 
+/**
+ * The logger factory implementation.
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -20,10 +29,11 @@ export class LoggerFactory {
     private _loggerFilterOptions: LoggerFilterOptions | null | undefined;
     private _nullLogger: NullLogger | null | undefined;
 
-    constructor(@Optional() @Inject(LOGGER_PROVIDER) private readonly _loggerProviders?: LoggerProvider[],
-        @Optional() @Inject(LOGGER_FILTER_OPTIONS) loggerFilterOptions?: LoggerFilterOptions) {
-        if (loggerFilterOptions) {
-            this._loggerFilterOptions = loggerFilterOptions;
+    constructor(
+        @Optional() @Inject(LOGGER_PROVIDER) private readonly _loggerProviders?: LoggerProvider[],
+        @Optional() @Inject(LOGGER_CONFIG) config?: LoggerFilterOptions | LoggerConfig) {
+        if (config) {
+            this._loggerFilterOptions = parseConfig(config);
         }
     }
 
@@ -59,7 +69,7 @@ export class LoggerFactory {
             };
         });
 
-        this._loggers[category] = defaultLogger;
+        this._loggers.set(category, defaultLogger)
 
         return defaultLogger;
     }
@@ -80,7 +90,6 @@ export class LoggerFactory {
 
         let minLevel = options.minLevel;
         let filter: FilterFunc | null | undefined;
-        // tslint:disable-next-line:no-null-keyword
         let current: LoggerFilterRule | null | undefined = null;
 
         if (options.rules) {
@@ -113,8 +122,7 @@ export class LoggerFactory {
                 return true;
             }
 
-            // tslint:disable-next-line:triple-equals
-            if (rule.logLevel != undefined &&
+            if (rule.logLevel != null &&
                 level < rule.logLevel) {
                 return false;
             }

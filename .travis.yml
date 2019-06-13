@@ -1,0 +1,20 @@
+sudo: false
+dist: trusty
+language: node_js
+git:
+  depth: 1
+matrix:
+  include:
+    - os: linux
+      node_js: "stable"
+    - os: osx
+      node_js: "stable"
+  fast_finish: true
+addons:
+  chrome: stable
+install:
+  - yarn install
+script:
+  - yarn build
+  - yarn test -c=ci
+cache: yarn

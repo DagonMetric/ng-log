@@ -6,19 +6,19 @@ One of the easiest ways to contribute is to participate in discussions and discu
 
 ### Github issues
 
-We use [Github issues](https://github.com/Dagonmetric/ng-logging/issues) to track public bugs. Please ensure your description is clear and has sufficient instructions to be able to reproduce the issue.
+We use [Github issues](https://github.com/dagonmetric/ng-log/issues) to track public bugs. Please ensure your description is clear and has sufficient instructions to be able to reproduce the issue.
 
 ### Discussions
 
-[Gitter Channel](https://gitter.im/DagonMetric/ng-logging) for ng-logging discussions.
+[Gitter Channel](https://gitter.im/DagonMetric/general) for general DagonMetric's open source products discussion.
 
 ## Contributing code and content
 
 This is a rough outline of what a contributor's workflow looks like:
 
-1. Search [GitHub](https://github.com/Dagonmetric/ng-logging/pulls) for an open or closed PR that relates to your submission. You don't want to duplicate effort.
+1. Search [GitHub](https://github.com/dagonmetric/ng-log/pulls) for an open or closed PR that relates to your submission. You don't want to duplicate effort.
 
-2. [Fork](https://help.github.com/articles/fork-a-repo/) the [repo](https://github.com/Dagonmetric/ng-logging) and create your branch `topic` from master.
+2. [Fork](https://help.github.com/articles/fork-a-repo/) the [repo](https://github.com/dagonmetric/ng-log) and create your branch `topic` from master.
 
 3. Make your changes in a new git branch.
 
@@ -30,7 +30,7 @@ This is a rough outline of what a contributor's workflow looks like:
 
 7. Push your branch to GitHub forked repo.
 
-8. In GitHub, submit a [pull request](https://help.github.com/articles/about-pull-requests) to [dagonmetric/ng-logging](https://github.com/Dagonmetric/ng-logging).
+8. In GitHub, submit a [pull request](https://help.github.com/articles/about-pull-requests) to [dagonmetric/ng-log](https://github.com/dagonmetric/ng-log).
 
 9. If you haven’t signed the CLA, you will see a automatic comment in the pull request. Click on the Details link. You will see the CLA. Click on sign in with Github to agree. And authorize CLA assistant to use your Github account to sign the CLA.
 

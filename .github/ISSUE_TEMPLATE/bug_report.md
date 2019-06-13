@@ -25,7 +25,7 @@ Please fill in the *entire* template below.
 ## Environment
 
 <!-- - OS: -->
-<!-- - Package Version: -->
+<!-- -  @dagonmetric/ng-log version: -->
 
 ## Additional context
 

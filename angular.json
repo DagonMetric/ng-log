@@ -1,0 +1,59 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "modules",
+  "projects": {
+    "ng-log": {
+      "root": "modules/ng-log",
+      "sourceRoot": "modules/ng-log",
+      "projectType": "library",
+      "architect": {
+        "build": {
+          "builder": "@dagonmetric/angular-build:lib",
+          "options": {
+            "extends": "file:angular-build.json:lib:ng-log",
+            "outputPath": "dist/packages/ng-log"
+          },
+          "configurations": {
+            "production": {
+              "environment": "prod"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "modules/ng-log/test.ts",
+            "tsConfig": "modules/ng-log/tsconfig-test.json",
+            "karmaConfig": "modules/ng-log/karma.conf.js",
+            "codeCoverageExclude": [
+              "**/test.ts",
+              "**/index.ts",
+              "**/public_api.ts"
+            ]
+          },
+          "configurations": {
+            "ci": {
+              "browsers": "ChromeHeadless",
+              "reporters": ["progress", "junit"],
+              "codeCoverage": true,
+              "watch": false,
+              "progress": false
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }   
+  }
+}

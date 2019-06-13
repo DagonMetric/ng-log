@@ -1,0 +1,28 @@
+version: 2.1
+
+var_1: &docker_image circleci/node:lts-browsers
+var_2: &cache_key v2.1-repo-{{ .Branch }}-{{ checksum "yarn.lock" }}-node-lts
+
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: *docker_image
+    steps:
+      - checkout
+      - restore_cache:
+          key: *cache_key
+      - run:
+          name: Install dependencies
+          command: yarn install --frozen-lockfile --non-interactive
+      - save_cache:
+          key: *cache_key
+          paths:
+            - ~/.cache/yarn
+            - node_modules
+      - run:
+          name: Run build
+          command: yarn build
+      - run:
+          name: Run test
+          command: yarn test -c=ci

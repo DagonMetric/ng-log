@@ -1,4 +1,4 @@
-# Logging Modules for Angular
+# Logging Package for Angular
 
 Contains logging abstractions and a few implementations for Angular.
 

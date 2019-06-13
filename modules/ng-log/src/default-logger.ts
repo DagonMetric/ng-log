@@ -1,15 +1,25 @@
-// tslint:disable:no-any
-// tslint:disable:no-unsafe-any
+/**
+ * @license
+ * Copyright DagonMetric. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found under the LICENSE file in the root directory of this source tree.
+ */
+
+ // tslint:disable: no-any
 
 import { LogLevel } from './log-level';
 import { Logger } from './logger';
 import { LoggerInformation } from './logger-information';
 
+/**
+ * Internal default logger implementation for `Logger`.
+ */
 export class DefaultLogger implements Logger {
-    private _loggers: LoggerInformation[];
+    private _loggers: LoggerInformation[] | undefined;
 
     get loggers(): LoggerInformation[] {
-        return this._loggers;
+        return this._loggers || [];
     }
     set loggers(value: LoggerInformation[]) {
         this._loggers = value;
@@ -62,7 +72,6 @@ export class DefaultLogger implements Logger {
     }
 
     private isEnabledInternal(level: LogLevel, loggerInfo: LoggerInformation): boolean {
-        // tslint:disable-next-line:no-null-keyword
         if (loggerInfo.minLevel != null &&
             level < loggerInfo.minLevel) {
             return false;

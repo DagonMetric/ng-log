@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "timezone": "Asia/Yangon",
+  "schedule": [
+    "after 11pm every weekday",
+    "before 6am every weekday",
+    "after 11pm every weekend",
+    "before 6am every weekend"
+  ],
+  "packageFiles": ["package.json"],
+  "rangeStrategy": "replace"
+}

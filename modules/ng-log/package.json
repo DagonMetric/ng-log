@@ -1,0 +1,24 @@
+{
+  "name": "@dagonmetric/ng-log",
+  "version": "0.0.0-PLACEHOLDER",
+  "description": "Logging abstractions and a few implementations for Angular.",
+  "author": "",
+  "license": "",
+  "repository": "",
+  "homepage": "",
+  "keywords": [
+    "angular-logging-service",
+    "angular-logging",
+    "angular-log",
+    "logging",
+    "log",
+    "angular"
+  ],
+  "dependencies": {
+    "tslib": "^1.10.0"
+  },
+  "peerDependencies": {
+    "@angular/core": "^8.0.0-beta.0"
+  },
+  "sideEffects": false
+}

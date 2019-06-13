@@ -1,10 +1,20 @@
-// tslint:disable:no-any
-// tslint:disable:no-unsafe-any
+/**
+ * @license
+ * Copyright DagonMetric. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found under the LICENSE file in the root directory of this source tree.
+ */
+
 // tslint:disable:no-console
+// tslint:disable: no-any
 
 import { LogLevel } from './log-level';
 import { Logger } from './logger';
 
+/**
+ * Console logger implementation for `Logger`.
+ */
 export class ConsoleLogger implements Logger {
     private readonly _filter: (category: string, logLevel: LogLevel) => boolean;
 

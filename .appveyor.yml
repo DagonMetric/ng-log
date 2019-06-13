@@ -1,32 +1,31 @@
-branches:
-  only:
-    - master
-    - '/v(?:0|[1-9]\d*)(\.(?:0|[1-9]\d*))?(\.(?:0|[1-9]\d*))?(?:-[\da-z-]+(?:\.[\da-z-]+)*)?(?:\+[\da-z-]+(?:\.[\da-z-]+)*)?/'
-skip_non_tags: true
-clone_depth: 1
+version: '{build}'
+image: 'Visual Studio 2017'
+# clone_depth: 1
+# only_commits:
+#   files:
+#     - modules/*
+#     - samples/*
+#     - angular-build.json
+#     - angular.json
+#     - package.json
+#     - tsconfig.json
+#     - tslint.json
+#     - .appveyor.yml
 environment:
   nodejs_version: "10"
 install:
   - ps: Install-Product node $env:nodejs_version
-  - ps: |
-      if ($env:npm_auth_token)
-      {
-        iex '"//registry.npmjs.org/:_authToken=$env:npm_auth_token`n" | out-file "$env:userprofile\.npmrc" -Encoding ASCII'
-        iex "npm whoami"
-      }
-  - yarn install --frozen-lockfile --network-timeout=500000
+  - yarn install --frozen-lockfile
 build_script:
-  - yarn run lint
-  - yarn run build
-  # - yarn run test
-  # - dotnet build samples/ng-logging-aspnetcore-sample/ng-logging-aspnetcore-sample.csproj
-test: "off"
+  - yarn build
+test_script:
+  - yarn test -c=ci
+  - ps: |
+      if ($env:CODECOV_TOKEN)
+      {
+        yarn global add codecov
+        codecov --disable=gcov -f dist/coverage/ng-log/lcov.info -F unit
+      }
 cache:
   - node_modules -> yarn.lock
   - "%LOCALAPPDATA%\\Yarn"
-deploy_script:
-  - ps: |
-      if ($env:npm_auth_token)
-      {
-        iex "npm publish ./dist/packages/ng-logging --access=public"
-      }
