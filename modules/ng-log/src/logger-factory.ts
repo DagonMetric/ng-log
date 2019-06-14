@@ -56,7 +56,7 @@ export class LoggerFactory {
         }
 
         const defaultLogger = new DefaultLogger();
-        defaultLogger.loggers = this._loggerProviders.map(loggerProvider => {
+        defaultLogger.loggerInformations = this._loggerProviders.map(loggerProvider => {
             const providerType = loggerProvider.name;
             const rule = this.getRule(providerType, category);
 
@@ -69,7 +69,7 @@ export class LoggerFactory {
             };
         });
 
-        this._loggers.set(category, defaultLogger)
+        this._loggers.set(category, defaultLogger);
 
         return defaultLogger;
     }

@@ -6,14 +6,13 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { LogLevel } from './log-level';
 import { Logger } from './logger';
 
 /**
- * The null logger implementation for `Logger`.
+ * The internal null logger implementation for `Logger`.
  */
 export class NullLogger implements Logger {
-    log(_: LogLevel): void {
+    log(): void {
         // Do nothing
     }
 
@@ -37,7 +36,43 @@ export class NullLogger implements Logger {
         // Do nothing
     }
 
-    isEnabled(): boolean {
-        return false;
+    fatal(): void {
+        // Do nothing
+    }
+
+    startTrackPage(): void {
+        // Do nothing
+    }
+
+    stopTrackPage(): void {
+        // Do nothing
+    }
+
+    trackPageView(): void {
+        // Do nothing
+    }
+
+    startTrackEvent(): void {
+        // Do nothing
+    }
+
+    stopTrackEvent(): void {
+        // Do nothing
+    }
+
+    trackEvent(): void {
+        // Do nothing
+    }
+
+    setAuthenticatedUserContext(): void {
+        // Do nothing
+    }
+
+    clearAuthenticatedUserContext(): void {
+        // Do nothing
+    }
+
+    flush(): void {
+        // Do nothing
     }
 }
