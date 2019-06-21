@@ -8,119 +8,123 @@
 
 // tslint:disable:no-any
 
-import { LogLevel } from './log-level';
+import { Injectable, InjectionToken } from '@angular/core';
 
+import { LogLevel } from './log-level';
 import { TrackEventRequest } from './track-event-request';
 import { TrackPageViewRequest } from './track-page-view-request';
 
+export const LOGGER_CATEGORY_NAME = new InjectionToken<string>('LoggerCategoryName');
+
 /**
- * The logger interface.
+ * The logger abstract class.
  */
-export interface Logger {
+@Injectable()
+export abstract class Logger {
     /**
      * Logs message or error with severity level.
      * @param logLevel The log level.
      * @param message Message string to log.
      * @param optionalParams Optional parameters.
      */
-    log(logLevel: LogLevel, message?: string | Error, ...optionalParams: any[]): void;
+    abstract log(logLevel: LogLevel, message?: string | Error, ...optionalParams: any[]): void;
 
     /**
      * Logs that contain the most detailed messages.
      * @param message Message string to log.
      * @param optionalParams Optional parameters.
      */
-    trace(message?: string, ...optionalParams: any[]): void;
+    trace(message?: string | Error, ...optionalParams: any[]): void {
+        this.log(LogLevel.Trace, message, ...optionalParams);
+    }
 
     /**
      * Logs that are used for interactive investigation during development.
      * @param message Message string to log.
      * @param optionalParams Optional parameters.
      */
-    debug(message: string, ...optionalParams: any[]): void;
+    debug(message: string, ...optionalParams: any[]): void {
+        this.log(LogLevel.Debug, message, ...optionalParams);
+    }
 
     /**
      * Logs that track the general flow of the application. These logs should have long-term value.
      * @param message Message string to log.
      * @param optionalParams Optional parameters.
      */
-    info(message: string, ...optionalParams: any[]): void;
+    info(message: string, ...optionalParams: any[]): void {
+        this.log(LogLevel.Info, message, ...optionalParams);
+    }
 
     /**
      * Logs that highlight an abnormal or unexpected event in the application flow.
      * @param message Message string to log.
      * @param optionalParams Optional parameters.
      */
-    warn(message: string, ...optionalParams: any[]): void;
+    warn(message: string, ...optionalParams: any[]): void {
+        this.log(LogLevel.Warn, message, ...optionalParams);
+    }
 
     /**
      * Logs that highlight when the current flow of execution is stopped due to a failure.
      * @param message Error description or exception object to log.
      * @param optionalParams Optional parameters.
      */
-    error(message: string | Error, ...optionalParams: any[]): void;
+    error(message: string | Error, ...optionalParams: any[]): void {
+        this.log(LogLevel.Error, message, ...optionalParams);
+    }
 
     /**
      * Logs that describe an unrecoverable application or system crash.
      * @param message Error description or exception object to log.
      * @param optionalParams Optional parameters.
      */
-    fatal(message: string | Error, ...optionalParams: any[]): void;
+    fatal(message: string | Error, ...optionalParams: any[]): void {
+        this.log(LogLevel.Critical, message, ...optionalParams);
+    }
 
     /**
      * Starts timing how long the user views a page. Call this when the page opens.
-     * @param name A string that idenfities this item, unique within this HTML document. Defaults to the document title.
+     * @param name A string that idenfities this item, unique within this HTML document. Default to document title.
      */
-    startTrackPage(name?: string): void;
+    abstract startTrackPage(name?: string): void;
 
     /**
      * Logs how long a page was visible, after `startTrackPage`. Call this when the page closes.
-     * @param name The string you used as the name in `startTrackPage`. Defaults to the document title.
+     * @param name The string you used as the name in `startTrackPage`. Default to document title.
      * @param properties Additional data used to filter pages and metrics.
      */
-    stopTrackPage(name?: string, properties?: TrackPageViewRequest): void;
+    abstract stopTrackPage(name?: string, properties?: TrackPageViewRequest): void;
 
     /**
      * Logs that a page was viewed.
-     * @param name The page's title. Defaults to the document title.
+     * @param name The page's title. Default to document title.
      * @param properties Additional data used to filter pages and metrics.
      */
-    trackPageView(name?: string, properties?: TrackPageViewRequest): void;
+    abstract trackPageView(name?: string, properties?: TrackPageViewRequest): void;
 
     /**
      * Start timing an extended event. Call `stopTrackEvent` to log the event when it ends.
      * @param name A string that identifies this event uniquely within the document.
      */
-    startTrackEvent(name: string): void;
+    abstract startTrackEvent(name: string): void;
 
     /**
      * Log an extended event that you started timing with `startTrackEvent`.
      * @param name The string you used to identify this event in `startTrackEvent`.
      * @param properties Additional data for event.
      */
-    stopTrackEvent(name: string, properties?: TrackEventRequest): void;
+    abstract stopTrackEvent(name: string, properties?: TrackEventRequest): void;
 
     /**
      * Log a user action or other occurrence.
      * @param name A string to identify this event.
      * @param properties Additional data for event.
      */
-    trackEvent(name: string, properties?: TrackEventRequest): void;
-
-    /**
-     * Sets the authenticated user id and the account id in this session.
-     * @param authenticatedUserId The authenticated user id.
-     * @param accountId An optional string to represent the account associated with the authenticated user.
-     */
-    setAuthenticatedUserContext(authenticatedUserId: string, accountId?: string): void;
-
-    /**
-     * Clears the authenticated user id and the account id from the user context.
-     */
-    clearAuthenticatedUserContext(): void;
+    abstract trackEvent(name: string, properties?: TrackEventRequest): void;
 
     /**
      * Flush to send data immediately.
      */
-    flush(): void;
+    abstract flush(): void;
 }

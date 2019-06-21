@@ -9,12 +9,11 @@
 import { LogLevel } from './log-level';
 import { Logger } from './logger';
 
-export type FilterFunc = (providerType: string, category: string, logLevel: LogLevel) => boolean;
-
 export interface LoggerInformation {
     logger: Logger;
     category: string;
     providerType: string;
     minLevel?: LogLevel;
-    filter?(providerType: string, category: string, level: LogLevel): boolean;
+    event?: { [name: string]: boolean };
+    pageView?: boolean;
 }

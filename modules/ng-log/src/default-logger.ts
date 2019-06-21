@@ -18,8 +18,8 @@ import { TrackPageViewRequest } from './track-page-view-request';
 /**
  * Internal default logger implementation for `Logger`.
  */
-export class DefaultLogger implements Logger {
-    private _loggerInformations: LoggerInformation[] | undefined;
+export class DefaultLogger extends Logger {
+    private _loggerInformations?: LoggerInformation[];
 
     get loggerInformations(): LoggerInformation[] {
         return this._loggerInformations || [];
@@ -31,7 +31,7 @@ export class DefaultLogger implements Logger {
 
     log(logLevel: LogLevel, message?: string | Error, ...optionalParams: any[]): void {
         for (const loggerInformation of this.loggerInformations) {
-            if (!this.isLogEnabledInternal(logLevel, loggerInformation)) {
+            if (!this.isLogLevelEnabled(loggerInformation, logLevel)) {
                 continue;
             }
 
@@ -39,75 +39,63 @@ export class DefaultLogger implements Logger {
         }
     }
 
-    trace(message?: string, ...optionalParams: any[]): void {
-        this.log(LogLevel.Trace, message, ...optionalParams);
-    }
-
-    debug(message: string, ...optionalParams: any[]): void {
-        this.log(LogLevel.Debug, message, ...optionalParams);
-    }
-
-    info(message: string, ...optionalParams: any[]): void {
-        this.log(LogLevel.Info, message, ...optionalParams);
-    }
-
-    warn(message: string, ...optionalParams: any[]): void {
-        this.log(LogLevel.Warn, message, ...optionalParams);
-    }
-
-    error(message: string | Error, ...optionalParams: any[]): void {
-        this.log(LogLevel.Error, message, ...optionalParams);
-    }
-
-    fatal(message: string | Error, ...optionalParams: any[]): void {
-        this.log(LogLevel.Critical, message, ...optionalParams);
-    }
-
-    startTrackPage(name?: string): void {
+    startTrackPage(name: string): void {
         for (const loggerInformation of this.loggerInformations) {
+            if (!this.isPageViewEnabled(loggerInformation)) {
+                continue;
+            }
+
             loggerInformation.logger.startTrackPage(name);
         }
     }
 
-    stopTrackPage(name?: string, properties?: TrackPageViewRequest): void {
+    stopTrackPage(name: string, properties?: TrackPageViewRequest): void {
         for (const loggerInformation of this.loggerInformations) {
+            if (!this.isPageViewEnabled(loggerInformation)) {
+                continue;
+            }
+
             loggerInformation.logger.stopTrackPage(name, properties);
         }
     }
 
-    trackPageView(name?: string, properties?: TrackPageViewRequest): void {
+    trackPageView(name: string, properties?: TrackPageViewRequest): void {
         for (const loggerInformation of this.loggerInformations) {
+            if (!this.isPageViewEnabled(loggerInformation)) {
+                continue;
+            }
+
             loggerInformation.logger.trackPageView(name, properties);
         }
     }
 
     startTrackEvent(name: string): void {
         for (const loggerInformation of this.loggerInformations) {
+            if (!this.isEventEnabled(loggerInformation, name)) {
+                continue;
+            }
+
             loggerInformation.logger.startTrackEvent(name);
         }
     }
 
     stopTrackEvent(name: string, properties?: TrackEventRequest): void {
         for (const loggerInformation of this.loggerInformations) {
+            if (!this.isEventEnabled(loggerInformation, name)) {
+                continue;
+            }
+
             loggerInformation.logger.stopTrackEvent(name, properties);
         }
     }
 
     trackEvent(name: string, properties?: TrackEventRequest): void {
         for (const loggerInformation of this.loggerInformations) {
+            if (!this.isEventEnabled(loggerInformation, name)) {
+                continue;
+            }
+
             loggerInformation.logger.trackEvent(name, properties);
-        }
-    }
-
-    setAuthenticatedUserContext(userId: string, accountId?: string): void {
-        for (const loggerInformation of this.loggerInformations) {
-            loggerInformation.logger.setAuthenticatedUserContext(userId, accountId);
-        }
-    }
-
-    clearAuthenticatedUserContext(): void {
-        for (const loggerInformation of this.loggerInformations) {
-            loggerInformation.logger.clearAuthenticatedUserContext();
         }
     }
 
@@ -117,14 +105,29 @@ export class DefaultLogger implements Logger {
         }
     }
 
-    private isLogEnabledInternal(level: LogLevel, loggerInformation: LoggerInformation): boolean {
+    private isLogLevelEnabled(loggerInformation: LoggerInformation, level: LogLevel): boolean {
         if (loggerInformation.minLevel != null &&
             level < loggerInformation.minLevel) {
             return false;
         }
 
-        if (loggerInformation.filter) {
-            return loggerInformation.filter(loggerInformation.providerType, loggerInformation.category, level);
+        return true;
+    }
+
+    private isEventEnabled(loggerInformation: LoggerInformation, eventName: string): boolean {
+        if (loggerInformation.event) {
+            const evtOptions = loggerInformation.event;
+            const foundDisabled = Object.keys(evtOptions).find(key => key === eventName && evtOptions[key] === false);
+
+            return foundDisabled == null;
+        }
+
+        return true;
+    }
+
+    private isPageViewEnabled(loggerInformation: LoggerInformation): boolean {
+        if (loggerInformation.pageView != null) {
+            return loggerInformation.pageView;
         }
 
         return true;

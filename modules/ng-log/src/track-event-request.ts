@@ -5,14 +5,6 @@ import { JsonValue } from './json-object';
  */
 export interface TrackEventRequest {
     /**
-     * The string that will appear as the event category.
-     */
-    eventCategory?: string;
-    /**
-     * The string that will appear as the event label.
-     */
-    eventLabel?: string;
-    /**
      * Metrics associated with this event.
      */
     measurements?: { [name: string]: number };

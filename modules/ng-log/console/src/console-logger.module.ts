@@ -8,8 +8,9 @@
 
 import { NgModule } from '@angular/core';
 
+import { LOGGER_PROVIDER } from '@dagonmetric/ng-log';
+
 import { ConsoleLoggerProvider } from './console-logger-provider';
-import { LOGGER_PROVIDER } from './logger-provider';
 
 /**
  * The `NGMODULE` for providing `LOGGER_PROVIDER` with `ConsoleLoggerProvider`.

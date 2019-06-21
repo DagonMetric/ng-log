@@ -13,6 +13,8 @@ import { Logger } from './logger';
 export interface LoggerProvider {
     readonly name: string;
     createLogger(category: string): Logger;
+    setAuthenticatedUserContext(userId: string, accountId?: string): void;
+    clearAuthenticatedUserContext(): void;
 }
 
 export const LOGGER_PROVIDER = new InjectionToken<LoggerProvider>('LoggerProvider');

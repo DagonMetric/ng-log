@@ -8,9 +8,9 @@
 
 import { Injectable } from '@angular/core';
 
+import { Logger, LoggerProvider } from '@dagonmetric/ng-log';
+
 import { ConsoleLogger } from './console-logger';
-import { Logger } from './logger';
-import { LoggerProvider } from './logger-provider';
 
 /**
  * Logger provider factory for `ConsoleLogger`.
@@ -25,5 +25,13 @@ export class ConsoleLoggerProvider implements LoggerProvider {
 
     createLogger(category: string): Logger {
         return new ConsoleLogger(category);
+    }
+
+    setAuthenticatedUserContext(): void {
+        // Do nothing
+    }
+
+    clearAuthenticatedUserContext(): void {
+        // Do nothing
     }
 }

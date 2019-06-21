@@ -26,6 +26,10 @@
     "rootDir": ".",
     "outDir": "./dist/out-tsc",
 
+    "paths": {
+      "@dagonmetric/ng-log": ["./modules/ng-log"]
+    },
+
     "plugins": [
       {
         "name": "typescript-tslint-plugin",

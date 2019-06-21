@@ -6,10 +6,6 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { LogLevel } from './log-level';
-
-export interface LoggerFilterRule {
-    providerName?: string | null;
-    categoryName?: string | null;
-    logLevel: LogLevel;
-}
+export * from './src/console-logger';
+export * from './src/console-logger-provider';
+export * from './src/console-logger.module';

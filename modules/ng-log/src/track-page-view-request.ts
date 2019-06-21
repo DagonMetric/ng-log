@@ -1,7 +1,9 @@
+import { TrackEventRequest } from './track-event-request';
+
 /**
  * The track page view data.
  */
-export interface TrackPageViewRequest {
+export interface TrackPageViewRequest extends TrackEventRequest {
     /**
      * The page's URL.
      */
@@ -10,12 +12,4 @@ export interface TrackPageViewRequest {
      * The path portion of location. This value must start with a slash (/) character.
      */
     pagePath?: string;
-    /**
-     * Metrics associated with the page.
-     */
-    measurements?: { [name: string]: number };
-    /**
-     * Measure pageview with specified tracker instrumentation key.
-     */
-    sendTo?: string;
 }
