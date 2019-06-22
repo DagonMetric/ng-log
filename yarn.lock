@@ -330,6 +330,13 @@
     webpack-sources "^1.3.0"
     yargs "^13.2.4"
 
+"@dagonmetric/ng-config@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@dagonmetric/ng-config/-/ng-config-2.1.0.tgz#0699b59ec466b9ef174c2507c49c40728365cf66"
+  integrity sha512-umvzAATriM4Cauw9EHn21fsfMGHghSr2WkGbcXIBRfujcdMLBNE9aBS1zbzCye093rDNXT0sKKQLcpQ4iqiPAw==
+  dependencies:
+    tslib "^1.10.0"
+
 "@ngtools/webpack@8.0.2", "@ngtools/webpack@^8.0.2":
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-8.0.2.tgz#d60167b514b531ed6ae308b4911739dd102e41c7"
