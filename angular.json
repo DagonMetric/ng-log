@@ -54,6 +54,25 @@
           }
         }
       }
-    }   
+    },
+    "ng-log-console": {
+      "root": "modules/ng-log/console",
+      "sourceRoot": "modules/ng-log/console/src",
+      "projectType": "library",
+      "architect": {
+        "build": {
+          "builder": "@dagonmetric/angular-build:lib",
+          "options": {
+            "extends": "file:angular-build.json:lib:ng-log-console",
+            "outputPath": "dist/packages/ng-log"
+          },
+          "configurations": {
+            "production": {
+              "environment": "prod"
+            }
+          }
+        }
+      }
+    },
   }
 }

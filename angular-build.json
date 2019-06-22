@@ -18,7 +18,29 @@
           "banner": "../banner.txt"
         }
       }
-    }
+    },
+    {
+      "extends": "ngb:lib-default",
+      "name": "ng-log-console",
+      "root": "modules/ng-log/console",
+      "outputPath": "dist/packages/ng-log",
+      "libraryName": "ngLog.console",
+      "externals": {
+        "@dagonmetric/ng-log": "ngLog"
+      },
+      "envOverrides": {
+        "prod": {
+          "copy": [
+            {
+              "from": "README.md",
+              "to": "console/README.md"
+            }
+          ],
+          "bundles": true,
+          "packageJsonCopy": true
+        }
+      }
+    },
   ],
   "apps": []
 }
