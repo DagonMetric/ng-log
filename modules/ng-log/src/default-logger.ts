@@ -12,8 +12,8 @@ import { LogLevel } from './log-level';
 import { Logger } from './logger';
 import { LoggerInformation } from './logger-information';
 
-import { TrackEventRequest } from './track-event-request';
-import { TrackPageViewRequest } from './track-page-view-request';
+import { EventInfo } from './event-info';
+import { PageViewInfo } from './page-view-info';
 
 /**
  * Internal default logger implementation for `Logger`.
@@ -49,7 +49,7 @@ export class DefaultLogger extends Logger {
         }
     }
 
-    stopTrackPage(name: string, properties?: TrackPageViewRequest): void {
+    stopTrackPage(name: string, properties?: PageViewInfo): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isPageViewEnabled(loggerInformation)) {
                 continue;
@@ -59,7 +59,7 @@ export class DefaultLogger extends Logger {
         }
     }
 
-    trackPageView(name: string, properties?: TrackPageViewRequest): void {
+    trackPageView(name: string, properties?: PageViewInfo): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isPageViewEnabled(loggerInformation)) {
                 continue;
@@ -79,7 +79,7 @@ export class DefaultLogger extends Logger {
         }
     }
 
-    stopTrackEvent(name: string, properties?: TrackEventRequest): void {
+    stopTrackEvent(name: string, properties?: EventInfo): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isEventEnabled(loggerInformation, name)) {
                 continue;
@@ -89,7 +89,7 @@ export class DefaultLogger extends Logger {
         }
     }
 
-    trackEvent(name: string, properties?: TrackEventRequest): void {
+    trackEvent(name: string, properties?: EventInfo): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isEventEnabled(loggerInformation, name)) {
                 continue;

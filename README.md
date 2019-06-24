@@ -1,8 +1,6 @@
-# Logging for Angular
+# Logging and Vendor-agnostic Analytics for Angular
 
-Contains logging abstractions and a few implementations for Angular.
-
-## Features
+Logging and vendor-agnostic analytics for Angular applications built-in integration with Google Analytics (gtag), Facebook Pixcel and Microsoft Azure Application Insights.
 
 [WIP]
 

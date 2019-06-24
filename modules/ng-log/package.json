@@ -1,7 +1,7 @@
 {
   "name": "@dagonmetric/ng-log",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Logging abstractions and a few implementations for Angular.",
+  "description": "Logging and vendor-agnostic analytics for Angular applications built-in integration with Google Analytics (gtag), Facebook Pixcel and Microsoft Azure Application Insights.",
   "author": "",
   "license": "",
   "repository": "",
@@ -10,8 +10,17 @@
     "angular-logging-service",
     "angular-logging",
     "angular-log",
+    "ng-log",
+    "google-analytics",
+    "google-tag-manager",
+    "gtag",
+    "facebook-pixel",
+    "applicationinsights-js-demo",
+    "application-insights",
+    "analytics",
     "logging",
     "log",
+    "monitoring",
     "angular"
   ],
   "dependencies": {

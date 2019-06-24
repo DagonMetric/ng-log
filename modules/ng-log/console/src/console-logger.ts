@@ -9,58 +9,89 @@
 // tslint:disable:no-console
 // tslint:disable: no-any
 
-import { Logger, LogLevel, TrackEventRequest, TrackPageViewRequest } from '@dagonmetric/ng-log';
+import { EventInfo, Logger, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
 
 /**
  * Console logger implementation for `Logger`.
  */
 export class ConsoleLogger extends Logger {
-    private readonly _eventTimingMap: Map<string, number> = new Map<string, number>();
+    private readonly _eventTiming: Map<string, number> = new Map<string, number>();
 
     constructor(readonly name: string) {
         super();
     }
 
-    log(logLevel: LogLevel, message?: string | Error, ...optionalParams: any[]): void {
+    log(logLevel: LogLevel, message?: string | Error, optionalParams?: any): void {
         if (logLevel === LogLevel.None) {
             return;
         }
 
         if (logLevel === LogLevel.Trace) {
-            console.trace(message, ...optionalParams);
+            console.trace(message, optionalParams);
         } else if (logLevel === LogLevel.Debug) {
-            console.debug(message, ...optionalParams);
+            console.debug(message, optionalParams);
         } else if (logLevel === LogLevel.Info) {
-            console.info(message, ...optionalParams);
+            console.info(message, optionalParams);
         } else if (logLevel === LogLevel.Warn) {
-            console.warn(message, ...optionalParams);
+            console.warn(message, optionalParams);
         } else if (logLevel === LogLevel.Error || logLevel === LogLevel.Critical) {
-            console.error(message, ...optionalParams);
+            console.error(message, optionalParams);
         }
     }
 
     startTrackPage(name?: string): void {
-        if (name) {
-            this._eventTimingMap.set(`page_view_${name}`, Date.now());
+        if (name == null && typeof window === 'object' && window.document) {
+            name = window.document && window.document.title || '';
         }
-    }
 
-    stopTrackPage(name?: string, properties?: TrackPageViewRequest): void {
         if (!name) {
+            console.error('Could not detect document title, please provide name parameter.');
+
             return;
         }
 
-        const start = this._eventTimingMap.get(`page_view_${name}`);
-        if (start != null) {
-            this._eventTimingMap.delete(`page_view_${name}`);
-            const duration = Date.now() - start;
-            const suffix = properties != null ? ', properties: ' : '.';
-            console.log(`PAGE_VIEW: ${name}, duration: ${duration}${suffix}`, properties);
+        if (this._eventTiming.get(name) != null) {
+            console.error(`The 'startTrackPage' was called more than once for this event without calling stop, name: ${name}.`);
+
+            return;
         }
+
+        this._eventTiming.set(`page_view_${name}`, Date.now());
     }
 
-    trackPageView(name?: string, properties?: TrackPageViewRequest): void {
+    stopTrackPage(name?: string, properties?: PageViewInfo): void {
+        if (name == null && typeof window === 'object' && window.document) {
+            name = window.document && window.document.title || '';
+        }
+
         if (!name) {
+            console.error('Could not detect document title, please provide name parameter.');
+
+            return;
+        }
+
+        const start = this._eventTiming.get(name);
+        if (start == null || isNaN(start)) {
+            console.error(`The 'stopTrackPage' was called without a corresponding start, name: ${name}.`);
+
+            return;
+        }
+
+        const duration = this.getDuration(start);
+        const suffix = properties != null ? ', properties: ' : '.';
+        console.log(`PAGE_VIEW: ${name}, duration: ${duration}${suffix}`, properties);
+
+        this._eventTiming.delete(`page_view_${name}`);
+    }
+
+    trackPageView(name?: string, properties?: PageViewInfo): void {
+        if (name == null && typeof window === 'object' && window.document) {
+            name = window.document && window.document.title || '';
+        }
+
+        if (!name) {
+            console.error('Could not detect document title, please provide name parameter.');
+
             return;
         }
 
@@ -69,25 +100,48 @@ export class ConsoleLogger extends Logger {
     }
 
     startTrackEvent(name: string): void {
-        this._eventTimingMap.set(`${name}`, Date.now());
-    }
+        if (this._eventTiming.get(name) != null) {
+            console.error(`The 'startTrackEvent' was called more than once for this event without calling stop, name: ${name}.`);
 
-    stopTrackEvent(name: string, properties?: TrackEventRequest): void {
-        const start = this._eventTimingMap.get(`${name}`);
-        if (start != null) {
-            this._eventTimingMap.delete(name);
-            const duration = Date.now() - start;
-            const suffix = properties != null ? ', properties: ' : '.';
-            console.log(`EVENT: ${name}, duration: ${duration}${suffix}`, properties);
+            return;
         }
+
+        this._eventTiming.set(name, +new Date());
     }
 
-    trackEvent(name: string, properties?: TrackEventRequest): void {
+    stopTrackEvent(name: string, properties?: EventInfo): void {
+        const start = this._eventTiming.get(name);
+        if (start == null || isNaN(start)) {
+            console.error(`The 'stopTrackEvent' was called without a corresponding start, name: ${name}.`);
+
+            return;
+        }
+
+        const duration = this.getDuration(start);
+        const suffix = properties != null ? ', properties: ' : '.';
+        console.log(`EVENT: ${name}, duration: ${duration}${suffix}`, properties);
+
+        this._eventTiming.delete(name);
+    }
+
+    trackEvent(name: string, properties?: EventInfo): void {
         const suffix = properties != null ? ', properties: ' : '.';
         console.log(`EVENT: ${name}${suffix}`, properties);
     }
 
     flush(): void {
         // Do nothing
+    }
+
+    private getDuration(start: number): number | undefined {
+        const end = +new Date();
+
+        let duration: number | undefined;
+
+        if (!(isNaN(start) || isNaN(end))) {
+            duration = Math.max(end - start, 0);
+        }
+
+        return duration;
     }
 }

@@ -1,8 +1,6 @@
-# Logging Package for Angular
+# Logging and Vendor-agnostic Analytics for Angular
 
-Contains logging abstractions and a few implementations for Angular.
-
-## Features
+Logging and vendor-agnostic analytics for Angular applications built-in integration with Google Analytics (gtag), Facebook Pixcel and Microsoft Azure Application Insights.
 
 [WIP]
 
@@ -27,14 +25,15 @@ yarn add @dagonmetric/ng-log
 The following code is a simple module setup with `ConsoleLoggerModule`.
 
 ```typescript
-import { ConsoleLoggerModule, LoggerModule } from '@dagonmetric/ng-log';
+import { LogModule } from '@dagonmetric/ng-log';
+import { ConsoleLoggerModule } from '@dagonmetric/ng-log/console';
 
 @NgModule({
   imports: [
     // Other module imports
 
     // ng-log module
-    LoggerModule.withOptions({ minLevel: 'trace' }),
+    LoggerModule.withConfig({ minLevel: 'trace' }),
     ConsoleLoggerModule
   ]
 })
@@ -46,7 +45,7 @@ export class AppModule { }
 ```typescript
 import { Component, OnInit } from '@angular/core';
 
-import { Logger, LoggerFactory } from '@dagonmetric/ng-log';
+import { Logger, LogService } from '@dagonmetric/ng-log';
 
 @Component({
   selector: 'app-root',
@@ -55,8 +54,8 @@ import { Logger, LoggerFactory } from '@dagonmetric/ng-log';
 export class AppComponent {
   private readonly _logger: Logger;
 
-  constructor(loggerFactory: LoggerFactory) {
-    this._logger = loggerFactory.createLogger('app');
+  constructor(logService: LogService) {
+    this._logger = logService.createLogger('app');
   }
 
   ngOnInit(): void {
