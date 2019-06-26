@@ -1,6 +1,6 @@
 # ApplicationInsightsWebLoggerModule
 
-[Microsoft Application Insights](https://github.com/microsoft/ApplicationInsights-JS) implementation for [LoggingApi](https://github.com/DagonMetric/ng-log/blob/master/modules/ng-log/src/logging-api.ts).
+[Microsoft Application Insights](https://github.com/microsoft/ApplicationInsights-JS) implementation for [Logger](https://github.com/DagonMetric/ng-log/blob/master/modules/ng-log/src/logger.ts).
 
 ## Getting Started
 
@@ -24,7 +24,7 @@ import { ApplicationInsightsWebLoggerModule } from '@dagonmetric/ng-log/applicat
     // Other module imports
 
     // ng-log module
-    LogModule.withConfig({ minLevel: 'debug' }),
+    LogModule,
     ApplicationInsightsWebLoggerModule.withOptions({
       instrumentationKey: 'YOUR_INSTRUMENTATION_KEY_GOES_HERE'
       /* ...Other Configuration Options... */
@@ -72,9 +72,9 @@ export class AppComponent {
     // Track custom event
     this._logService.trackEvent({
       name: 'video_auto_play_start',
+      eventLabel: 'My promotional video',
+      eventCategory: 'video_auto_play',
       properties: {
-        eventLabel: 'My promotional video',
-        eventCategory: 'video_auto_play',
         nonInteraction: true
       }
     });
@@ -93,9 +93,9 @@ export class AppComponent {
     // Track custom event with timing
     this._logService.startTrackEvent('video_auto_play');
     this._logService.stopTrackEvent('video_auto_play', {
+      eventLabel: 'My promotional video',
+      eventCategory: 'video_auto_play',
       properties: {
-        eventLabel: 'My promotional video',
-        eventCategory: 'video_auto_play',
         nonInteraction: true
       }
     });
