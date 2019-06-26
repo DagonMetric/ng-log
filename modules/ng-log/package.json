@@ -10,7 +10,7 @@
     "angular-logging-service",
     "angular-logging",
     "angular-log",
-    "ng-log",
+    "angular-analytics",
     "google-analytics",
     "google-tag-manager",
     "gtag",

@@ -11,4 +11,5 @@ export * from './log.service';
 export * from './logger-provider';
 export * from './logger';
 export * from './logging-config';
+export * from './logging-info';
 export * from './page-view-info';

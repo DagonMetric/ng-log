@@ -7,20 +7,20 @@
  */
 
 // tslint:disable:no-console
-// tslint:disable: no-any
 
 import { EventInfo, Logger, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
 
 /**
- * Console logger implementation for `Logger`.
+ * Console logging implementation for `Logger`.
  */
 export class ConsoleLogger extends Logger {
     private readonly _eventTiming: Map<string, number> = new Map<string, number>();
 
-    constructor(readonly name: string) {
+    constructor(readonly name: string, public verboseLogging?: boolean) {
         super();
     }
 
+    // tslint:disable-next-line: no-any
     log(logLevel: LogLevel, message?: string | Error, optionalParams?: any): void {
         if (logLevel === LogLevel.None) {
             return;
@@ -56,7 +56,13 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        this._eventTiming.set(`page_view_${name}`, Date.now());
+        const start = +new Date();
+
+        this._eventTiming.set(`page_view_${name}`, start);
+
+        if (this.verboseLogging) {
+            console.log(`START_TRACK_PAGE_VIEW: ${name}, start: ${start}`);
+        }
     }
 
     stopTrackPage(name?: string, properties?: PageViewInfo): void {
@@ -77,9 +83,11 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        const duration = this.getDuration(start);
-        const suffix = properties != null ? ', properties: ' : '.';
-        console.log(`PAGE_VIEW: ${name}, duration: ${duration}${suffix}`, properties);
+        if (this.verboseLogging) {
+            const duration = ConsoleLogger.getDuration(start);
+            const suffix = properties != null ? ', properties: ' : '.';
+            console.log(`STOP_TRACK_PAGE_VIEW: ${name}, start: ${start}, duration: ${duration}${suffix}`, properties);
+        }
 
         this._eventTiming.delete(`page_view_${name}`);
     }
@@ -95,8 +103,10 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        const suffix = properties != null ? ', properties: ' : '.';
-        console.log(`PAGE_VIEW: ${name}${suffix}`, properties);
+        if (this.verboseLogging) {
+            const suffix = properties != null ? ', properties: ' : '.';
+            console.log(`TRACK_PAGE_VIEW: ${name}${suffix}`, properties);
+        }
     }
 
     startTrackEvent(name: string): void {
@@ -106,7 +116,13 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        this._eventTiming.set(name, +new Date());
+        const start = +new Date();
+
+        this._eventTiming.set(name, start);
+
+        if (this.verboseLogging) {
+            console.log(`START_TRACK_EVENT: ${name}, start: ${start}`);
+        }
     }
 
     stopTrackEvent(name: string, properties?: EventInfo): void {
@@ -117,23 +133,29 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        const duration = this.getDuration(start);
-        const suffix = properties != null ? ', properties: ' : '.';
-        console.log(`EVENT: ${name}, duration: ${duration}${suffix}`, properties);
+        if (this.verboseLogging) {
+            const duration = ConsoleLogger.getDuration(start);
+            const suffix = properties != null ? ', properties: ' : '.';
+            console.log(`STOP_TRACK_EVENT: ${name}, start: ${start}, duration: ${duration}${suffix}`, properties);
+        }
 
         this._eventTiming.delete(name);
     }
 
     trackEvent(name: string, properties?: EventInfo): void {
-        const suffix = properties != null ? ', properties: ' : '.';
-        console.log(`EVENT: ${name}${suffix}`, properties);
+        if (this.verboseLogging) {
+            const suffix = properties != null ? ', properties: ' : '.';
+            console.log(`TRACK_EVENT: ${name}${suffix}`, properties);
+        }
     }
 
     flush(): void {
-        // Do nothing
+        if (this.verboseLogging) {
+            console.log('FLUSH');
+        }
     }
 
-    private getDuration(start: number): number | undefined {
+    private static getDuration(start: number): number | undefined {
         const end = +new Date();
 
         let duration: number | undefined;

@@ -6,32 +6,115 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 
-import { Logger, LoggerProvider } from '@dagonmetric/ng-log';
+import { EventInfo, Logger, LoggerProvider, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
 
 import { ConsoleLogger } from './console-logger';
 
+export interface ConsoleLoggerOptions {
+    verboseLogging?: boolean;
+}
+
+export const CONSOLE_LOGGER_OPTIONS = new InjectionToken<ConsoleLoggerOptions>('ConsoleLoggerOptions');
+
 /**
- * Logger provider factory for `ConsoleLogger`.
+ * Logger provider implementation for `ConsoleLogger`.
  */
 @Injectable({
     providedIn: 'root'
 })
-export class ConsoleLoggerProvider implements LoggerProvider {
+export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
+    private readonly _loggers = new Map<string, ConsoleLogger | null>();
+    private readonly _options: ConsoleLoggerOptions;
+
+    private _userId: string | undefined;
+    private _accountId: string | undefined;
+    private _currentLogger: ConsoleLogger | undefined;
+
     get name(): string {
         return 'console';
     }
 
+    get currentLogger(): ConsoleLogger {
+        if (this._currentLogger) {
+            return this._currentLogger;
+        }
+
+        this._currentLogger = new ConsoleLogger('', this._options.verboseLogging);
+
+        return this._currentLogger;
+    }
+
+    constructor(
+        @Optional() @Inject(CONSOLE_LOGGER_OPTIONS) options?: ConsoleLoggerOptions) {
+        super();
+        this._options = options || {};
+    }
+
     createLogger(category: string): Logger {
-        return new ConsoleLogger(category);
+        const logger = this._loggers.get(category);
+        if (logger) {
+            return logger;
+        }
+
+        const newLogger = new ConsoleLogger(category, this._options.verboseLogging);
+
+        this._loggers.set(category, newLogger);
+
+        return newLogger;
     }
 
-    setAuthenticatedUserContext(): void {
-        // Do nothing
+    setUserProperties(userId: string, accountId?: string): void {
+        this._userId = userId;
+        this._accountId = accountId;
+
+        if (this._options.verboseLogging) {
+            // tslint:disable-next-line: no-console
+            console.log(`SET_USER_PROPERTIES: userId: ${userId}, accountId: ${accountId}`);
+        }
     }
 
-    clearAuthenticatedUserContext(): void {
-        // Do nothing
+    clearUserProperties(): void {
+        if (this._options.verboseLogging) {
+            // tslint:disable-next-line: no-console
+            console.log(`CLEAR_USER_PROPERTIES: userId: ${this._userId}, accountId: ${this._accountId}`);
+        }
+
+        this._userId = undefined;
+        this._accountId = undefined;
+    }
+
+    // tslint:disable-next-line: no-any
+    log(logLevel: LogLevel, message?: string | Error, optionalParams?: any): void {
+        this.currentLogger.log(logLevel, message, optionalParams);
+    }
+
+    startTrackPage(name?: string): void {
+        this.currentLogger.startTrackPage(name);
+    }
+
+    stopTrackPage(name?: string, properties?: PageViewInfo): void {
+        this.currentLogger.stopTrackPage(name, properties);
+    }
+
+    trackPageView(name?: string, properties?: PageViewInfo): void {
+        this.currentLogger.trackPageView(name, properties);
+    }
+
+    startTrackEvent(name: string): void {
+        this.currentLogger.startTrackEvent(name);
+    }
+
+    stopTrackEvent(name: string, properties?: EventInfo): void {
+        this.currentLogger.stopTrackEvent(name, properties);
+    }
+
+    trackEvent(name: string, properties?: EventInfo): void {
+        this.currentLogger.trackEvent(name, properties);
+    }
+
+    flush(): void {
+        this.currentLogger.flush();
     }
 }

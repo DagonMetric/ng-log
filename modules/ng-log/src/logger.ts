@@ -6,13 +6,14 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-// tslint:disable:no-any
-
 import { Injectable, InjectionToken } from '@angular/core';
 
 import { EventInfo } from './event-info';
 import { LogLevel } from './log-level';
+import { LoggingApi } from './logging-api';
+import { LoggingInfo } from './logging-info';
 import { PageViewInfo } from './page-view-info';
+import { TrackingApi } from './tracking-api';
 
 export const LOGGER_CATEGORY_NAME = new InjectionToken<string>('LoggerCategoryName');
 
@@ -20,21 +21,21 @@ export const LOGGER_CATEGORY_NAME = new InjectionToken<string>('LoggerCategoryNa
  * The logger abstract class.
  */
 @Injectable()
-export abstract class Logger {
+export abstract class Logger implements LoggingApi, TrackingApi {
     /**
      * Logs message or error with severity level.
      * @param logLevel The log level.
      * @param message Message string to log.
      * @param optionalParams Optional parameters.
      */
-    abstract log(logLevel: LogLevel, message?: string | Error, optionalParams?: any): void;
+    abstract log(logLevel: LogLevel, message: string | Error, optionalParams?: LoggingInfo): void;
 
     /**
      * Logs that contain the most detailed messages.
      * @param message Message string to log.
      * @param optionalParams Optional parameters.
      */
-    trace(message?: string | Error, optionalParams?: any): void {
+    trace(message: string | Error, optionalParams?: LoggingInfo): void {
         this.log(LogLevel.Trace, message, optionalParams);
     }
 
@@ -43,7 +44,7 @@ export abstract class Logger {
      * @param message Message string to log.
      * @param optionalParams Optional parameters.
      */
-    debug(message: string, optionalParams?: any): void {
+    debug(message: string, optionalParams?: LoggingInfo): void {
         this.log(LogLevel.Debug, message, optionalParams);
     }
 
@@ -52,7 +53,7 @@ export abstract class Logger {
      * @param message Message string to log.
      * @param optionalParams Optional parameters.
      */
-    info(message: string, optionalParams?: any): void {
+    info(message: string, optionalParams?: LoggingInfo): void {
         this.log(LogLevel.Info, message, optionalParams);
     }
 
@@ -61,7 +62,7 @@ export abstract class Logger {
      * @param message Message string to log.
      * @param optionalParams Optional parameters.
      */
-    warn(message: string, optionalParams?: any): void {
+    warn(message: string, optionalParams?: LoggingInfo): void {
         this.log(LogLevel.Warn, message, optionalParams);
     }
 
@@ -70,7 +71,7 @@ export abstract class Logger {
      * @param message Error description or exception object to log.
      * @param optionalParams Optional parameters.
      */
-    error(message: string | Error, optionalParams?: any): void {
+    error(message: string | Error, optionalParams?: LoggingInfo): void {
         this.log(LogLevel.Error, message, optionalParams);
     }
 
@@ -79,7 +80,7 @@ export abstract class Logger {
      * @param message Error description or exception object to log.
      * @param optionalParams Optional parameters.
      */
-    fatal(message: string | Error, optionalParams: any): void {
+    fatal(message: string | Error, optionalParams: LoggingInfo): void {
         this.log(LogLevel.Critical, message, optionalParams);
     }
 
@@ -92,16 +93,16 @@ export abstract class Logger {
     /**
      * Logs how long a page was visible, after `startTrackPage`. Call this when the page closes.
      * @param name The string you used as the name in `startTrackPage`. Default to document title.
-     * @param properties Additional data used to filter pages and metrics.
+     * @param pageViewInfo Additional data for page view.
      */
-    abstract stopTrackPage(name?: string, properties?: PageViewInfo): void;
+    abstract stopTrackPage(name?: string, pageViewInfo?: PageViewInfo): void;
 
     /**
      * Logs that a page was viewed.
      * @param name The page's title. Default to document title.
-     * @param properties Additional data used to filter pages and metrics.
+     * @param pageViewInfo Data for page view.
      */
-    abstract trackPageView(name?: string, properties?: PageViewInfo): void;
+    abstract trackPageView(pageViewInfo: PageViewInfo & { name: string }): void;
 
     /**
      * Start timing an extended event. Call `stopTrackEvent` to log the event when it ends.
@@ -112,19 +113,19 @@ export abstract class Logger {
     /**
      * Log an extended event that you started timing with `startTrackEvent`.
      * @param name The string you used to identify this event in `startTrackEvent`.
-     * @param properties Additional data for event.
+     * @param eventInfo Additional data for event.
      */
-    abstract stopTrackEvent(name: string, properties?: EventInfo): void;
+    abstract stopTrackEvent(name: string, eventInfo?: EventInfo): void;
 
     /**
      * Log a user action or other occurrence.
      * @param name A string to identify this event.
-     * @param properties Additional data for event.
+     * @param eventInfo Data for event.
      */
-    abstract trackEvent(name: string, properties?: EventInfo): void;
+    abstract trackEvent(eventInfo: EventInfo & { name: string }): void;
 
     /**
-     * Flush to send data immediately.
+     * Flush to log/send data immediately.
      */
     abstract flush(): void;
 }

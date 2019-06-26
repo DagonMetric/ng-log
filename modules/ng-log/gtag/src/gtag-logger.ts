@@ -8,7 +8,7 @@
 
 // tslint:disable: no-any
 
-import { EventInfo, Logger, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
+import { EventInfo, EventInfoBase, Logger, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
 
 import { GTag } from './gtag';
 import { GTagPropertiesMapper } from './gtag-properties-mapper';
@@ -17,17 +17,16 @@ import { GTagPropertiesMapper } from './gtag-properties-mapper';
  * Google global site tag logger implementation for `Logger`.
  */
 export class GTagLogger extends Logger {
-    measurementId?: string;
-
     private readonly _eventTiming: Map<string, number> = new Map<string, number>();
 
     constructor(
-        readonly name: string,
         private readonly _propertiesMapper: GTagPropertiesMapper,
         private readonly _gtag?: GTag,
-        measurementId?: string) {
+        public customMap?: { [key: string]: string },
+        public measurementId?: string,
+        public userId?: string,
+        public accountId?: string) {
         super();
-        this.measurementId = measurementId;
     }
 
     log(logLevel: LogLevel, message?: string | Error, optionalParams?: any): void {
@@ -35,8 +34,9 @@ export class GTagLogger extends Logger {
             return;
         }
 
-        const additionalProps = optionalParams && typeof optionalParams === 'object' ?
+        const params = optionalParams && typeof optionalParams === 'object' ?
             optionalParams as { [key: string]: any } : undefined;
+        const mappedProps = this._propertiesMapper.mapKeys(params, ['customMap', 'measurements']);
 
         if (logLevel === LogLevel.Error || logLevel === LogLevel.Critical) {
             const exceptionProps = {
@@ -44,25 +44,26 @@ export class GTagLogger extends Logger {
                 fatal: logLevel === LogLevel.Critical
             };
 
-            if (additionalProps && additionalProps.customMap) {
-                const measurementId = (additionalProps.sendTo || this.measurementId) as string;
-                const customMap = this._propertiesMapper.mapValues(additionalProps.customMap as { [name: string]: string });
+            if (params && params.customMap) {
+                const measurementId = params.sendTo && typeof params.sendTo === 'string' ? params.sendTo : this.measurementId;
+                const customMap = this._propertiesMapper.mapValues(params.customMap as { [name: string]: string });
 
                 this._gtag('config', measurementId, {
                     custom_map: customMap
                 });
 
-                const measurements = this._propertiesMapper.mapKeys(additionalProps.measurements as { [name: string]: number });
-
-                const properties = this._propertiesMapper.mapKeys(additionalProps, ['customMap', 'measurements']);
+                const measurements = this._propertiesMapper.mapKeys(params.measurements as { [name: string]: number });
 
                 this._gtag('event', 'exception', {
-                    ...properties,
-                    ...exceptionProps,
-                    ...measurements
+                    ...mappedProps,
+                    ...measurements,
+                    ...exceptionProps
                 });
             } else {
-                this._gtag('event', 'exception', exceptionProps);
+                this._gtag('event', 'exception', {
+                    ...mappedProps,
+                    ...exceptionProps
+                });
             }
         } else {
             let level = '';
@@ -81,10 +82,8 @@ export class GTagLogger extends Logger {
                 level
             };
 
-            const properties = this._propertiesMapper.mapKeys(additionalProps, ['customMap', 'measurements']);
-
             this._gtag('event', 'trace', {
-                ...properties,
+                ...mappedProps,
                 ...traceProps
             });
         }
@@ -136,38 +135,18 @@ export class GTagLogger extends Logger {
             return;
         }
 
-        const duration = this.getDuration(start);
-        const pageViewInfo = {
-            page_title: name,
-            page_path: properties && properties.pagePath ? properties.pagePath : undefined,
-            page_location: properties && properties.pageLocation ? properties.pageLocation : undefined
-        };
+        const duration = GTagLogger.getDuration(start);
 
-        if (properties && (properties.sendTo || properties.customMap)) {
-            const measurementId = properties.sendTo || this.measurementId;
-            if (properties.customMap) {
-                const customMap = this._propertiesMapper.mapValues(properties.customMap);
-
-                this._gtag('config', measurementId, {
-                    custom_map: customMap
-                });
-            }
-
-            const measurements = this._propertiesMapper.mapKeys(properties.measurements);
-
-            this._gtag('event', 'timing_complete', {
-                ...pageViewInfo,
-                ...measurements,
-                name,
-                value: duration
-            });
-        } else {
-            this._gtag('event', 'timing_complete', {
-                ...pageViewInfo,
-                name,
-                value: duration
-            });
+        const pageViewProps = this.getMappedPageViewInfo(name, properties);
+        if (properties && properties.sendTo) {
+            pageViewProps.send_to = properties.sendTo;
         }
+
+        this._gtag('event', 'timing_complete', {
+            ...pageViewProps,
+            name,
+            value: duration
+        });
 
         this._eventTiming.delete(name);
     }
@@ -177,32 +156,10 @@ export class GTagLogger extends Logger {
             return;
         }
 
-        const pageViewInfo = {
-            page_title: name,
-            page_path: properties && properties.pagePath ? properties.pagePath : undefined,
-            page_location: properties && properties.pageLocation ? properties.pageLocation : undefined
-        };
+        const pageViewProps = this.getMappedPageViewInfo(name, properties);
 
-        if (properties && (properties.sendTo || properties.customMap)) {
-            const measurementId = properties.sendTo || this.measurementId;
-            if (properties.customMap) {
-                const customMap = this._propertiesMapper.mapValues(properties.customMap);
-
-                this._gtag('config', measurementId, {
-                    custom_map: customMap
-                });
-            }
-
-            const measurements = this._propertiesMapper.mapKeys(properties.measurements);
-
-            this._gtag('event', 'page_view', {
-                ...pageViewInfo,
-                ...measurements,
-                send_to: properties.sendTo
-            });
-        } else {
-            this._gtag('config', this.measurementId, properties ? pageViewInfo : undefined);
-        }
+        const measurementId = properties && properties.sendTo ? properties.sendTo : this.measurementId;
+        this._gtag('config', measurementId, pageViewProps);
     }
 
     startTrackEvent(name: string): void {
@@ -231,32 +188,22 @@ export class GTagLogger extends Logger {
             return;
         }
 
-        const duration = this.getDuration(start);
-        const mappedProps = this._propertiesMapper.mapKeys(properties, ['customMap', 'measurements']);
+        const duration = GTagLogger.getDuration(start);
 
-        if (properties && properties.customMap) {
-            const measurementId = properties.sendTo || this.measurementId;
-            const customMap = this._propertiesMapper.mapValues(properties.customMap);
+        const mappedProps = this.getMappedEventInfo(properties);
 
-            this._gtag('config', measurementId, {
-                custom_map: customMap
-            });
-
-            const measurements = this._propertiesMapper.mapKeys(properties.measurements);
-
-            this._gtag('event', 'timing_complete', {
-                ...mappedProps,
-                name,
-                value: duration,
-                ...measurements
-            });
-        } else {
-            this._gtag('event', 'timing_complete', {
-                ...mappedProps,
-                name,
-                value: duration
+        const customMap = properties && properties.customMap ? { ...this.customMap, ...properties.customMap } : { ...this.customMap };
+        if (Object.keys(customMap).length > 0) {
+            this._gtag('config', mappedProps.send_to || this.measurementId, {
+                custom_map: this._propertiesMapper.mapValues(customMap)
             });
         }
+
+        this._gtag('event', 'timing_complete', {
+            ...mappedProps,
+            name,
+            value: duration
+        });
 
         this._eventTiming.delete(name);
     }
@@ -266,32 +213,23 @@ export class GTagLogger extends Logger {
             return;
         }
 
-        const mappedProps = this._propertiesMapper.mapKeys(properties, ['customMap', 'measurements']);
+        const mappedProps = this.getMappedEventInfo(properties);
 
-        if (properties && properties.customMap) {
-            const measurementId = properties.sendTo || this.measurementId;
-            const customMap = this._propertiesMapper.mapValues(properties.customMap);
-
-            this._gtag('config', measurementId, {
-                custom_map: customMap
+        const customMap = properties && properties.customMap ? { ...this.customMap, ...properties.customMap } : { ...this.customMap };
+        if (Object.keys(customMap).length > 0) {
+            this._gtag('config', mappedProps.send_to || this.measurementId, {
+                custom_map: this._propertiesMapper.mapValues(customMap)
             });
-
-            const measurements = this._propertiesMapper.mapKeys(properties.measurements);
-
-            this._gtag('event', name, {
-                ...mappedProps,
-                ...measurements
-            });
-        } else {
-            this._gtag('event', name, mappedProps);
         }
+
+        this._gtag('event', name, mappedProps);
     }
 
     flush(): void {
         // Do nothing
     }
 
-    private getDuration(start: number): number | undefined {
+    private static getDuration(start: number): number | undefined {
         const end = +new Date();
 
         let duration: number | undefined;
@@ -301,5 +239,60 @@ export class GTagLogger extends Logger {
         }
 
         return duration;
+    }
+
+    private getMappedPageViewInfo(
+        name?: string,
+        properties?: PageViewInfo,
+        excludeKeys: (keyof EventInfoBase)[] = ['customMap', 'measurements', 'sendTo']): { [key: string]: any } {
+        const mappedProps = this._propertiesMapper.mapKeys(properties, excludeKeys) || {};
+
+        if (name) {
+            mappedProps.page_title = name;
+        }
+
+        if (this.userId) {
+            mappedProps.user_id = this.userId;
+        }
+        if (this.accountId) {
+            mappedProps.account_id = this.accountId;
+        }
+
+        const customMap = properties && properties.customMap ? { ...this.customMap, ...properties.customMap } : { ...this.customMap };
+        if (Object.keys(customMap).length > 0) {
+            mappedProps.custom_map = this._propertiesMapper.mapValues(customMap);
+        }
+
+        const measurements = properties && properties.measurements ? this._propertiesMapper.mapKeys(properties.measurements) : undefined;
+
+        return {
+            ...mappedProps,
+            ...measurements
+        };
+    }
+
+    private getMappedEventInfo(
+        properties?: EventInfo,
+        excludeKeys: (keyof EventInfoBase)[] = ['customMap', 'measurements']): { [key: string]: any } {
+        const mappedProps = this._propertiesMapper.mapKeys(properties, excludeKeys) || {};
+
+        if (this.userId) {
+            mappedProps.user_id = this.userId;
+        }
+        if (this.accountId) {
+            mappedProps.account_id = this.accountId;
+        }
+
+        if (properties && properties.value && typeof properties.value === 'string') {
+            const parsed = parseInt(properties.value, 10);
+            mappedProps.value = isNaN(parsed) ? 0 : parsed;
+        }
+
+        const measurements = properties && properties.measurements ? this._propertiesMapper.mapKeys(properties.measurements) : undefined;
+
+        return {
+            ...mappedProps,
+            ...measurements
+        };
     }
 }

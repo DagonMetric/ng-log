@@ -337,6 +337,69 @@
   dependencies:
     tslib "^1.10.0"
 
+"@microsoft/applicationinsights-analytics-js@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/applicationinsights-analytics-js/-/applicationinsights-analytics-js-2.0.1.tgz#2b27bc6baf4ee8a253b4e8a3dc2ea0fde4e53b65"
+  integrity sha512-jg0nuq4O77UUJ4Lo4HdUG2ELLKmiPvMgMhe13Yzb3rNm/mXuom9BOHDG8NATYoqgovgEBEe8qQSVjimAfui95w==
+  dependencies:
+    "@microsoft/applicationinsights-common" "2.0.1"
+    "@microsoft/applicationinsights-core-js" "2.0.1"
+    tslib "^1.9.3"
+
+"@microsoft/applicationinsights-channel-js@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/applicationinsights-channel-js/-/applicationinsights-channel-js-2.0.1.tgz#3f2d3b9243b5a31ae6fb961d3320366d6e8915a7"
+  integrity sha512-IX3rkxKJUlLAzbUWY4GNEtvZlo/Eo8RzfBoMhqe+E9/M3OJNR15M68P92IQHIvs+UaMncew+lfw6sabAaRqkAw==
+  dependencies:
+    "@microsoft/applicationinsights-common" "2.0.1"
+    "@microsoft/applicationinsights-core-js" "2.0.1"
+    tslib "^1.9.3"
+
+"@microsoft/applicationinsights-common@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/applicationinsights-common/-/applicationinsights-common-2.0.1.tgz#142cff344b094c58be5fc6acfff21d9d8c0b68a6"
+  integrity sha512-tfEUgPUO+CiakjNaksSknXiM4Wpl/srDqttI8Vu42Ltw/Zabl8BT/uTZ4dFjHamHbM643HMoUg0OncU2FdZ7IA==
+  dependencies:
+    "@microsoft/applicationinsights-core-js" "2.0.1"
+    tslib "^1.9.3"
+
+"@microsoft/applicationinsights-core-js@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/applicationinsights-core-js/-/applicationinsights-core-js-2.0.1.tgz#fe7eafe49ee383a8cbc7f5956327bf1e1729b8ee"
+  integrity sha512-cDVu9++zEhCe6jSDWJwCU6In8SBmvo5YGJ4ZNe/VpC7HfH3UXXxswdge63Ho7scopy/jbiUrobEM4ze8aOZdlg==
+  dependencies:
+    tslib "^1.9.3"
+
+"@microsoft/applicationinsights-dependencies-js@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/applicationinsights-dependencies-js/-/applicationinsights-dependencies-js-2.0.1.tgz#df101fc9cd92cd249591259d3543248d886feaff"
+  integrity sha512-vPqw76OOGD/JKEEHwGngHZKWWXw83UKMLTyd+Vh0dvYwRG/6Xc7T2pOr/CmjAQYiaxGjHi12EiKT4qJSxEaeoQ==
+  dependencies:
+    "@microsoft/applicationinsights-common" "2.0.1"
+    "@microsoft/applicationinsights-core-js" "2.0.1"
+    tslib "^1.9.3"
+
+"@microsoft/applicationinsights-properties-js@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/applicationinsights-properties-js/-/applicationinsights-properties-js-2.0.1.tgz#2b264b5cf1eee69282854a36d06aee09bfffcdac"
+  integrity sha512-qwr2U6e+X0pYo6gp3rays/tY2/95muiRmzmPDy7yPHbrsVCYHVLmE0S3WuWxT5WmXfItrxqolnVU2uRYx5r0Yg==
+  dependencies:
+    "@microsoft/applicationinsights-common" "2.0.1"
+    "@microsoft/applicationinsights-core-js" "2.0.1"
+    tslib "^1.9.3"
+
+"@microsoft/applicationinsights-web@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/applicationinsights-web/-/applicationinsights-web-2.0.1.tgz#d09cf29e77b5006916c8494232dc162e65148eb6"
+  integrity sha512-F+AEFPGZFEVExx7nL+raxrCUAqxVoQgNE/jpcFj0DVgLlIXTIDDDYeWGsVmy6sZvU6s7yRtv4QCadUqxuFJ6Bw==
+  dependencies:
+    "@microsoft/applicationinsights-analytics-js" "2.0.1"
+    "@microsoft/applicationinsights-channel-js" "2.0.1"
+    "@microsoft/applicationinsights-common" "2.0.1"
+    "@microsoft/applicationinsights-core-js" "2.0.1"
+    "@microsoft/applicationinsights-dependencies-js" "2.0.1"
+    "@microsoft/applicationinsights-properties-js" "2.0.1"
+
 "@ngtools/webpack@8.0.2", "@ngtools/webpack@^8.0.2":
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-8.0.2.tgz#d60167b514b531ed6ae308b4911739dd102e41c7"
@@ -8233,7 +8296,7 @@ tsickle@^0.35.0:
     mkdirp "^0.5.1"
     source-map "^0.7.3"
 
-tslib@^1.10.0, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0:
+tslib@^1.10.0, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
   integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==

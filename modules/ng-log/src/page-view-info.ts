@@ -1,25 +1,38 @@
+// tslint:disable: no-any
+
 /**
- * The track page view request data.
+ * The page view telemetry info interface.
  */
 export interface PageViewInfo {
-    /**
-     * The page's URL.
-     */
-    pageLocation?: string;
-    /**
-     * The path portion of location. This value must start with a slash (/) character.
-     */
-    pagePath?: string;
-    /**
-     * Metrics associated with this event.
-     */
-    measurements?: { [name: string]: number };
     /**
      * Mapping for custom dimensions and metrics.
      */
     customMap?: { [key: string]: string };
     /**
-     * Measure event with specified tracker instrumentation key.
+     * Metrics associated with this event.
      */
-    sendTo?: string;
+    measurements?: { [name: string]: number };
+    /**
+     * Additional properties.
+     */
+    properties?: {
+
+        [key: string]: any;
+    };
+    /**
+     * The page's URL.
+     */
+    uri?: string;
+    /**
+     * The URL of the source page where current page is loaded from.
+     */
+    refUri?: string;
+    /**
+     * The page type.
+     */
+    pageType?: string;
+    /**
+     * Is user logged in.
+     */
+    isLoggedIn?: boolean;
 }

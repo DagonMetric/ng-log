@@ -1,0 +1,11 @@
+{
+  "name": "@dagonmetric/ng-log/applicationinsights-web",
+  "version": "0.0.0-PLACEHOLDER",
+  "sideEffects": false,
+  "peerDependencies": {
+    "@angular/common": "^8.0.0-beta.0",
+    "@angular/core": "^8.0.0-beta.0",
+    "@dagonmetric/ng-log": "^0.0.0-PLACEHOLDER",
+    "@microsoft/applicationinsights-web": "^2.0.1"
+  }
+}

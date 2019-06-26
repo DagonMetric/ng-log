@@ -6,11 +6,11 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 
 import { LOGGER_PROVIDER } from '@dagonmetric/ng-log';
 
-import { ConsoleLoggerProvider } from './console-logger-provider';
+import { CONSOLE_LOGGER_OPTIONS, ConsoleLoggerOptions, ConsoleLoggerProvider } from './console-logger-provider';
 
 /**
  * The `NGMODULE` for providing `LOGGER_PROVIDER` with `ConsoleLoggerProvider`.
@@ -24,4 +24,20 @@ import { ConsoleLoggerProvider } from './console-logger-provider';
         }
     ]
 })
-export class ConsoleLoggerModule { }
+export class ConsoleLoggerModule {
+    /**
+     * Call this method to provide options for configuring the `ConsoleLoggerProvider`.
+     * @param options An option object for 'ConsoleLoggerProvider'.
+     */
+    static withOptions(options: ConsoleLoggerOptions): ModuleWithProviders {
+        return {
+            ngModule: ConsoleLoggerModule,
+            providers: [
+                {
+                    provide: CONSOLE_LOGGER_OPTIONS,
+                    useValue: options
+                }
+            ]
+        };
+    }
+}

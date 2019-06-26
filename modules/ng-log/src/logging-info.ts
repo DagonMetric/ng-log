@@ -1,8 +1,8 @@
 // tslint:disable: no-any
 /**
- * The event telemetry info interface.
+ * The logging telemetry info interface.
  */
-export interface EventInfo {
+export interface LoggingInfo {
     /**
      * Mapping for custom dimensions and metrics.
      */
@@ -17,12 +17,4 @@ export interface EventInfo {
     properties?: {
         [key: string]: any;
     };
-    /**
-     * The string that will appear as the event label.
-     */
-    eventLabel?: string;
-    /**
-     * The string that will appear as the event category.
-     */
-    eventCategory?: string;
 }

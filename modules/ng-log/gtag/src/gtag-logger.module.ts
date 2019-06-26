@@ -10,7 +10,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 
 import { LOGGER_PROVIDER } from '@dagonmetric/ng-log';
 
-import { GTAG_LOGGER_PROVIDER_OPTIONS, GTagLoggerProvider, GTagLoggerProviderOptions } from './gtag-logger-provider';
+import { GTAG_LOGGER_OPTIONS, GTagLoggerOptions, GTagLoggerProvider } from './gtag-logger-provider';
 
 /**
  * The `NGMODULE` for providing `LOGGER_PROVIDER` with `GTagLoggerProvider`.
@@ -26,15 +26,15 @@ import { GTAG_LOGGER_PROVIDER_OPTIONS, GTagLoggerProvider, GTagLoggerProviderOpt
 })
 export class GTagLoggerModule {
     /**
-     * Call this method to provide options for configuring the GTagLoggerProvider.
-     * @param options An option object for 'GTagLoggerProvider'.
+     * Call this method to provide options for configuring the `GTagLoggerProvider`.
+     * @param options An option object for `GTagLoggerProvider`.
      */
-    static withOptions(options: GTagLoggerProviderOptions): ModuleWithProviders {
+    static withOptions(options: GTagLoggerOptions): ModuleWithProviders {
         return {
             ngModule: GTagLoggerModule,
             providers: [
                 {
-                    provide: GTAG_LOGGER_PROVIDER_OPTIONS,
+                    provide: GTAG_LOGGER_OPTIONS,
                     useValue: options
                 }
             ]

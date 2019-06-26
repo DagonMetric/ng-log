@@ -9,12 +9,14 @@
 import { InjectionToken } from '@angular/core';
 
 import { Logger } from './logger';
+import { LoggingApi } from './logging-api';
+import { TrackingApi } from './tracking-api';
 
-export interface LoggerProvider {
+export interface LoggerProvider extends LoggingApi, TrackingApi {
     readonly name: string;
     createLogger(category: string): Logger;
-    setAuthenticatedUserContext(userId: string, accountId?: string): void;
-    clearAuthenticatedUserContext(): void;
+    setUserProperties(userId: string, accountId?: string): void;
+    clearUserProperties(): void;
 }
 
 export const LOGGER_PROVIDER = new InjectionToken<LoggerProvider>('LoggerProvider');
