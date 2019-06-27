@@ -20,7 +20,11 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'trace');
 
         const msg = 'This is a trace log.';
-        const params = { key1: 'value1' };
+        const params = {
+            properties: {
+                key1: 'value1'
+            }
+        };
 
         logger.trace(msg, params);
         expect(console.trace).toHaveBeenCalledWith(msg, params);
@@ -30,7 +34,11 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'debug');
 
         const msg = 'This is a debug log.';
-        const params = { key1: 'value1' };
+        const params = {
+            properties: {
+                key1: 'value1'
+            }
+        };
 
         logger.debug(msg, params);
         expect(console.debug).toHaveBeenCalledWith(msg, params);
@@ -40,7 +48,11 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'info');
 
         const msg = 'This is a info log.';
-        const params = { key1: 'value1' };
+        const params = {
+            properties: {
+                key1: 'value1'
+            }
+        };
 
         logger.info(msg, params);
         expect(console.info).toHaveBeenCalledWith(msg, params);
@@ -50,7 +62,11 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'warn');
 
         const msg = 'This is a warn.';
-        const params = { key1: 'value1' };
+        const params = {
+            properties: {
+                key1: 'value1'
+            }
+        };
 
         logger.warn(msg, params);
         expect(console.warn).toHaveBeenCalledWith(msg, params);
@@ -60,7 +76,11 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'error');
 
         const msg = 'This is an error.';
-        const params = { key1: 'value1' };
+        const params = {
+            properties: {
+                key1: 'value1'
+            }
+        };
 
         logger.error(msg, params);
         expect(console.error).toHaveBeenCalledWith(msg, params);
@@ -70,7 +90,11 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'error');
 
         const err = new Error('This is an error.');
-        const params = { key1: 'value1' };
+        const params = {
+            properties: {
+                key1: 'value1'
+            }
+        };
 
         logger.error(err, params);
         expect(console.error).toHaveBeenCalledWith(err, params);
@@ -80,7 +104,11 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'error');
 
         const msg = 'This is a fatal.';
-        const params = { key1: 'value1' };
+        const params = {
+            properties: {
+                key1: 'value1'
+            }
+        };
 
         logger.fatal(msg, params);
         expect(console.error).toHaveBeenCalledWith(msg, params);
@@ -90,7 +118,11 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'error');
 
         const err = new Error('This is a fatal.');
-        const params = { key1: 'value1' };
+        const params = {
+            properties: {
+                key1: 'value1'
+            }
+        };
 
         logger.fatal(err, params);
         expect(console.error).toHaveBeenCalledWith(err, params);
@@ -98,7 +130,11 @@ describe('ConsoleLogger', () => {
 
     it("should work with 'log' method", () => {
         const msg = 'This is a message.';
-        const params = { key1: 'value1' };
+        const params = {
+            properties: {
+                key1: 'value1'
+            }
+        };
 
         spyOn(console, 'info');
 
@@ -114,9 +150,6 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'error');
 
         logger.log(LogLevel.None, 'This message does not log.', {});
-
-        // unknown
-        logger.log(100);
 
         // tslint:disable: no-unsafe-any no-any
         expect((console.trace as any).calls.any()).toEqual(false);
@@ -136,7 +169,7 @@ describe('ConsoleLogger', () => {
 
         // With properties
         logger.startTrackPage('home');
-        logger.stopTrackPage('home', { pagePath: '/home' });
+        logger.stopTrackPage('home', { uri: '/home' });
 
         // Without properties
         logger.startTrackPage('about');
@@ -162,8 +195,8 @@ describe('ConsoleLogger', () => {
         // Coverage only - do nothing
         logger.trackPageView();
 
-        logger.trackPageView('home', { pagePath: '/home' });
-        logger.trackPageView('about');
+        logger.trackPageView({ name: 'home', uri: '/home' });
+        logger.trackPageView({ name: 'about' });
         expect(console.log).toHaveBeenCalled();
     });
 
@@ -195,10 +228,12 @@ describe('ConsoleLogger', () => {
     it("should work with 'trackEvent'", () => {
         spyOn(console, 'log');
 
-        const eventName = 'event1';
-        const eventData = { eventCategory: 'test' };
-        logger.trackEvent(eventName, eventData);
-        logger.trackEvent('event2');
+        const eventData = {
+            name: 'event1',
+            eventCategory: 'test'
+        };
+        logger.trackEvent(eventData);
+        logger.trackEvent({ name: 'event2' });
 
         // Coverage only, do nothing
         logger.flush();

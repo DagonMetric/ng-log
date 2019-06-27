@@ -31,8 +31,8 @@ describe('ConsoleLoggerProvider', () => {
             expect(logger instanceof ConsoleLogger).toBeTruthy();
 
             // Coverage only
-            loggerProvider.setAuthenticatedUserContext();
-            loggerProvider.clearAuthenticatedUserContext();
+            loggerProvider.setUserProperties('user1');
+            loggerProvider.clearUserProperties();
         });
     });
 });
