@@ -21,7 +21,7 @@ export class LogConfigModule {
         configService.loadEvent
             .subscribe((evt) => {
                 if (evt.status === 'loaded' && evt.data.logging) {
-                    logService.setConfig(evt.data.logging as LoggingConfig);
+                    logService.config = evt.data.logging as LoggingConfig;
                 }
             });
     }

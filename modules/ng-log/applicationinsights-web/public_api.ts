@@ -7,5 +7,5 @@
  */
 
 export * from './src/applicationinsights-logger';
-export * from './src/applicationinsights-web-logger-provider';
 export * from './src/applicationinsights-web-logger.module';
+export * from './src/applicationinsights-logger-provider';

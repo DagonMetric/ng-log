@@ -9,7 +9,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID } from '@angular/core';
 
-import { EventInfo, Logger, LoggerProvider, LoggingInfo, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
+import { Logger, LoggerProvider } from '@dagonmetric/ng-log';
 import { ApplicationInsights, IConfig, IConfiguration } from '@microsoft/applicationinsights-web';
 
 import { ApplicationInsightsLogger } from './applicationinsights-logger';
@@ -26,7 +26,7 @@ export const APPLICATIONINSIGHTS_LOGGER_OPTIONS = new InjectionToken<Application
 @Injectable({
     providedIn: 'root'
 })
-export class ApplicationInsightsWebLoggerProvider extends Logger implements LoggerProvider {
+export class ApplicationInsightsLoggerProvider extends LoggerProvider {
     private readonly _loggers = new Map<string, ApplicationInsightsLogger | null>();
     private readonly _isBrowser: boolean;
 
@@ -36,16 +36,6 @@ export class ApplicationInsightsWebLoggerProvider extends Logger implements Logg
 
     get name(): string {
         return 'applicationinsights';
-    }
-
-    get currentLogger(): ApplicationInsightsLogger {
-        if (this._currentLogger) {
-            return this._currentLogger;
-        }
-
-        this._currentLogger = new ApplicationInsightsLogger(this._appInsights);
-
-        return this._currentLogger;
     }
 
     set config(config: IConfiguration & IConfig) {
@@ -75,6 +65,16 @@ export class ApplicationInsightsWebLoggerProvider extends Logger implements Logg
                 logger.appInsights = this._appInsights;
             }
         }
+    }
+
+    get currentLogger(): ApplicationInsightsLogger {
+        if (this._currentLogger) {
+            return this._currentLogger;
+        }
+
+        this._currentLogger = new ApplicationInsightsLogger(this._appInsights);
+
+        return this._currentLogger;
     }
 
     constructor(
@@ -118,37 +118,5 @@ export class ApplicationInsightsWebLoggerProvider extends Logger implements Logg
         if (this._isBrowser && this._appInsights) {
             this._appInsights.clearAuthenticatedUserContext();
         }
-    }
-
-    log(logLevel: LogLevel, message: string | Error, optionalParams?: LoggingInfo): void {
-        this.currentLogger.log(logLevel, message, optionalParams);
-    }
-
-    startTrackPage(name?: string): void {
-        this.currentLogger.startTrackPage(name);
-    }
-
-    stopTrackPage(name?: string, pageViewInfo?: PageViewInfo): void {
-        this.currentLogger.stopTrackPage(name, pageViewInfo);
-    }
-
-    trackPageView(namepageViewInfo: PageViewInfo & { name?: string }): void {
-        this.currentLogger.trackPageView(namepageViewInfo);
-    }
-
-    startTrackEvent(name: string): void {
-        this.currentLogger.startTrackEvent(name);
-    }
-
-    stopTrackEvent(name: string, eventInfo?: EventInfo): void {
-        this.currentLogger.stopTrackEvent(name, eventInfo);
-    }
-
-    trackEvent(eventInfo: EventInfo & { name: string }): void {
-        this.currentLogger.trackEvent(eventInfo);
-    }
-
-    flush(): void {
-        this.currentLogger.flush();
     }
 }

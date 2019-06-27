@@ -6,17 +6,15 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-// tslint:disable: no-any
-
+import { EventInfo, EventTimingInfo } from './event-info';
+import { LogInfo } from './log-info';
 import { LogLevel } from './log-level';
 import { Logger } from './logger';
 import { LoggerInformation } from './logger-information';
-
-import { EventInfo } from './event-info';
-import { PageViewInfo } from './page-view-info';
+import { PageViewInfo, PageViewTimingInfo } from './page-view-info';
 
 /**
- * Internal default logger implementation for `Logger`.
+ * Internal logging implementation for `Logger`.
  */
 export class DefaultLogger extends Logger {
     private _loggerInformations?: LoggerInformation[];
@@ -29,17 +27,17 @@ export class DefaultLogger extends Logger {
         this._loggerInformations = value;
     }
 
-    log(logLevel: LogLevel, message?: string | Error, ...optionalParams: any[]): void {
+    log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isLogLevelEnabled(loggerInformation, logLevel)) {
                 continue;
             }
 
-            loggerInformation.logger.log(logLevel, message, ...optionalParams);
+            loggerInformation.logger.log(logLevel, message, logInfo);
         }
     }
 
-    startTrackPage(name: string): void {
+    startTrackPage(name?: string): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isPageViewEnabled(loggerInformation)) {
                 continue;
@@ -49,23 +47,23 @@ export class DefaultLogger extends Logger {
         }
     }
 
-    stopTrackPage(name: string, properties?: PageViewInfo): void {
+    stopTrackPage(name?: string, pageViewInfo?: PageViewTimingInfo): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isPageViewEnabled(loggerInformation)) {
                 continue;
             }
 
-            loggerInformation.logger.stopTrackPage(name, properties);
+            loggerInformation.logger.stopTrackPage(name, pageViewInfo);
         }
     }
 
-    trackPageView(name: string, properties?: PageViewInfo): void {
+    trackPageView(pageViewInfo: PageViewInfo): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isPageViewEnabled(loggerInformation)) {
                 continue;
             }
 
-            loggerInformation.logger.trackPageView(name, properties);
+            loggerInformation.logger.trackPageView(pageViewInfo);
         }
     }
 
@@ -79,23 +77,23 @@ export class DefaultLogger extends Logger {
         }
     }
 
-    stopTrackEvent(name: string, properties?: EventInfo): void {
+    stopTrackEvent(name: string, eventInfo?: EventTimingInfo): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isEventEnabled(loggerInformation, name)) {
                 continue;
             }
 
-            loggerInformation.logger.stopTrackEvent(name, properties);
+            loggerInformation.logger.stopTrackEvent(name, eventInfo);
         }
     }
 
-    trackEvent(name: string, properties?: EventInfo): void {
+    trackEvent(eventInfo: EventInfo): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isEventEnabled(loggerInformation, name)) {
                 continue;
             }
 
-            loggerInformation.logger.trackEvent(name, properties);
+            loggerInformation.logger.trackEvent(eventInfo);
         }
     }
 
@@ -114,20 +112,19 @@ export class DefaultLogger extends Logger {
         return true;
     }
 
-    private isEventEnabled(loggerInformation: LoggerInformation, eventName: string): boolean {
-        if (loggerInformation.event) {
-            const evtOptions = loggerInformation.event;
-            const foundDisabled = Object.keys(evtOptions).find(key => key === eventName && evtOptions[key] === false);
-
-            return foundDisabled == null;
+    private isPageViewEnabled(loggerInformation: LoggerInformation): boolean {
+        if (loggerInformation.pageView != null) {
+            return loggerInformation.pageView;
         }
 
         return true;
     }
 
-    private isPageViewEnabled(loggerInformation: LoggerInformation): boolean {
-        if (loggerInformation.pageView != null) {
-            return loggerInformation.pageView;
+    private isEventEnabled(loggerInformation: LoggerInformation, eventName: string): boolean {
+        if (loggerInformation.event) {
+            const evtOptions = loggerInformation.event;
+
+            return Object.keys(evtOptions).find(key => key === eventName && evtOptions[key] === false) == null;
         }
 
         return true;

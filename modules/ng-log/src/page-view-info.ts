@@ -1,9 +1,9 @@
 // tslint:disable: no-any
 
 /**
- * The page view telemetry info interface.
+ * The page view timing telemetry interface.
  */
-export interface PageViewInfo {
+export interface PageViewTimingInfo {
     /**
      * Mapping for custom dimensions and metrics.
      */
@@ -11,14 +11,11 @@ export interface PageViewInfo {
     /**
      * Metrics associated with this event.
      */
-    measurements?: { [name: string]: number };
+    measurements?: { [key: string]: number };
     /**
      * Additional properties.
      */
-    properties?: {
-
-        [key: string]: any;
-    };
+    properties?: { [key: string]: any; };
     /**
      * The page's URL.
      */
@@ -35,4 +32,14 @@ export interface PageViewInfo {
      * Is user logged in.
      */
     isLoggedIn?: boolean;
+}
+
+/**
+ * The page view telemetry interface.
+ */
+export interface PageViewInfo extends PageViewTimingInfo {
+    /**
+     * The page title. Default to document title.
+     */
+    name?: string;
 }

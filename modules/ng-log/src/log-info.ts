@@ -1,8 +1,9 @@
 // tslint:disable: no-any
+
 /**
- * The logging telemetry info interface.
+ * The logg telemetry interface.
  */
-export interface LoggingInfo {
+export interface LogInfo {
     /**
      * Mapping for custom dimensions and metrics.
      */
@@ -10,11 +11,9 @@ export interface LoggingInfo {
     /**
      * Metrics associated with this event.
      */
-    measurements?: { [name: string]: number };
+    measurements?: { [key: string]: number };
     /**
      * Additional properties.
      */
-    properties?: {
-        [key: string]: any;
-    };
+    properties?: { [key: string]: any };
 }

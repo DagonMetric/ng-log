@@ -6,7 +6,7 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { EventInfo, Logger, LoggingInfo, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
+import { EventInfo, Logger, LogInfo, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
 import { ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
 
 /**
@@ -17,16 +17,16 @@ export class ApplicationInsightsLogger extends Logger {
         super();
     }
 
-    log(logLevel: LogLevel, message: string | Error, optionalParams?: LoggingInfo): void {
+    log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void {
         if (!this.appInsights || logLevel === LogLevel.None) {
             return;
         }
 
         const severityLevel = ApplicationInsightsLogger.toSeverityLevel(logLevel);
-        const measurements = optionalParams && optionalParams.measurements ?
-            optionalParams.measurements : undefined;
-        const extraProperties = optionalParams && optionalParams.properties ?
-            optionalParams.properties : undefined;
+        const measurements = logInfo && logInfo.measurements ?
+            logInfo.measurements : undefined;
+        const extraProperties = logInfo && logInfo.properties ?
+            logInfo.properties : undefined;
 
         if (logLevel === LogLevel.Error || logLevel === LogLevel.Critical) {
             this.appInsights.trackException({

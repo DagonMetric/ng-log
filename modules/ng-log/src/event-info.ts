@@ -1,8 +1,9 @@
 // tslint:disable: no-any
+
 /**
- * The event telemetry info interface.
+ * The event timing telemetry interface.
  */
-export interface EventInfo {
+export interface EventTimingInfo {
     /**
      * Mapping for custom dimensions and metrics.
      */
@@ -10,13 +11,11 @@ export interface EventInfo {
     /**
      * Metrics associated with this event.
      */
-    measurements?: { [name: string]: number };
+    measurements?: { [key: string]: number };
     /**
      * Additional properties.
      */
-    properties?: {
-        [key: string]: any;
-    };
+    properties?: { [key: string]: any };
     /**
      * The string that will appear as the event label.
      */
@@ -25,4 +24,14 @@ export interface EventInfo {
      * The string that will appear as the event category.
      */
     eventCategory?: string;
+}
+
+/**
+ * The event telemetry interface.
+ */
+export interface EventInfo extends EventTimingInfo {
+    /**
+     * The event action name.
+     */
+    name: string;
 }

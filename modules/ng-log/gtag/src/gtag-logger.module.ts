@@ -8,17 +8,17 @@
 
 import { ModuleWithProviders, NgModule } from '@angular/core';
 
-import { LOGGER_PROVIDER } from '@dagonmetric/ng-log';
+import { LoggerProvider } from '@dagonmetric/ng-log';
 
 import { GTAG_LOGGER_OPTIONS, GTagLoggerOptions, GTagLoggerProvider } from './gtag-logger-provider';
 
 /**
- * The `NGMODULE` for providing `LOGGER_PROVIDER` with `GTagLoggerProvider`.
+ * The `NGMODULE` for providing `LoggerProvider` with `GTagLoggerProvider`.
  */
 @NgModule({
     providers: [
         {
-            provide: LOGGER_PROVIDER,
+            provide: LoggerProvider,
             useClass: GTagLoggerProvider,
             multi: true
         }

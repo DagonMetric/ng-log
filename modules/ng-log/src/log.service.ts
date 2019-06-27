@@ -9,12 +9,30 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 
 import { DefaultLogger } from './default-logger';
-import { LogLevel, LogLevelString } from './log-level';
+import { EventInfo, EventTimingInfo } from './event-info';
+import { LogInfo } from './log-info';
+import { LogLevel } from './log-level';
 import { Logger } from './logger';
 import { LoggerFilterOptions, LoggerFilterRule } from './logger-filter-options';
 import { LoggerInformation } from './logger-information';
-import { LOGGER_PROVIDER, LoggerProvider } from './logger-provider';
-import { EventSection, LOGGING_CONFIG, LoggingConfig, LoggingConfigBase, LogLevelSection, PageViewSection } from './logging-config';
+import { LoggerProvider } from './logger-provider';
+import {
+    EventSection,
+    LoggerSection,
+    LOGGING_CONFIG,
+    LoggingConfig,
+    LoggingConfigBase,
+    LogLevelSection,
+    PageViewSection
+} from './logging-config';
+import { PageViewInfo, PageViewTimingInfo } from './page-view-info';
+
+interface SelectedRule {
+    minLevel?: LogLevel;
+    event?: { [name: string]: boolean };
+    pageView?: boolean;
+    userId?: boolean;
+}
 
 /**
  * Log service implementation.
@@ -22,19 +40,44 @@ import { EventSection, LOGGING_CONFIG, LoggingConfig, LoggingConfigBase, LogLeve
 @Injectable({
     providedIn: 'root'
 })
-export class LogService {
+export class LogService extends Logger {
     private readonly _loggerProviders: LoggerProvider[];
-    private readonly _loggers = new Map<string, DefaultLogger>();
+    private readonly _loggers = new Map<string, DefaultLogger | null>();
+    private readonly _ruleByProvider = new Map<string, SelectedRule>();
+    private readonly _userIdSetByProvider = new Map<string, boolean>();
     private _loggerFilterOptions?: LoggerFilterOptions;
-    private _userIdEnabled = true;
-    private _isUserIdSet = false;
+
+    set config(config: LoggingConfig) {
+        this._loggerFilterOptions = this.parseConfig(config);
+
+        for (const loggerProvider of this._loggerProviders) {
+            const providerName = loggerProvider.name;
+
+            const rule = this.selectRule(providerName);
+            if (rule) {
+                this._ruleByProvider.set(providerName, rule);
+            } else if (this._ruleByProvider.has(providerName)) {
+                this._ruleByProvider.delete(providerName);
+            }
+        }
+
+        for (const pair of this._loggers) {
+            const logger = pair[1];
+            if (logger == null) {
+                this._loggers.delete(pair[0]);
+                continue;
+            }
+            this.refreshFilters(logger.loggerInformations);
+        }
+    }
 
     constructor(
-        @Optional() @Inject(LOGGER_PROVIDER) loggerProviders?: LoggerProvider[],
+        @Optional() loggerProviders?: LoggerProvider[],
         @Optional() @Inject(LOGGING_CONFIG) config?: LoggingConfig) {
+        super();
         this._loggerProviders = loggerProviders || [];
         if (config) {
-            this.setConfig(config);
+            this.config = config;
         }
     }
 
@@ -64,46 +107,138 @@ export class LogService {
         return newLogger;
     }
 
-    setConfig(config: LoggingConfig): void {
-        this._loggerFilterOptions = this.parseConfig(config);
-
-        this._userIdEnabled = this._loggerFilterOptions.userId != null ? this._loggerFilterOptions.userId : true;
-        if (!this._userIdEnabled && this._isUserIdSet) {
-            this.clearAuthenticatedUserContext();
-        }
-
-        for (const pair of this._loggers) {
-            const logger = pair[1];
-            this.refreshFilters(logger.loggerInformations);
-        }
-    }
-
     /**
-     * Sets the authenticated user id and the account id in this session.
-     * @param authenticatedUserId The authenticated user id.
+     * Sets the authenticated user id and the account id properties.
+     * @param userId The authenticated user id.
      * @param accountId An optional string to represent the account associated with the authenticated user.
      */
-    setAuthenticatedUserContext(userId: string, accountId?: string): void {
-        if (!this._userIdEnabled) {
-            return;
-        }
-
+    setUserProperties(userId: string, accountId?: string): void {
         for (const loggerProvider of this._loggerProviders) {
-            loggerProvider.setAuthenticatedUserContext(userId, accountId);
-        }
+            const rule = this._ruleByProvider.get(loggerProvider.name);
+            if (rule && rule.userId === false) {
+                continue;
+            }
 
-        this._isUserIdSet = true;
+            loggerProvider.setUserProperties(userId, accountId);
+            this._userIdSetByProvider.set(loggerProvider.name, true);
+        }
     }
 
     /**
      * Clears the authenticated user id and the account id from the user context.
      */
-    clearAuthenticatedUserContext(): void {
+    clearUserProperties(): void {
         for (const loggerProvider of this._loggerProviders) {
-            loggerProvider.clearAuthenticatedUserContext();
+            const rule = this._ruleByProvider.get(loggerProvider.name);
+            if (rule && rule.userId === false && !this._userIdSetByProvider.get(loggerProvider.name)) {
+                continue;
+            }
+
+            loggerProvider.clearUserProperties();
+            this._userIdSetByProvider.set(loggerProvider.name, false);
+        }
+    }
+
+    log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void {
+        if (logLevel === LogLevel.None) {
+            return;
         }
 
-        this._isUserIdSet = false;
+        for (const loggerProvider of this._loggerProviders) {
+            const rule = this._ruleByProvider.get(loggerProvider.name);
+            if (rule && rule.minLevel != null && logLevel < rule.minLevel) {
+                continue;
+            }
+
+            loggerProvider.log(logLevel, message, logInfo);
+        }
+    }
+
+    startTrackPage(name?: string): void {
+        for (const loggerProvider of this._loggerProviders) {
+            const rule = this._ruleByProvider.get(loggerProvider.name);
+            if (rule && rule.pageView === false) {
+                continue;
+            }
+
+            loggerProvider.startTrackPage(name);
+        }
+    }
+
+    stopTrackPage(name?: string, pageViewInfo?: PageViewTimingInfo): void {
+        for (const loggerProvider of this._loggerProviders) {
+            const rule = this._ruleByProvider.get(loggerProvider.name);
+            if (rule && rule.pageView === false) {
+                continue;
+            }
+
+            loggerProvider.stopTrackPage(name, pageViewInfo);
+        }
+    }
+
+    trackPageView(pageViewInfo: PageViewInfo): void {
+        for (const loggerProvider of this._loggerProviders) {
+            const rule = this._ruleByProvider.get(loggerProvider.name);
+            if (rule && rule.pageView === false) {
+                continue;
+            }
+
+            loggerProvider.trackPageView(pageViewInfo);
+        }
+    }
+
+    startTrackEvent(name: string): void {
+        for (const loggerProvider of this._loggerProviders) {
+            const rule = this._ruleByProvider.get(loggerProvider.name);
+            if (rule && rule.event) {
+                const evtOptions = rule.event;
+                const foundDisabled = Object.keys(evtOptions).find(key => key === name && evtOptions[key] === false) != null;
+
+                if (foundDisabled) {
+                    continue;
+                }
+            }
+
+            loggerProvider.startTrackEvent(name);
+        }
+    }
+
+    stopTrackEvent(name: string, eventInfo?: EventTimingInfo): void {
+        for (const loggerProvider of this._loggerProviders) {
+            const rule = this._ruleByProvider.get(loggerProvider.name);
+            if (rule && rule.event) {
+                const evtOptions = rule.event;
+                const foundDisabled = Object.keys(evtOptions).find(key => key === name && evtOptions[key] === false) != null;
+
+                if (foundDisabled) {
+                    continue;
+                }
+            }
+
+            loggerProvider.stopTrackEvent(name, eventInfo);
+        }
+    }
+
+    trackEvent(eventInfo: EventInfo): void {
+        for (const loggerProvider of this._loggerProviders) {
+            const rule = this._ruleByProvider.get(loggerProvider.name);
+            if (rule && rule.event) {
+                const evtOptions = rule.event;
+                const foundDisabled = Object.keys(evtOptions).find(key => key === name && evtOptions[key] === false) != null;
+
+                if (foundDisabled) {
+                    continue;
+                }
+            }
+
+            loggerProvider.trackEvent(eventInfo);
+        }
+    }
+
+    flush(): void {
+        for (const loggerProvider of this._loggerProviders) {
+            loggerProvider.flush();
+        }
     }
 
     private refreshFilters(loggerInformations: LoggerInformation[]): void {
@@ -116,24 +251,27 @@ export class LogService {
         }
     }
 
-    private selectRule(
-        providerName: string,
-        category: string): { minLevel?: LogLevel; event?: { [name: string]: boolean }; pageView?: boolean } | undefined {
+    private selectRule(providerName: string, category?: string): SelectedRule | undefined {
         if (!this._loggerFilterOptions) {
             return undefined;
         }
 
         const options = this._loggerFilterOptions;
 
+        let userId = options.userId;
         let minLevel = options.minLevel;
         let event = options.event;
         let pageView = options.pageView;
 
+        let userIdCurrent: LoggerFilterRule | undefined;
         let logLevelCurrent: LoggerFilterRule | undefined;
         let pageViewCurrent: LoggerFilterRule | undefined;
         let eventCurrent: LoggerFilterRule | undefined;
 
         for (const rule of options.rules) {
+            if (rule.userId != null && this.isBetter(rule, userIdCurrent, providerName, category)) {
+                userIdCurrent = rule;
+            }
             if (rule.logLevel != null && this.isBetter(rule, logLevelCurrent, providerName, category)) {
                 logLevelCurrent = rule;
             }
@@ -142,10 +280,13 @@ export class LogService {
             }
             if (rule.event != null && this.isBetter(rule, eventCurrent, providerName, category)) {
                 eventCurrent = rule;
-                event = { ... (event || {}), ...rule.event };
+                event = { ...(event || {}), ...rule.event };
             }
         }
 
+        if (userIdCurrent) {
+            userId = userIdCurrent.userId;
+        }
         if (logLevelCurrent) {
             minLevel = logLevelCurrent.logLevel;
         }
@@ -154,6 +295,7 @@ export class LogService {
         }
 
         return {
+            userId,
             minLevel,
             event,
             pageView
@@ -200,8 +342,8 @@ export class LogService {
 
     private parseConfig(config: LoggingConfig): LoggerFilterOptions {
         const options: LoggerFilterOptions = {
-            userId: config.userId,
-            rules: []
+            rules: [],
+            userId: config.userId
         };
         let hasError = false;
 
@@ -239,13 +381,14 @@ export class LogService {
 
     private parseSections(
         options: LoggerFilterOptions,
-        config: {
-            logLevel?: LogLevelSection | LogLevelString;
-            pageView?: PageViewSection | boolean;
-            event?: EventSection | { [name: string]: boolean };
-        },
+        config: LoggerSection,
         providerName?: string): boolean {
         let hasError = false;
+
+        if (config.userId != null) {
+            const rule: LoggerFilterRule = { userId: config.userId, providerName };
+            options.rules.push(rule);
+        }
 
         if (config.logLevel != null) {
             if (typeof config.logLevel === 'string') {

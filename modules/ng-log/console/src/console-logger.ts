@@ -8,7 +8,7 @@
 
 // tslint:disable:no-console
 
-import { EventInfo, Logger, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
+import { EventInfo, EventTimingInfo, Logger, LogInfo, LogLevel, PageViewInfo, PageViewTimingInfo } from '@dagonmetric/ng-log';
 
 /**
  * Console logging implementation for `Logger`.
@@ -16,32 +16,32 @@ import { EventInfo, Logger, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
 export class ConsoleLogger extends Logger {
     private readonly _eventTiming: Map<string, number> = new Map<string, number>();
 
-    constructor(readonly name: string, public verboseLogging?: boolean) {
+    constructor(readonly name: string, public enableDebug?: boolean) {
         super();
     }
 
     // tslint:disable-next-line: no-any
-    log(logLevel: LogLevel, message?: string | Error, optionalParams?: any): void {
+    log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void {
         if (logLevel === LogLevel.None) {
             return;
         }
 
         if (logLevel === LogLevel.Trace) {
-            console.trace(message, optionalParams);
+            console.trace(message, logInfo);
         } else if (logLevel === LogLevel.Debug) {
-            console.debug(message, optionalParams);
+            console.debug(message, logInfo);
         } else if (logLevel === LogLevel.Info) {
-            console.info(message, optionalParams);
+            console.info(message, logInfo);
         } else if (logLevel === LogLevel.Warn) {
-            console.warn(message, optionalParams);
+            console.warn(message, logInfo);
         } else if (logLevel === LogLevel.Error || logLevel === LogLevel.Critical) {
-            console.error(message, optionalParams);
+            console.error(message, logInfo);
         }
     }
 
     startTrackPage(name?: string): void {
         if (name == null && typeof window === 'object' && window.document) {
-            name = window.document && window.document.title || '';
+            name = window.document.title;
         }
 
         if (!name) {
@@ -57,17 +57,16 @@ export class ConsoleLogger extends Logger {
         }
 
         const start = +new Date();
-
         this._eventTiming.set(`page_view_${name}`, start);
 
-        if (this.verboseLogging) {
+        if (this.enableDebug) {
             console.log(`START_TRACK_PAGE_VIEW: ${name}, start: ${start}`);
         }
     }
 
-    stopTrackPage(name?: string, properties?: PageViewInfo): void {
+    stopTrackPage(name?: string, pageViewInfo?: PageViewTimingInfo): void {
         if (name == null && typeof window === 'object' && window.document) {
-            name = window.document && window.document.title || '';
+            name = window.document.title;
         }
 
         if (!name) {
@@ -76,25 +75,29 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        const start = this._eventTiming.get(name);
+        const start = this._eventTiming.get(`page_view_${name}`);
         if (start == null || isNaN(start)) {
             console.error(`The 'stopTrackPage' was called without a corresponding start, name: ${name}.`);
 
             return;
         }
 
-        if (this.verboseLogging) {
+        if (this.enableDebug) {
             const duration = ConsoleLogger.getDuration(start);
-            const suffix = properties != null ? ', properties: ' : '.';
-            console.log(`STOP_TRACK_PAGE_VIEW: ${name}, start: ${start}, duration: ${duration}${suffix}`, properties);
+            const suffix = pageViewInfo != null ? ', properties: ' : '.';
+            console.log(`STOP_TRACK_PAGE_VIEW: ${name}, start: ${start}, duration: ${duration}${suffix}`, pageViewInfo);
         }
 
         this._eventTiming.delete(`page_view_${name}`);
     }
 
-    trackPageView(name?: string, properties?: PageViewInfo): void {
+    trackPageView(pageViewInfo?: PageViewInfo): void {
+        let name = pageViewInfo && pageViewInfo.name ? pageViewInfo.name : undefined;
         if (name == null && typeof window === 'object' && window.document) {
-            name = window.document && window.document.title || '';
+            name = window.document.title;
+            if (pageViewInfo) {
+                pageViewInfo.name = name;
+            }
         }
 
         if (!name) {
@@ -103,9 +106,9 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        if (this.verboseLogging) {
-            const suffix = properties != null ? ', properties: ' : '.';
-            console.log(`TRACK_PAGE_VIEW: ${name}${suffix}`, properties);
+        if (this.enableDebug) {
+            const suffix = pageViewInfo != null ? ', properties: ' : '.';
+            console.log(`TRACK_PAGE_VIEW: ${name}${suffix}`, pageViewInfo);
         }
     }
 
@@ -120,12 +123,12 @@ export class ConsoleLogger extends Logger {
 
         this._eventTiming.set(name, start);
 
-        if (this.verboseLogging) {
+        if (this.enableDebug) {
             console.log(`START_TRACK_EVENT: ${name}, start: ${start}`);
         }
     }
 
-    stopTrackEvent(name: string, properties?: EventInfo): void {
+    stopTrackEvent(name: string, eventInfo?: EventTimingInfo): void {
         const start = this._eventTiming.get(name);
         if (start == null || isNaN(start)) {
             console.error(`The 'stopTrackEvent' was called without a corresponding start, name: ${name}.`);
@@ -133,24 +136,24 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        if (this.verboseLogging) {
+        if (this.enableDebug) {
             const duration = ConsoleLogger.getDuration(start);
-            const suffix = properties != null ? ', properties: ' : '.';
-            console.log(`STOP_TRACK_EVENT: ${name}, start: ${start}, duration: ${duration}${suffix}`, properties);
+            const suffix = eventInfo != null ? ', properties: ' : '.';
+            console.log(`STOP_TRACK_EVENT: ${name}, start: ${start}, duration: ${duration}${suffix}`, eventInfo);
         }
 
         this._eventTiming.delete(name);
     }
 
-    trackEvent(name: string, properties?: EventInfo): void {
-        if (this.verboseLogging) {
-            const suffix = properties != null ? ', properties: ' : '.';
-            console.log(`TRACK_EVENT: ${name}${suffix}`, properties);
+    trackEvent(eventInfo: EventInfo): void {
+        if (this.enableDebug) {
+            const suffix = eventInfo != null ? ', properties: ' : '.';
+            console.log(`TRACK_EVENT: ${eventInfo.name}${suffix}`, eventInfo);
         }
     }
 
     flush(): void {
-        if (this.verboseLogging) {
+        if (this.enableDebug) {
             console.log('FLUSH');
         }
     }

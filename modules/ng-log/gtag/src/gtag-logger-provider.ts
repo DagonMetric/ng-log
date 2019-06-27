@@ -7,11 +7,10 @@
  */
 
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, InjectionToken, Injector, Optional, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID } from '@angular/core';
 
-import { EventInfo, Logger, LoggerProvider, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
+import { Logger, LoggerProvider } from '@dagonmetric/ng-log';
 
-import { DefaultGTagPropertiesMapper } from './default-gtag-properties-mapper';
 import { GTag } from './gtag';
 import { GTagLogger } from './gtag-logger';
 import { GTagPropertiesMapper } from './gtag-properties-mapper';
@@ -19,7 +18,6 @@ import { GTagPropertiesMapper } from './gtag-properties-mapper';
 export interface GTagLoggerOptions {
     measurementId?: string;
     customMap?: { [key: string]: string };
-    propertiesMapper?: GTagPropertiesMapper | InjectionToken<GTagPropertiesMapper>;
 }
 
 export const GTAG_LOGGER_OPTIONS = new InjectionToken<GTagLoggerOptions>('GTagLoggerOptions');
@@ -30,7 +28,7 @@ export const GTAG_LOGGER_OPTIONS = new InjectionToken<GTagLoggerOptions>('GTagLo
 @Injectable({
     providedIn: 'root'
 })
-export class GTagLoggerProvider extends Logger implements LoggerProvider {
+export class GTagLoggerProvider extends LoggerProvider {
     private readonly _loggers = new Map<string, GTagLogger | null>();
     private readonly _options: GTagLoggerOptions;
     private readonly _propertiesMapper: GTagPropertiesMapper;
@@ -100,7 +98,6 @@ export class GTagLoggerProvider extends Logger implements LoggerProvider {
     }
 
     constructor(
-        injector: Injector,
         @Inject(PLATFORM_ID) platformId: Object,
         @Optional() @Inject(GTAG_LOGGER_OPTIONS) options?: GTagLoggerOptions) {
         super();
@@ -115,13 +112,7 @@ export class GTagLoggerProvider extends Logger implements LoggerProvider {
             this._gtag = (window as any).gtag as GTag;
         }
 
-        if (this._options.propertiesMapper && this._options.propertiesMapper instanceof InjectionToken) {
-            this._propertiesMapper = injector.get(this._options.propertiesMapper);
-        } else if (this._options.propertiesMapper && typeof this._options.propertiesMapper === 'object') {
-            this._propertiesMapper = this._options.propertiesMapper;
-        } else {
-            this._propertiesMapper = new DefaultGTagPropertiesMapper();
-        }
+        this._propertiesMapper = new GTagPropertiesMapper();
     }
 
     createLogger(category: string): Logger {
@@ -191,38 +182,5 @@ export class GTagLoggerProvider extends Logger implements LoggerProvider {
             logger.userId = undefined;
             logger.accountId = undefined;
         }
-    }
-
-    // tslint:disable-next-line: no-any
-    log(logLevel: LogLevel, message?: string | Error, optionalParams?: any): void {
-        this.currentLogger.log(logLevel, message, optionalParams);
-    }
-
-    startTrackPage(name?: string): void {
-        this.currentLogger.startTrackPage(name);
-    }
-
-    stopTrackPage(name?: string, properties?: PageViewInfo): void {
-        this.currentLogger.stopTrackPage(name, properties);
-    }
-
-    trackPageView(name?: string, properties?: PageViewInfo): void {
-        this.currentLogger.trackPageView(name, properties);
-    }
-
-    startTrackEvent(name: string): void {
-        this.currentLogger.startTrackEvent(name);
-    }
-
-    stopTrackEvent(name: string, properties?: EventInfo): void {
-        this.currentLogger.stopTrackEvent(name, properties);
-    }
-
-    trackEvent(name: string, properties?: EventInfo): void {
-        this.currentLogger.trackEvent(name, properties);
-    }
-
-    flush(): void {
-        this.currentLogger.flush();
     }
 }

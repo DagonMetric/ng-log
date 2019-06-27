@@ -12,7 +12,7 @@ import { LogService } from './log.service';
 import { LOGGING_CONFIG, LoggingConfig } from './logging-config';
 
 /**
- * The main `NGMODULE` for providing `LogService`.
+ * The `NGMODULE` for providing `LogService`.
  */
 @NgModule({
     providers: [

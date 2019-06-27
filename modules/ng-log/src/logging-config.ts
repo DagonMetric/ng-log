@@ -26,6 +26,7 @@ export interface LoggerSection {
     logLevel?: LogLevelSection | LogLevelString;
     pageView?: PageViewSection | boolean;
     event?: EventSection | { [eventName: string]: boolean };
+    userId?: boolean;
 }
 
 export interface LoggingConfigBase {

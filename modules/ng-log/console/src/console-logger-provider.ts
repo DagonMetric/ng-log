@@ -8,12 +8,12 @@
 
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 
-import { EventInfo, Logger, LoggerProvider, LogLevel, PageViewInfo } from '@dagonmetric/ng-log';
+import { Logger, LoggerProvider } from '@dagonmetric/ng-log';
 
 import { ConsoleLogger } from './console-logger';
 
 export interface ConsoleLoggerOptions {
-    verboseLogging?: boolean;
+    enableDebug?: boolean;
 }
 
 export const CONSOLE_LOGGER_OPTIONS = new InjectionToken<ConsoleLoggerOptions>('ConsoleLoggerOptions');
@@ -24,7 +24,7 @@ export const CONSOLE_LOGGER_OPTIONS = new InjectionToken<ConsoleLoggerOptions>('
 @Injectable({
     providedIn: 'root'
 })
-export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
+export class ConsoleLoggerProvider extends LoggerProvider {
     private readonly _loggers = new Map<string, ConsoleLogger | null>();
     private readonly _options: ConsoleLoggerOptions;
 
@@ -41,7 +41,7 @@ export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
             return this._currentLogger;
         }
 
-        this._currentLogger = new ConsoleLogger('', this._options.verboseLogging);
+        this._currentLogger = new ConsoleLogger('', this._options.enableDebug);
 
         return this._currentLogger;
     }
@@ -58,7 +58,7 @@ export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
             return logger;
         }
 
-        const newLogger = new ConsoleLogger(category, this._options.verboseLogging);
+        const newLogger = new ConsoleLogger(category, this._options.enableDebug);
 
         this._loggers.set(category, newLogger);
 
@@ -69,52 +69,19 @@ export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
         this._userId = userId;
         this._accountId = accountId;
 
-        if (this._options.verboseLogging) {
+        if (this._options.enableDebug) {
             // tslint:disable-next-line: no-console
             console.log(`SET_USER_PROPERTIES: userId: ${userId}, accountId: ${accountId}`);
         }
     }
 
     clearUserProperties(): void {
-        if (this._options.verboseLogging) {
+        if (this._options.enableDebug) {
             // tslint:disable-next-line: no-console
             console.log(`CLEAR_USER_PROPERTIES: userId: ${this._userId}, accountId: ${this._accountId}`);
         }
 
         this._userId = undefined;
         this._accountId = undefined;
-    }
-
-    // tslint:disable-next-line: no-any
-    log(logLevel: LogLevel, message?: string | Error, optionalParams?: any): void {
-        this.currentLogger.log(logLevel, message, optionalParams);
-    }
-
-    startTrackPage(name?: string): void {
-        this.currentLogger.startTrackPage(name);
-    }
-
-    stopTrackPage(name?: string, properties?: PageViewInfo): void {
-        this.currentLogger.stopTrackPage(name, properties);
-    }
-
-    trackPageView(name?: string, properties?: PageViewInfo): void {
-        this.currentLogger.trackPageView(name, properties);
-    }
-
-    startTrackEvent(name: string): void {
-        this.currentLogger.startTrackEvent(name);
-    }
-
-    stopTrackEvent(name: string, properties?: EventInfo): void {
-        this.currentLogger.stopTrackEvent(name, properties);
-    }
-
-    trackEvent(name: string, properties?: EventInfo): void {
-        this.currentLogger.trackEvent(name, properties);
-    }
-
-    flush(): void {
-        this.currentLogger.flush();
     }
 }

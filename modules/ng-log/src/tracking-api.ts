@@ -6,10 +6,8 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-// tslint:disable:no-any
-
-import { EventInfo } from './event-info';
-import { PageViewInfo } from './page-view-info';
+import { EventInfo, EventTimingInfo } from './event-info';
+import { PageViewInfo, PageViewTimingInfo } from './page-view-info';
 
 /**
  * The tracking interface.
@@ -26,14 +24,13 @@ export interface TrackingApi {
      * @param name The string you used as the name in `startTrackPage`. Default to document title.
      * @param pageViewInfo Additional data for page view.
      */
-    stopTrackPage(name?: string, pageViewInfo?: PageViewInfo): void;
+    stopTrackPage(name?: string, pageViewInfo?: EventTimingInfo): void;
 
     /**
      * Logs that a page was viewed.
-     * @param name The page's title. Default to document title.
      * @param pageViewInfo Data for page view.
      */
-    trackPageView(pageViewInfo: PageViewInfo & { name: string }): void;
+    trackPageView(pageViewInfo: PageViewInfo): void;
 
     /**
      * Start timing an extended event. Call `stopTrackEvent` to log the event when it ends.
@@ -46,12 +43,11 @@ export interface TrackingApi {
      * @param name The string you used to identify this event in `startTrackEvent`.
      * @param eventInfo Additional data for event.
      */
-    stopTrackEvent(name: string, eventInfo?: EventInfo): void;
+    stopTrackEvent(name: string, eventInfo?: PageViewTimingInfo): void;
 
     /**
      * Log a user action or other occurrence.
-     * @param name A string to identify this event.
      * @param eventInfo Data for event.
      */
-    trackEvent(eventInfo: EventInfo & { name: string }): void;
+    trackEvent(eventInfo: EventInfo): void;
 }

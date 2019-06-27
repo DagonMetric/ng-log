@@ -32,6 +32,10 @@ export interface LoggerFilterRule {
      * Enables or disables tracking page view.
      */
     pageView?: boolean;
+    /**
+     * Enables or disables setting authenticated user id.
+     */
+    userId?: boolean;
 }
 
 /**
