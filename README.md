@@ -2,6 +2,8 @@
 
 Vendor-agnostic Logging and telemetry client abstractions and some implementations for Angular applications.
 
+[WIP]
+
 ## Modules
 
 [ng-log](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log)
