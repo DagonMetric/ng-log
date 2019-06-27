@@ -1,8 +1,30 @@
-# Logging and Vendor-agnostic Analytics for Angular
+# Logging and Telemetry Client for Angular
 
-Logging and vendor-agnostic analytics for Angular applications built-in integration with Google Analytics (gtag), Facebook Pixcel and Microsoft Azure Application Insights.
+Vendor-agnostic Logging and telemetry client abstractions and some implementations for Angular applications.
 
-[WIP]
+## Modules
+
+[ng-log](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log)
+
+The core log service and telemetry client abstractions
+
+[ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console)
+
+Console logging implementation for `Logger`
+
+[ng-log-config](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config)
+
+`LogConfigModule` for setting logging configuration with `ConfigService`.
+
+## Features
+
+* Log service provides both application scoped root logger and category scoped child loggers with `createLogger(categoryName)` method.
+* Supports standard logging api (`trace`, `debug`, `info`, `warn`, `error`, `fatal`) and telemetry tracking api (`trackPageView`, `trackEvent`, etc.)
+* Extendable and plugable logging provider (see built-in [ConsoleLoggerProvider](https://github.com/DagonMetric/ng-log/blob/master/modules/ng-log/console/src/console-logger-provider.ts) for implementation demo)
+* Flexable logging configuration (similar and same as [Microsoft ASP.NET Core Logging Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-2.2#configuration))
+* Logging configuration can be set by code or with a configuration loader (see [LogConfigModule](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config) for detail)
+* Latest versions of Angular are supported
+* Work with Angular Universal (Server Side Rendering - SSR)
 
 ## Getting Started
 
@@ -32,8 +54,8 @@ import { ConsoleLoggerModule } from '@dagonmetric/ng-log/console';
   imports: [
     // Other module imports
 
-    // ng-log module
-    LoggerModule.withConfig({ minLevel: 'trace' }),
+    // ng-log modules
+    LogModule.withConfig({ minLevel: 'debug' }),
     ConsoleLoggerModule
   ]
 })
@@ -45,25 +67,41 @@ export class AppModule { }
 ```typescript
 import { Component, OnInit } from '@angular/core';
 
-import { Logger, LogService } from '@dagonmetric/ng-log';
+import { LogService } from '@dagonmetric/ng-log';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  private readonly _logger: Logger;
-
-  constructor(logService: LogService) {
-    this._logger = logService.createLogger('app');
-  }
+  constructor(private readonly _logService: LogService) { }
 
   ngOnInit(): void {
-    this._logger.trace('Testing trace');
-    this._logger.debug('Testing debug');
-    this._logger.info('Testing info');
-    this._logger.warn('Testing warn');
-    this._logger.error('Testing error');
+    // Track traces
+    this._logService.trace('Testing trace');
+    this._logService.debug('Testing debug');
+    this._logService.info('Testing info');
+    this._logService.warn('Testing warn');
+
+    // Track exceptions
+    this._logService.error(new Error('Testing error'));
+    this._logService.fatal(new Error('Testing critical'));
+
+    // Track page view
+    this._logService.trackPageView({
+      name: 'My Angular App',
+      uri: '/home'
+    });
+
+    // Track custom event
+    this._logService.trackEvent({
+      name: 'video_auto_play_start',
+      eventLabel: 'My promotional video',
+      eventCategory: 'video_auto_play',
+      properties: {
+        nonInteraction: true
+      }
+    });
   }
 }
 ```
