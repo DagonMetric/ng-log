@@ -9,14 +9,14 @@
 import { EventInfo, EventTimingInfo } from './event-info';
 import { LogInfo } from './log-info';
 import { LogLevel } from './log-level';
-import { Logger } from './logger';
+import { LoggerBase } from './logger';
 import { LoggerInformation } from './logger-information';
 import { PageViewInfo, PageViewTimingInfo } from './page-view-info';
 
 /**
  * Internal logging implementation for `Logger`.
  */
-export class DefaultLogger extends Logger {
+export class DefaultLogger extends LoggerBase {
     private _loggerInformations?: LoggerInformation[];
 
     get loggerInformations(): LoggerInformation[] {
@@ -57,7 +57,7 @@ export class DefaultLogger extends Logger {
         }
     }
 
-    trackPageView(pageViewInfo: PageViewInfo): void {
+    trackPageView(pageViewInfo?: PageViewInfo): void {
         for (const loggerInformation of this.loggerInformations) {
             if (!this.isPageViewEnabled(loggerInformation)) {
                 continue;

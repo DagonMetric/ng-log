@@ -3,7 +3,7 @@
 
 import { TestBed } from '@angular/core/testing';
 
-import { LoggerProvider } from '../../src/logger-provider';
+import { LOGGER_PROVIDER, LoggerProvider } from '../../src/logger-provider';
 
 import { ConsoleLoggerProvider } from '../src/console-logger-provider';
 import { ConsoleLoggerModule } from '../src/console-logger.module';
@@ -16,7 +16,7 @@ describe('ConsoleLoggerModule', () => {
             ]
         });
 
-        const loggerProviders = TestBed.get<LoggerProvider[]>(LoggerProvider as any);
+        const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER);
 
         expect(loggerProviders).toBeDefined();
         expect((loggerProviders as LoggerProvider[])[0] instanceof ConsoleLoggerProvider).toBeTruthy();

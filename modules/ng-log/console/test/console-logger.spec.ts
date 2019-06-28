@@ -9,11 +9,7 @@ describe('ConsoleLogger', () => {
     let logger: ConsoleLogger;
 
     beforeEach(() => {
-        logger = new ConsoleLogger('test');
-    });
-
-    it('should have a category name', () => {
-        expect(logger.name).toBe('test');
+        logger = new ConsoleLogger();
     });
 
     it("should work with 'trace' method", () => {

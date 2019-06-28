@@ -15,7 +15,7 @@ export interface PageViewTimingInfo {
     /**
      * Additional properties.
      */
-    properties?: { [key: string]: any; };
+    properties?: { [key: string]: any };
     /**
      * The page's URL.
      */

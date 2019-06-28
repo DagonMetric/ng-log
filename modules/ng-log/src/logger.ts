@@ -6,20 +6,110 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { Injectable } from '@angular/core';
-
 import { EventInfo, EventTimingInfo } from './event-info';
 import { LogInfo } from './log-info';
 import { LogLevel } from './log-level';
-import { LoggingApi } from './logging-api';
 import { PageViewInfo, PageViewTimingInfo } from './page-view-info';
-import { TrackingApi } from './tracking-api';
+
+export interface Logger {
+    /**
+     * Logs message or error with severity level.
+     * @param logLevel The log level.
+     * @param message Message string to log.
+     * @param logInfo Optional parameters.
+     */
+    log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void;
+
+    /**
+     * Logs that contain the most detailed messages.
+     * @param message Message string to log.
+     * @param logInfo Optional parameters.
+     */
+    trace(message: string | Error, logInfo?: LogInfo): void;
+
+    /**
+     * Logs that are used for interactive investigation during development.
+     * @param message Message string to log.
+     * @param logInfo Optional parameters.
+     */
+    debug(message: string, logInfo?: LogInfo): void;
+
+    /**
+     * Logs that track the general flow of the application. These logs should have long-term value.
+     * @param message Message string to log.
+     * @param logInfo Optional parameters.
+     */
+    info(message: string, logInfo?: LogInfo): void;
+
+    /**
+     * Logs that highlight an abnormal or unexpected event in the application flow.
+     * @param message Message string to log.
+     * @param logInfo Optional parameters.
+     */
+    warn(message: string, logInfo?: LogInfo): void;
+
+    /**
+     * Logs that highlight when the current flow of execution is stopped due to a failure.
+     * @param message Error description or exception object to log.
+     * @param logInfo Optional parameters.
+     */
+    error(message: string | Error, logInfo?: LogInfo): void;
+
+    /**
+     * Logs that describe an unrecoverable application or system crash.
+     * @param message Error description or exception object to log.
+     * @param logInfo Optional parameters.
+     */
+    fatal(message: string | Error, logInfo: LogInfo): void;
+
+    /**
+     * Starts timing how long the user views a page. Call this when the page opens.
+     * @param name A string that idenfities this item, unique within this HTML document. Default to document title.
+     */
+    startTrackPage(name?: string): void;
+
+    /**
+     * Logs how long a page was visible, after `startTrackPage`. Call this when the page closes.
+     * @param name The string you used as the name in `startTrackPage`. Default to document title.
+     * @param pageViewInfo Additional data for page view.
+     */
+    stopTrackPage(name?: string, pageViewInfo?: PageViewTimingInfo): void;
+
+    /**
+     * Logs that a page was viewed.
+     * @param pageViewInfo Data for page view.
+     */
+    trackPageView(pageViewInfo?: PageViewInfo): void;
+
+    /**
+     * Start timing an extended event. Call `stopTrackEvent` to log the event when it ends.
+     * @param name A string that identifies this event uniquely within the document.
+     */
+    startTrackEvent(name: string): void;
+
+    /**
+     * Log an extended event that you started timing with `startTrackEvent`.
+     * @param name The string you used to identify this event in `startTrackEvent`.
+     * @param eventInfo Additional data for event.
+     */
+    stopTrackEvent(name: string, eventInfo?: EventTimingInfo): void;
+
+    /**
+     * Log a user action or other occurrence.
+     * @param eventInfo Data for event.
+     */
+    trackEvent(eventInfo: EventInfo): void;
+
+    /**
+     * Flush to log/send data immediately.
+     */
+    flush(): void;
+}
 
 /**
  * The logger abstract class.
  */
-@Injectable()
-export abstract class Logger implements LoggingApi, TrackingApi {
+export abstract class LoggerBase implements Logger {
     /**
      * Logs message or error with severity level.
      * @param logLevel The log level.
@@ -99,7 +189,7 @@ export abstract class Logger implements LoggingApi, TrackingApi {
      * Logs that a page was viewed.
      * @param pageViewInfo Data for page view.
      */
-    abstract trackPageView(pageViewInfo: PageViewInfo): void;
+    abstract trackPageView(pageViewInfo?: PageViewInfo): void;
 
     /**
      * Start timing an extended event. Call `stopTrackEvent` to log the event when it ends.

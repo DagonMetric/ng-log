@@ -12,10 +12,10 @@ import { DefaultLogger } from './default-logger';
 import { EventInfo, EventTimingInfo } from './event-info';
 import { LogInfo } from './log-info';
 import { LogLevel } from './log-level';
-import { Logger } from './logger';
+import { Logger, LoggerBase } from './logger';
 import { LoggerFilterOptions, LoggerFilterRule } from './logger-filter-options';
 import { LoggerInformation } from './logger-information';
-import { LoggerProvider } from './logger-provider';
+import { LOGGER_PROVIDER, LoggerProvider } from './logger-provider';
 import {
     EventSection,
     LoggerSection,
@@ -40,9 +40,9 @@ interface SelectedRule {
 @Injectable({
     providedIn: 'root'
 })
-export class LogService extends Logger {
+export class LogService extends LoggerBase {
     private readonly _loggerProviders: LoggerProvider[];
-    private readonly _loggers = new Map<string, DefaultLogger | null>();
+    private readonly _loggers: { [key: string]: DefaultLogger | null } = {};
     private readonly _ruleByProvider = new Map<string, SelectedRule>();
     private readonly _userIdSetByProvider = new Map<string, boolean>();
     private _loggerFilterOptions?: LoggerFilterOptions;
@@ -61,18 +61,18 @@ export class LogService extends Logger {
             }
         }
 
-        for (const pair of this._loggers) {
-            const logger = pair[1];
-            if (logger == null) {
-                this._loggers.delete(pair[0]);
-                continue;
+        const categoryNames = Object.keys(this._loggers);
+
+        for (const categoryName of categoryNames) {
+            const logger = this._loggers[categoryName];
+            if (logger != null) {
+                this.refreshFilters(logger.loggerInformations);
             }
-            this.refreshFilters(logger.loggerInformations);
         }
     }
 
     constructor(
-        @Optional() loggerProviders?: LoggerProvider[],
+        @Optional() @Inject(LOGGER_PROVIDER) loggerProviders?: LoggerProvider[],
         @Optional() @Inject(LOGGING_CONFIG) config?: LoggingConfig) {
         super();
         this._loggerProviders = loggerProviders || [];
@@ -82,7 +82,7 @@ export class LogService extends Logger {
     }
 
     createLogger(category: string): Logger {
-        const logger = this._loggers.get(category);
+        const logger = this._loggers[category];
         if (logger) {
             return logger;
         }
@@ -102,7 +102,7 @@ export class LogService extends Logger {
             };
         });
 
-        this._loggers.set(category, newLogger);
+        this._loggers[category] = newLogger;
 
         return newLogger;
     }
@@ -176,7 +176,7 @@ export class LogService extends Logger {
         }
     }
 
-    trackPageView(pageViewInfo: PageViewInfo): void {
+    trackPageView(pageViewInfo?: PageViewInfo): void {
         for (const loggerProvider of this._loggerProviders) {
             const rule = this._ruleByProvider.get(loggerProvider.name);
             if (rule && rule.pageView === false) {

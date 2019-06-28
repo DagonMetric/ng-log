@@ -41,6 +41,29 @@
         }
       }
     },
+    {
+      "extends": "ngb:lib-default",
+      "name": "ng-log-config",
+      "root": "modules/ng-log/config",
+      "outputPath": "dist/packages/ng-log",
+      "libraryName": "ngLog.config",
+      "externals": {
+        "@dagonmetric/ng-config": "ngConfig",
+        "@dagonmetric/ng-log": "ngLog"
+      },
+      "envOverrides": {
+        "prod": {
+          "copy": [
+            {
+              "from": "README.md",
+              "to": "console/README.md"
+            }
+          ],
+          "bundles": true,
+          "packageJsonCopy": true
+        }
+      }
+    }
   ],
   "apps": []
 }

@@ -8,19 +8,18 @@
 
 // tslint:disable:no-console
 
-import { EventInfo, EventTimingInfo, Logger, LogInfo, LogLevel, PageViewInfo, PageViewTimingInfo } from '@dagonmetric/ng-log';
+import { EventInfo, EventTimingInfo, LoggerBase, LogInfo, LogLevel, PageViewInfo, PageViewTimingInfo } from '@dagonmetric/ng-log';
 
 /**
  * Console logging implementation for `Logger`.
  */
-export class ConsoleLogger extends Logger {
+export class ConsoleLogger extends LoggerBase {
     private readonly _eventTiming: Map<string, number> = new Map<string, number>();
 
-    constructor(readonly name: string, public enableDebug?: boolean) {
+    constructor(public enableDebug?: boolean) {
         super();
     }
 
-    // tslint:disable-next-line: no-any
     log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void {
         if (logLevel === LogLevel.None) {
             return;

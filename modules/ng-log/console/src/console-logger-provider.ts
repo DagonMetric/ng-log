@@ -8,12 +8,22 @@
 
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 
-import { Logger, LoggerProvider } from '@dagonmetric/ng-log';
+import {
+    EventInfo,
+    EventTimingInfo,
+    Logger,
+    LoggerBase,
+    LoggerProvider,
+    LogInfo,
+    LogLevel,
+    PageViewInfo,
+    PageViewTimingInfo
+} from '@dagonmetric/ng-log';
 
 import { ConsoleLogger } from './console-logger';
 
 export interface ConsoleLoggerOptions {
-    enableDebug?: boolean;
+    enableDebug: boolean;
 }
 
 export const CONSOLE_LOGGER_OPTIONS = new InjectionToken<ConsoleLoggerOptions>('ConsoleLoggerOptions');
@@ -24,8 +34,8 @@ export const CONSOLE_LOGGER_OPTIONS = new InjectionToken<ConsoleLoggerOptions>('
 @Injectable({
     providedIn: 'root'
 })
-export class ConsoleLoggerProvider extends LoggerProvider {
-    private readonly _loggers = new Map<string, ConsoleLogger | null>();
+export class ConsoleLoggerProvider extends LoggerBase implements LoggerProvider {
+    private readonly _loggers: { [key: string]: ConsoleLogger | null } = {};
     private readonly _options: ConsoleLoggerOptions;
 
     private _userId: string | undefined;
@@ -36,31 +46,21 @@ export class ConsoleLoggerProvider extends LoggerProvider {
         return 'console';
     }
 
-    get currentLogger(): ConsoleLogger {
-        if (this._currentLogger) {
-            return this._currentLogger;
-        }
-
-        this._currentLogger = new ConsoleLogger('', this._options.enableDebug);
-
-        return this._currentLogger;
-    }
-
     constructor(
         @Optional() @Inject(CONSOLE_LOGGER_OPTIONS) options?: ConsoleLoggerOptions) {
         super();
-        this._options = options || {};
+        this._options = options || { enableDebug: false };
     }
 
     createLogger(category: string): Logger {
-        const logger = this._loggers.get(category);
+        const logger = this._loggers[category];
         if (logger) {
             return logger;
         }
 
-        const newLogger = new ConsoleLogger(category, this._options.enableDebug);
+        const newLogger = new ConsoleLogger(this._options.enableDebug);
 
-        this._loggers.set(category, newLogger);
+        this._loggers[category] = newLogger;
 
         return newLogger;
     }
@@ -83,5 +83,47 @@ export class ConsoleLoggerProvider extends LoggerProvider {
 
         this._userId = undefined;
         this._accountId = undefined;
+    }
+
+    log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void {
+        this.currentLogger.log(logLevel, message, logInfo);
+    }
+
+    startTrackPage(name?: string): void {
+        this.currentLogger.startTrackPage(name);
+    }
+
+    stopTrackPage(name?: string, pageViewInfo?: PageViewTimingInfo): void {
+        this.currentLogger.stopTrackPage(name, pageViewInfo);
+    }
+
+    trackPageView(pageViewInfo?: PageViewInfo): void {
+        this.currentLogger.trackPageView(pageViewInfo);
+    }
+
+    startTrackEvent(name: string): void {
+        this.currentLogger.startTrackEvent(name);
+    }
+
+    stopTrackEvent(name: string, eventInfo?: EventTimingInfo): void {
+        this.currentLogger.stopTrackEvent(name, eventInfo);
+    }
+
+    trackEvent(eventInfo: EventInfo): void {
+        this.currentLogger.trackEvent(eventInfo);
+    }
+
+    flush(): void {
+        this.currentLogger.flush();
+    }
+
+    private get currentLogger(): ConsoleLogger {
+        if (this._currentLogger) {
+            return this._currentLogger;
+        }
+
+        this._currentLogger = new ConsoleLogger(this._options.enableDebug);
+
+        return this._currentLogger;
     }
 }

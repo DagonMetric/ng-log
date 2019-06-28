@@ -7,14 +7,14 @@ import { TestBed } from '@angular/core/testing';
 import { DefaultLogger } from '../src/default-logger';
 import { LogLevel } from '../src/log-level';
 import { LogService } from '../src/log.service';
-import { Logger } from '../src/logger';
-import { LoggerProvider } from '../src/logger-provider';
+import { Logger, LoggerBase } from '../src/logger';
+import { LOGGER_PROVIDER, LoggerProvider } from '../src/logger-provider';
 import { LOGGING_CONFIG, LoggingConfig } from '../src/logging-config';
 
 /**
  * Mock logger implementation.
  */
-export class MockLogger extends Logger {
+export class MockLogger extends LoggerBase {
     constructor(readonly name?: string) {
         super();
     }
@@ -58,21 +58,13 @@ export class MockLogger extends Logger {
 @Injectable({
     providedIn: 'root'
 })
-export class MockLoggerProvider extends LoggerProvider {
-    private _currentLogger?: MockLogger;
-
+export class MockLoggerProvider extends LoggerBase implements LoggerProvider {
     get name(): string {
         return 'mock';
     }
 
-    get currentLogger(): MockLogger {
-        if (this._currentLogger) {
-            return this._currentLogger;
-        }
-
-        this._currentLogger = new MockLogger();
-
-        return this._currentLogger;
+    createLogger(category: string): Logger {
+        return new MockLogger(category);
     }
 
     setUserProperties(): void {
@@ -83,8 +75,36 @@ export class MockLoggerProvider extends LoggerProvider {
         // Do nothing
     }
 
-    createLogger(category: string): Logger {
-        return new MockLogger(category);
+    log(): void {
+        // Do nothing
+    }
+
+    startTrackPage(): void {
+        // Do nothing
+    }
+
+    stopTrackPage(): void {
+        // Do nothing
+    }
+
+    trackPageView(): void {
+        // Do nothing
+    }
+
+    startTrackEvent(): void {
+        // Do nothing
+    }
+
+    stopTrackEvent(): void {
+        // Do nothing
+    }
+
+    trackEvent(): void {
+        // Do nothing
+    }
+
+    flush(): void {
+        // Do nothing
     }
 }
 
@@ -157,7 +177,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     },
@@ -183,7 +203,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -201,7 +221,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -221,7 +241,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -242,7 +262,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -292,7 +312,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -316,7 +336,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -361,7 +381,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -422,7 +442,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -473,7 +493,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -529,7 +549,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -595,7 +615,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -656,7 +676,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -664,7 +684,7 @@ describe('LogService', () => {
             });
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LoggerProvider as any) as LoggerProvider[];
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'setUserProperties');
@@ -680,7 +700,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -688,7 +708,7 @@ describe('LogService', () => {
             });
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LoggerProvider as any) as LoggerProvider[];
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
             const loggerProvider = loggerProviders[0];
             logService.config = {
                 userId: false
@@ -712,7 +732,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -720,7 +740,7 @@ describe('LogService', () => {
             });
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LoggerProvider as any) as LoggerProvider[];
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'clearUserProperties');
@@ -738,7 +758,7 @@ describe('LogService', () => {
             TestBed.configureTestingModule({
                 providers: [
                     {
-                        provide: LoggerProvider,
+                        provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     }
@@ -746,7 +766,7 @@ describe('LogService', () => {
             });
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LoggerProvider as any) as LoggerProvider[];
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'clearUserProperties');
@@ -772,7 +792,7 @@ describe('DefaultLogger', () => {
         TestBed.configureTestingModule({
             providers: [
                 {
-                    provide: LoggerProvider,
+                    provide: LOGGER_PROVIDER,
                     useClass: MockLoggerProvider,
                     multi: true
                 }
