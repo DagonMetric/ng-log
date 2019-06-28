@@ -29,7 +29,7 @@ export interface LoggerSection {
     userId?: boolean;
 }
 
-export interface LoggingConfigBase {
+export interface LogConfigBase {
     minLevel?: LogLevelString;
     logLevel?: LogLevelSection;
     pageView?: PageViewSection | boolean;
@@ -37,8 +37,8 @@ export interface LoggingConfigBase {
     userId?: boolean;
 }
 
-export interface LoggingConfig extends LoggingConfigBase {
+export interface LogConfig extends LogConfigBase {
     [name: string]: LoggerSection | LogLevelSection | EventSection | PageViewSection | LogLevelString | boolean | undefined;
 }
 
-export const LOGGING_CONFIG = new InjectionToken<LoggingConfig>('LoggingConfig');
+export const LOG_CONFIG = new InjectionToken<LogConfig>('LogConfig');

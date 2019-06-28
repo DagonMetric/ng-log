@@ -1,5 +1,4 @@
 // tslint:disable: no-floating-promises
-// tslint:disable: no-console
 
 import { TestBed } from '@angular/core/testing';
 

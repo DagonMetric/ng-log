@@ -9,7 +9,7 @@
 import { NgModule } from '@angular/core';
 
 import { ConfigService } from '@dagonmetric/ng-config';
-import { LoggingConfig, LogService } from '@dagonmetric/ng-log';
+import { LogConfig, LogService } from '@dagonmetric/ng-log';
 
 /**
  * The `NGMODULE` for setting logging configuration with `ConfigService`.
@@ -21,7 +21,7 @@ export class LogConfigModule {
         configService.loadEvent
             .subscribe((evt) => {
                 if (evt.status === 'loaded' && evt.data.logging) {
-                    logService.config = evt.data.logging as LoggingConfig;
+                    logService.setConfig(evt.data.logging as LogConfig);
                 }
             });
     }

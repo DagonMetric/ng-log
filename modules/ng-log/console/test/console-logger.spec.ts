@@ -9,7 +9,7 @@ describe('ConsoleLogger', () => {
     let logger: ConsoleLogger;
 
     beforeEach(() => {
-        logger = new ConsoleLogger();
+        logger = new ConsoleLogger(true);
     });
 
     it("should work with 'trace' method", () => {
@@ -174,15 +174,13 @@ describe('ConsoleLogger', () => {
         expect(console.log).toHaveBeenCalled();
     });
 
-    it('should not track page if page names are not the same', () => {
-        spyOn(console, 'log');
+    it("should log an error when calling 'stopTrackPage' if page names are not the same", () => {
+        spyOn(console, 'error');
 
         logger.startTrackPage('home1');
         logger.stopTrackPage('home2');
 
-        // tslint:disable: no-unsafe-any no-any
-        expect((console.log as any).calls.any()).toEqual(false);
-        // tslint:enable: no-unsafe-any no-any
+        expect(console.error).toHaveBeenCalledWith("The 'stopTrackPage' was called without a corresponding start, name: home2.");
     });
 
     it("should work with 'trackPageView'", () => {
@@ -210,25 +208,22 @@ describe('ConsoleLogger', () => {
         expect(console.log).toHaveBeenCalled();
     });
 
-    it('should not track event if event names are not the same', () => {
-        spyOn(console, 'log');
+    it("should log an error when calling 'stopTrackEvent' if event names are not the same", () => {
+        spyOn(console, 'error');
 
         logger.startTrackEvent('event1');
         logger.stopTrackEvent('event2');
 
-        // tslint:disable: no-unsafe-any no-any
-        expect((console.log as any).calls.any()).toEqual(false);
-        // tslint:enable: no-unsafe-any no-any
+        expect(console.error).toHaveBeenCalledWith("The 'stopTrackEvent' was called without a corresponding start, name: event2.");
     });
 
     it("should work with 'trackEvent'", () => {
         spyOn(console, 'log');
 
-        const eventData = {
+        logger.trackEvent({
             name: 'event1',
             eventCategory: 'test'
-        };
-        logger.trackEvent(eventData);
+        });
         logger.trackEvent({ name: 'event2' });
 
         // Coverage only, do nothing

@@ -8,12 +8,12 @@
 
 import { InjectionToken } from '@angular/core';
 
-import { Logger } from './logger';
+import { Logger, LoggingApi } from './logger';
 
 /**
  * The logger provider interface.
  */
-export interface LoggerProvider extends Logger {
+export interface LoggerProvider extends LoggingApi {
     readonly name: string;
     createLogger(category: string): Logger;
     setUserProperties(userId: string, accountId?: string): void;

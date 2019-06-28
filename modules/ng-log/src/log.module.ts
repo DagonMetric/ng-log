@@ -8,8 +8,8 @@
 
 import { ModuleWithProviders, NgModule } from '@angular/core';
 
+import { LOG_CONFIG, LogConfig } from './log-config';
 import { LogService } from './log.service';
-import { LOGGING_CONFIG, LoggingConfig } from './logging-config';
 
 /**
  * The `NGMODULE` for providing `LogService`.
@@ -20,12 +20,12 @@ import { LOGGING_CONFIG, LoggingConfig } from './logging-config';
     ]
 })
 export class LogModule {
-    static withConfig(config: LoggingConfig): ModuleWithProviders {
+    static withConfig(config: LogConfig): ModuleWithProviders {
         return {
             ngModule: LogModule,
             providers: [
                 {
-                    provide: LOGGING_CONFIG,
+                    provide: LOG_CONFIG,
                     useValue: config
                 }
             ]

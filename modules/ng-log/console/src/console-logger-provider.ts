@@ -12,7 +12,6 @@ import {
     EventInfo,
     EventTimingInfo,
     Logger,
-    LoggerBase,
     LoggerProvider,
     LogInfo,
     LogLevel,
@@ -34,7 +33,7 @@ export const CONSOLE_LOGGER_OPTIONS = new InjectionToken<ConsoleLoggerOptions>('
 @Injectable({
     providedIn: 'root'
 })
-export class ConsoleLoggerProvider extends LoggerBase implements LoggerProvider {
+export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
     private readonly _loggers: { [key: string]: ConsoleLogger | null } = {};
     private readonly _options: ConsoleLoggerOptions;
 

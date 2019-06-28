@@ -5,16 +5,16 @@ import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { DefaultLogger } from '../src/default-logger';
+import { LOG_CONFIG, LogConfig } from '../src/log-config';
 import { LogLevel } from '../src/log-level';
 import { LogService } from '../src/log.service';
-import { Logger, LoggerBase } from '../src/logger';
+import { Logger } from '../src/logger';
 import { LOGGER_PROVIDER, LoggerProvider } from '../src/logger-provider';
-import { LOGGING_CONFIG, LoggingConfig } from '../src/logging-config';
 
 /**
  * Mock logger implementation.
  */
-export class MockLogger extends LoggerBase {
+export class MockLogger extends Logger {
     constructor(readonly name?: string) {
         super();
     }
@@ -58,7 +58,7 @@ export class MockLogger extends LoggerBase {
 @Injectable({
     providedIn: 'root'
 })
-export class MockLoggerProvider extends LoggerBase implements LoggerProvider {
+export class MockLoggerProvider extends Logger implements LoggerProvider {
     get name(): string {
         return 'mock';
     }
@@ -123,7 +123,11 @@ describe('LogService', () => {
 
     describe('createLogger', () => {
         it("should create 'DefaultLogger' without 'LOGGER_PROVIDER' registration", () => {
-            TestBed.configureTestingModule({});
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService
+                ]
+            });
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const logger = logService.createLogger('test');
@@ -132,8 +136,8 @@ describe('LogService', () => {
             expect(logger instanceof DefaultLogger).toBeTruthy();
         });
 
-        it("should create 'DefaultLogger' with 'LOGGER_PROVIDER' and 'LOG_OPTIONS'", () => {
-            const config: LoggingConfig = {
+        it("should create 'DefaultLogger' with 'LOGGER_PROVIDER' and 'LOG_CONFIG'", () => {
+            const config: LogConfig = {
                 userId: true,
                 minLevel: 'trace',
                 logLevel: {
@@ -176,13 +180,14 @@ describe('LogService', () => {
 
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
                         multi: true
                     },
                     {
-                        provide: LOGGING_CONFIG,
+                        provide: LOG_CONFIG,
                         useValue: config
                     }
                 ]
@@ -202,6 +207,7 @@ describe('LogService', () => {
         it("should create same 'DefaultLogger' instance if same category name is passed", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -220,6 +226,7 @@ describe('LogService', () => {
         it("should create unique 'DefaultLogger' instances if unique category name is passed", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -240,6 +247,7 @@ describe('LogService', () => {
         it('should be able to call with empty config value', () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -251,7 +259,7 @@ describe('LogService', () => {
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const logger = logService.createLogger('test') as DefaultLogger;
 
-            logService.config = {};
+            logService.setConfig({});
 
             expect(logger.loggerInformations[0].minLevel).toBeUndefined();
             expect(logger.loggerInformations[0].pageView).toBeUndefined();
@@ -261,6 +269,7 @@ describe('LogService', () => {
         it("should be able to set config 'minLevel' values", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -272,45 +281,46 @@ describe('LogService', () => {
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const logger = logService.createLogger('test') as DefaultLogger;
 
-            logService.config = {
+            logService.setConfig({
                 minLevel: 'trace'
-            };
+            });
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Trace);
 
-            logService.config = {
+            logService.setConfig({
                 minLevel: 'debug'
-            };
+            });
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Debug);
 
-            logService.config = {
+            logService.setConfig({
                 minLevel: 'info'
-            };
+            });
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Info);
 
-            logService.config = {
+            logService.setConfig({
                 minLevel: 'warn'
-            };
+            });
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Warn);
 
-            logService.config = {
+            logService.setConfig({
                 minLevel: 'error'
-            };
+            });
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Error);
 
-            logService.config = {
+            logService.setConfig({
                 minLevel: 'critical'
-            };
+            });
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Critical);
 
-            logService.config = {
+            logService.setConfig({
                 minLevel: 'none'
-            };
+            });
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.None);
         });
 
         it("should log an error when invalid 'minLevel' is provided", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -323,11 +333,11 @@ describe('LogService', () => {
 
             spyOn(console, 'error');
 
-            logService.config = {
+            logService.setConfig({
                 // Invalid log level
                 // tslint:disable-next-line: no-any
                 minLevel: 'important' as any
-            };
+            });
 
             expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, minLevel value 'important' is not supported.");
         });
@@ -335,6 +345,7 @@ describe('LogService', () => {
         it("should be able to set config 'logLevel' value", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -346,40 +357,41 @@ describe('LogService', () => {
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const logger = logService.createLogger('ng-log-test') as DefaultLogger;
 
-            logService.config = {
+            logService.setConfig({
                 logLevel: {
                     default: 'trace',
                     angular: 'debug',
                     'ng-log-test': 'info',
                     'ng-log': 'warn'
                 }
-            };
+            });
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Info);
 
-            logService.config = {
+            logService.setConfig({
                 mock: {
                     logLevel: 'error'
                 },
                 logLevel: {
                     default: 'critical'
                 }
-            };
+            });
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Error);
 
-            logService.config = {
+            logService.setConfig({
                 mock: {
                     logLevel: {
                         default: 'error',
                         'ng-log*test': 'critical'
                     }
                 }
-            };
+            });
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Critical);
         });
 
         it("should log an error when invalid 'logLevel' value is provided", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -392,27 +404,27 @@ describe('LogService', () => {
 
             spyOn(console, 'error');
 
-            logService.config = {
+            logService.setConfig({
                 logLevel: {
                     // Invalid category name
                     'angular*unit*test': 'error'
                 }
-            };
-            logService.config = {
+            });
+            logService.setConfig({
                 logLevel: {
                     // Invalid log level
                     // tslint:disable-next-line: no-any
                     default: 'important' as any
                 }
-            };
-            logService.config = {
+            });
+            logService.setConfig({
                 logLevel: {
                     // Invalid log level
                     // tslint:disable-next-line: no-any
                     test: 100 as any
                 }
-            };
-            logService.config = {
+            });
+            logService.setConfig({
                 console: {
                     logLevel: {
                         'angular*unit*test': 'error'
@@ -426,7 +438,7 @@ describe('LogService', () => {
                     logLevel: false
                 },
                 invalid: 'info'
-            };
+            });
 
             expect(console.error)
                 .toHaveBeenCalledWith('Invalid logging configuration, only one wildcard character is allowed in category name.');
@@ -441,6 +453,7 @@ describe('LogService', () => {
         it("should be able to set config 'pageView' value", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -452,30 +465,30 @@ describe('LogService', () => {
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const logger = logService.createLogger('test') as DefaultLogger;
 
-            logService.config = {
+            logService.setConfig({
                 pageView: true
-            };
+            });
             expect(logger.loggerInformations[0].pageView).toBeTruthy();
 
-            logService.config = {
+            logService.setConfig({
                 pageView: {
                     default: false,
                     test: true
                 }
-            };
+            });
             expect(logger.loggerInformations[0].pageView).toBeTruthy();
 
-            logService.config = {
+            logService.setConfig({
                 // With provider name
                 mock: {
                     pageView: true
                 },
                 // Without provider name
                 pageView: false
-            };
+            });
             expect(logger.loggerInformations[0].pageView).toBeTruthy();
 
-            logService.config = {
+            logService.setConfig({
                 mock: {
                     // With provider & category name
                     pageView: {
@@ -485,13 +498,14 @@ describe('LogService', () => {
                 },
                 // Without provider & category name
                 pageView: true
-            };
+            });
             expect(logger.loggerInformations[0].pageView === false).toBeTruthy();
         });
 
         it("should log an error when invalid 'pageView' value is provided", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -504,20 +518,20 @@ describe('LogService', () => {
 
             spyOn(console, 'error');
 
-            logService.config = {
+            logService.setConfig({
                 pageView: {
                     'angular*unit*test': true
                 }
-            };
-            logService.config = {
+            });
+            logService.setConfig({
                 // tslint:disable-next-line: no-any
                 pageView: 'info' as any
-            };
-            logService.config = {
+            });
+            logService.setConfig({
                 // tslint:disable-next-line: no-any
                 pageView: 0 as any
-            };
-            logService.config = {
+            });
+            logService.setConfig({
                 console: {
                     pageView: {
                         'angular*unit*test': true
@@ -532,7 +546,7 @@ describe('LogService', () => {
                         default: 0 as any
                     }
                 }
-            };
+            });
 
             expect(console.error)
                 .toHaveBeenCalledWith('Invalid logging configuration, only one wildcard character is allowed in category name.');
@@ -548,6 +562,7 @@ describe('LogService', () => {
         it("should be able to set config 'event' value", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -560,17 +575,17 @@ describe('LogService', () => {
             const logger = logService.createLogger('test') as DefaultLogger;
 
             // event object
-            logService.config = {
+            logService.setConfig({
                 event: {
                     payment: true,
                     add_to_cart: false
                 }
-            };
+            });
             expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
             expect((logger.loggerInformations[0].event as { [name: string]: boolean }).add_to_cart === false).toBeTruthy();
 
             // event object with category
-            logService.config = {
+            logService.setConfig({
                 event: {
                     default: {
                         payment: true,
@@ -581,22 +596,22 @@ describe('LogService', () => {
                         add_to_cart: true
                     }
                 }
-            };
+            });
             expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment === false).toBeTruthy();
             expect((logger.loggerInformations[0].event as { [name: string]: boolean }).add_to_cart).toBeTruthy();
 
             // event object in logger section
-            logService.config = {
+            logService.setConfig({
                 mock: {
                     event: {
                         payment: true
                     }
                 }
-            };
+            });
             expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
 
             // event object with category in logger section
-            logService.config = {
+            logService.setConfig({
                 mock: {
                     event: {
                         default: {
@@ -607,13 +622,14 @@ describe('LogService', () => {
                         }
                     }
                 }
-            };
+            });
             expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
         });
 
         it("should log an error when invalid 'event' value is provided", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -626,20 +642,20 @@ describe('LogService', () => {
 
             spyOn(console, 'error');
 
-            logService.config = {
+            logService.setConfig({
                 event: {
                     // Invalid category name
                     'angular*unit*test': {
                         payment: true
                     }
                 }
-            };
-            logService.config = {
+            });
+            logService.setConfig({
                 // Invalid event value
                 // tslint:disable-next-line: no-any
                 event: 'info' as any
-            };
-            logService.config = {
+            });
+            logService.setConfig({
                 console: {
                     event: {
                         // Invalid category name in logger section
@@ -659,7 +675,7 @@ describe('LogService', () => {
                     // Invalid event value
                     event: 'info'
                 }
-            };
+            });
 
             expect(console.error)
                 .toHaveBeenCalledWith('Invalid logging configuration, only one wildcard character is allowed in category name.');
@@ -675,6 +691,7 @@ describe('LogService', () => {
         it("should call registered logger provider's 'setUserProperties' method", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -699,6 +716,7 @@ describe('LogService', () => {
         it("should not call registered logger provider's 'setUserProperties' method if userId is disabled", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -710,9 +728,9 @@ describe('LogService', () => {
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
             const loggerProvider = loggerProviders[0];
-            logService.config = {
+            logService.setConfig({
                 userId: false
-            };
+            });
 
             spyOn(loggerProvider, 'setUserProperties');
 
@@ -731,6 +749,7 @@ describe('LogService', () => {
         it("should call registered logger provider's 'clearUserProperties' method if userId is set", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -751,12 +770,13 @@ describe('LogService', () => {
             logService.setUserProperties(userId, accountId);
             logService.clearUserProperties();
 
-            expect(loggerProvider.clearUserProperties).toHaveBeenCalledWith();
+            expect(loggerProvider.clearUserProperties).toHaveBeenCalled();
         });
 
-        it("should call registered logger provider's 'clearUserProperties' method if userId is set to 'false' in config", () => {
+        it("should call registered logger provider's 'clearUserProperties' method after setting user properties", () => {
             TestBed.configureTestingModule({
                 providers: [
+                    LogService,
                     {
                         provide: LOGGER_PROVIDER,
                         useClass: MockLoggerProvider,
@@ -775,11 +795,40 @@ describe('LogService', () => {
             const accountId = 'test_account';
 
             logService.setUserProperties(userId, accountId);
-            logService.config = {
+            logService.setConfig({
                 userId: false
-            };
+            });
+            logService.clearUserProperties();
 
-            expect(loggerProvider.clearUserProperties).toHaveBeenCalledWith();
+            expect(loggerProvider.clearUserProperties).toHaveBeenCalled();
+        });
+
+        it("should not call registered logger provider's 'clearUserProperties' method if userId is disabled", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+            logService.setConfig({
+                userId: false
+            });
+
+            spyOn(loggerProvider, 'clearUserProperties');
+
+            logService.clearUserProperties();
+
+            // tslint:disable: no-unsafe-any no-any
+            expect((loggerProvider.clearUserProperties as any).calls.any()).toEqual(false);
+            // tslint:enable: no-unsafe-any no-any
         });
     });
 });
@@ -791,6 +840,7 @@ describe('DefaultLogger', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
+                LogService,
                 {
                     provide: LOGGER_PROVIDER,
                     useClass: MockLoggerProvider,
@@ -804,9 +854,9 @@ describe('DefaultLogger', () => {
     });
 
     it("should call registered logger's 'log' method if enabled", () => {
-        logService.config = {
+        logService.setConfig({
             minLevel: 'trace'
-        };
+        });
         const loggerInformation = logger.loggerInformations[0];
 
         const msg = 'This is a message.';
@@ -839,19 +889,19 @@ describe('DefaultLogger', () => {
         logger.log(LogLevel.None, msg, params);
         expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.None, msg, params);
 
-        logService.config = {
+        logService.setConfig({
             logLevel: {
                 default: 'info'
             }
-        };
+        });
         logger.log(LogLevel.Info, msg, params);
         expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Info, msg, params);
 
-        logService.config = {
+        logService.setConfig({
             mock: {
                 logLevel: 'warn'
             }
-        };
+        });
         logger.log(LogLevel.Warn, msg, params);
         expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Warn, msg, params);
 
@@ -862,24 +912,24 @@ describe('DefaultLogger', () => {
 
         spyOn(loggerInformation.logger, 'log');
 
-        logService.config = {
+        logService.setConfig({
             minLevel: 'info'
-        };
+        });
         logger.log(LogLevel.Debug, 'This is a message.');
 
-        logService.config = {
+        logService.setConfig({
             mock: {
                 logLevel: 'warn'
             }
-        };
+        });
         logger.log(LogLevel.Info, 'This is a message.');
 
-        logService.config = {
+        logService.setConfig({
             logLevel: {
                 angular: 'debug',
                 test: 'info'
             }
-        };
+        });
         logger.log(LogLevel.Debug, 'This is a message.');
 
         // tslint:disable: no-unsafe-any no-any
@@ -899,9 +949,9 @@ describe('DefaultLogger', () => {
 
     it("should not call registered loggers's 'startTrackPage' method if disabled", () => {
         const loggerInformation = logger.loggerInformations[0];
-        logService.config = {
+        logService.setConfig({
             pageView: false
-        };
+        });
 
         spyOn(loggerInformation.logger, 'startTrackPage');
 
@@ -929,9 +979,9 @@ describe('DefaultLogger', () => {
 
     it("should not call registered loggers's 'stopTrackPage' method if disabled", () => {
         const loggerInformation = logger.loggerInformations[0];
-        logService.config = {
+        logService.setConfig({
             pageView: false
-        };
+        });
 
         spyOn(loggerInformation.logger, 'stopTrackPage');
 
@@ -959,9 +1009,9 @@ describe('DefaultLogger', () => {
 
     it("should not call registered loggers's 'trackPageView' method if disabled", () => {
         const loggerInformation = logger.loggerInformations[0];
-        logService.config = {
+        logService.setConfig({
             pageView: false
-        };
+        });
 
         spyOn(loggerInformation.logger, 'trackPageView');
 
@@ -988,11 +1038,11 @@ describe('DefaultLogger', () => {
 
     it("should not call registered loggers's 'startTrackEvent' method if disabled", () => {
         const loggerInformation = logger.loggerInformations[0];
-        logService.config = {
+        logService.setConfig({
             event: {
                 event1: false
             }
-        };
+        });
 
         spyOn(loggerInformation.logger, 'startTrackEvent');
 
@@ -1017,11 +1067,11 @@ describe('DefaultLogger', () => {
 
     it("should not call registered loggers's 'stopTrackEvent' method if disabled", () => {
         const loggerInformation = logger.loggerInformations[0];
-        logService.config = {
+        logService.setConfig({
             event: {
                 event1: false
             }
-        };
+        });
 
         spyOn(loggerInformation.logger, 'stopTrackEvent');
 
@@ -1047,13 +1097,13 @@ describe('DefaultLogger', () => {
         expect(loggerInformation.logger.trackEvent).toHaveBeenCalledWith(props);
     });
 
-    it("should call registered loggers's 'trackEvent' method", () => {
+    it("should not call registered loggers's 'trackEvent' method if disabled", () => {
         const loggerInformation = logger.loggerInformations[0];
-        logService.config = {
+        logService.setConfig({
             event: {
                 event1: false
             }
-        };
+        });
 
         spyOn(loggerInformation.logger, 'trackEvent');
 

@@ -10,21 +10,21 @@ import { Inject, Injectable, Optional } from '@angular/core';
 
 import { DefaultLogger } from './default-logger';
 import { EventInfo, EventTimingInfo } from './event-info';
+import {
+    EventSection,
+    LOG_CONFIG,
+    LogConfig,
+    LogConfigBase,
+    LoggerSection,
+    LogLevelSection,
+    PageViewSection
+} from './log-config';
 import { LogInfo } from './log-info';
 import { LogLevel } from './log-level';
-import { Logger, LoggerBase } from './logger';
+import { Logger } from './logger';
 import { LoggerFilterOptions, LoggerFilterRule } from './logger-filter-options';
 import { LoggerInformation } from './logger-information';
 import { LOGGER_PROVIDER, LoggerProvider } from './logger-provider';
-import {
-    EventSection,
-    LoggerSection,
-    LOGGING_CONFIG,
-    LoggingConfig,
-    LoggingConfigBase,
-    LogLevelSection,
-    PageViewSection
-} from './logging-config';
 import { PageViewInfo, PageViewTimingInfo } from './page-view-info';
 
 interface SelectedRule {
@@ -40,25 +40,31 @@ interface SelectedRule {
 @Injectable({
     providedIn: 'root'
 })
-export class LogService extends LoggerBase {
+export class LogService extends Logger {
     private readonly _loggerProviders: LoggerProvider[];
     private readonly _loggers: { [key: string]: DefaultLogger | null } = {};
-    private readonly _ruleByProvider = new Map<string, SelectedRule>();
-    private readonly _userIdSetByProvider = new Map<string, boolean>();
+    private readonly _rulesByProvider: { [key: string]: SelectedRule | undefined } = {};
+    private readonly _userIdsByProvider: { [key: string]: boolean | undefined } = {};
     private _loggerFilterOptions?: LoggerFilterOptions;
 
-    set config(config: LoggingConfig) {
+    constructor(
+        @Optional() @Inject(LOGGER_PROVIDER) loggerProviders?: LoggerProvider[],
+        @Optional() @Inject(LOG_CONFIG) config?: LogConfig) {
+        super();
+        this._loggerProviders = loggerProviders || [];
+        if (config) {
+            this.setConfig(config);
+        }
+    }
+
+    setConfig(config: LogConfig): void {
         this._loggerFilterOptions = this.parseConfig(config);
 
         for (const loggerProvider of this._loggerProviders) {
             const providerName = loggerProvider.name;
 
             const rule = this.selectRule(providerName);
-            if (rule) {
-                this._ruleByProvider.set(providerName, rule);
-            } else if (this._ruleByProvider.has(providerName)) {
-                this._ruleByProvider.delete(providerName);
-            }
+            this._rulesByProvider[providerName] = rule;
         }
 
         const categoryNames = Object.keys(this._loggers);
@@ -68,16 +74,6 @@ export class LogService extends LoggerBase {
             if (logger != null) {
                 this.refreshFilters(logger.loggerInformations);
             }
-        }
-    }
-
-    constructor(
-        @Optional() @Inject(LOGGER_PROVIDER) loggerProviders?: LoggerProvider[],
-        @Optional() @Inject(LOGGING_CONFIG) config?: LoggingConfig) {
-        super();
-        this._loggerProviders = loggerProviders || [];
-        if (config) {
-            this.config = config;
         }
     }
 
@@ -114,13 +110,13 @@ export class LogService extends LoggerBase {
      */
     setUserProperties(userId: string, accountId?: string): void {
         for (const loggerProvider of this._loggerProviders) {
-            const rule = this._ruleByProvider.get(loggerProvider.name);
+            const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.userId === false) {
                 continue;
             }
 
             loggerProvider.setUserProperties(userId, accountId);
-            this._userIdSetByProvider.set(loggerProvider.name, true);
+            this._userIdsByProvider[loggerProvider.name] = true;
         }
     }
 
@@ -129,13 +125,13 @@ export class LogService extends LoggerBase {
      */
     clearUserProperties(): void {
         for (const loggerProvider of this._loggerProviders) {
-            const rule = this._ruleByProvider.get(loggerProvider.name);
-            if (rule && rule.userId === false && !this._userIdSetByProvider.get(loggerProvider.name)) {
+            const rule = this._rulesByProvider[loggerProvider.name];
+            if (rule && rule.userId === false && !this._userIdsByProvider[loggerProvider.name]) {
                 continue;
             }
 
             loggerProvider.clearUserProperties();
-            this._userIdSetByProvider.set(loggerProvider.name, false);
+            this._userIdsByProvider[loggerProvider.name] = false;
         }
     }
 
@@ -145,7 +141,7 @@ export class LogService extends LoggerBase {
         }
 
         for (const loggerProvider of this._loggerProviders) {
-            const rule = this._ruleByProvider.get(loggerProvider.name);
+            const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.minLevel != null && logLevel < rule.minLevel) {
                 continue;
             }
@@ -156,7 +152,7 @@ export class LogService extends LoggerBase {
 
     startTrackPage(name?: string): void {
         for (const loggerProvider of this._loggerProviders) {
-            const rule = this._ruleByProvider.get(loggerProvider.name);
+            const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.pageView === false) {
                 continue;
             }
@@ -167,7 +163,7 @@ export class LogService extends LoggerBase {
 
     stopTrackPage(name?: string, pageViewInfo?: PageViewTimingInfo): void {
         for (const loggerProvider of this._loggerProviders) {
-            const rule = this._ruleByProvider.get(loggerProvider.name);
+            const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.pageView === false) {
                 continue;
             }
@@ -178,7 +174,7 @@ export class LogService extends LoggerBase {
 
     trackPageView(pageViewInfo?: PageViewInfo): void {
         for (const loggerProvider of this._loggerProviders) {
-            const rule = this._ruleByProvider.get(loggerProvider.name);
+            const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.pageView === false) {
                 continue;
             }
@@ -189,7 +185,7 @@ export class LogService extends LoggerBase {
 
     startTrackEvent(name: string): void {
         for (const loggerProvider of this._loggerProviders) {
-            const rule = this._ruleByProvider.get(loggerProvider.name);
+            const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.event) {
                 const evtOptions = rule.event;
                 const foundDisabled = Object.keys(evtOptions).find(key => key === name && evtOptions[key] === false) != null;
@@ -205,7 +201,7 @@ export class LogService extends LoggerBase {
 
     stopTrackEvent(name: string, eventInfo?: EventTimingInfo): void {
         for (const loggerProvider of this._loggerProviders) {
-            const rule = this._ruleByProvider.get(loggerProvider.name);
+            const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.event) {
                 const evtOptions = rule.event;
                 const foundDisabled = Object.keys(evtOptions).find(key => key === name && evtOptions[key] === false) != null;
@@ -221,7 +217,7 @@ export class LogService extends LoggerBase {
 
     trackEvent(eventInfo: EventInfo): void {
         for (const loggerProvider of this._loggerProviders) {
-            const rule = this._ruleByProvider.get(loggerProvider.name);
+            const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.event) {
                 const evtOptions = rule.event;
                 const foundDisabled = Object.keys(evtOptions).find(key => key === name && evtOptions[key] === false) != null;
@@ -340,7 +336,7 @@ export class LogService extends LoggerBase {
         return true;
     }
 
-    private parseConfig(config: LoggingConfig): LoggerFilterOptions {
+    private parseConfig(config: LogConfig): LoggerFilterOptions {
         const options: LoggerFilterOptions = {
             rules: [],
             userId: config.userId
@@ -358,8 +354,8 @@ export class LogService extends LoggerBase {
         }
 
         Object.keys(config)
-            .filter((key: keyof LoggingConfigBase) => key !== 'userId' && key !== 'minLevel')
-            .forEach((key: keyof LoggingConfigBase) => {
+            .filter((key: keyof LogConfigBase) => key !== 'userId' && key !== 'minLevel')
+            .forEach((key: keyof LogConfigBase) => {
                 if (key === 'logLevel' || key === 'pageView' || key === 'event') {
                     if (!this.parseSections(options, config)) {
                         hasError = true;

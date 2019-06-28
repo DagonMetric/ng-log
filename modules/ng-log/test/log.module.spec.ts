@@ -2,9 +2,9 @@
 
 import { TestBed } from '@angular/core/testing';
 
+import { LOG_CONFIG, LogConfig } from '../src/log-config';
 import { LogModule } from '../src/log.module';
 import { LogService } from '../src/log.service';
-import { LOGGING_CONFIG, LoggingConfig } from '../src/logging-config';
 
 describe('LogModule', () => {
     it("should provide 'LogService' instance", () => {
@@ -29,10 +29,10 @@ describe('LogModule', () => {
                 ]
             });
 
-            const config = TestBed.get<LoggingConfig>(LOGGING_CONFIG);
+            const config = TestBed.get<LogConfig>(LOG_CONFIG);
 
             expect(config).toBeDefined();
-            expect((config as LoggingConfig).minLevel).toBe('info');
+            expect((config as LogConfig).minLevel).toBe('info');
         });
     });
 });

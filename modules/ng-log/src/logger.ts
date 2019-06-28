@@ -11,7 +11,7 @@ import { LogInfo } from './log-info';
 import { LogLevel } from './log-level';
 import { PageViewInfo, PageViewTimingInfo } from './page-view-info';
 
-export interface Logger {
+export interface LoggingApi {
     /**
      * Logs message or error with severity level.
      * @param logLevel The log level.
@@ -109,7 +109,7 @@ export interface Logger {
 /**
  * The logger abstract class.
  */
-export abstract class LoggerBase implements Logger {
+export abstract class Logger implements LoggingApi {
     /**
      * Logs message or error with severity level.
      * @param logLevel The log level.
