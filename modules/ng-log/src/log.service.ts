@@ -42,7 +42,7 @@ interface SelectedRule {
 })
 export class LogService extends Logger {
     private readonly _loggerProviders: LoggerProvider[];
-    private readonly _loggers: { [key: string]: DefaultLogger | null } = {};
+    private readonly _loggers: { [key: string]: DefaultLogger } = {};
     private readonly _rulesByProvider: { [key: string]: SelectedRule | undefined } = {};
     private readonly _userIdsByProvider: { [key: string]: boolean | undefined } = {};
     private _loggerFilterOptions?: LoggerFilterOptions;
@@ -71,9 +71,7 @@ export class LogService extends Logger {
 
         for (const categoryName of categoryNames) {
             const logger = this._loggers[categoryName];
-            if (logger != null) {
-                this.refreshFilters(logger.loggerInformations);
-            }
+            this.refreshFilters(logger.loggerInformations);
         }
     }
 
@@ -101,6 +99,13 @@ export class LogService extends Logger {
         this._loggers[category] = newLogger;
 
         return newLogger;
+    }
+
+    destroyLogger(category: string): void {
+        if (this._loggers[category] != null) {
+            // tslint:disable-next-line: no-dynamic-delete
+            delete this._loggers[category];
+        }
     }
 
     /**
@@ -220,6 +225,7 @@ export class LogService extends Logger {
             const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.event) {
                 const evtOptions = rule.event;
+                const name = eventInfo.name;
                 const foundDisabled = Object.keys(evtOptions).find(key => key === name && evtOptions[key] === false) != null;
 
                 if (foundDisabled) {

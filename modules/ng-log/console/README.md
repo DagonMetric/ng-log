@@ -14,7 +14,7 @@ import { ConsoleLoggerModule } from '@dagonmetric/ng-log/console';
   imports: [
     // Other module imports
 
-    // ng-log module
+    // ng-log modules
     LogModule.withConfig({ minLevel: 'debug' }),
     ConsoleLoggerModule
   ]

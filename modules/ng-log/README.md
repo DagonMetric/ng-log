@@ -2,6 +2,20 @@
 
 Vendor-agnostic Logging and telemetry client abstractions and some implementations for Angular applications.
 
+## Modules
+
+[ng-log](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log)
+
+The core log service and telemetry client abstractions
+
+[ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console)
+
+Console logging implementation for `Logger`
+
+[ng-log-config](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config)
+
+`LogConfigModule` for setting logging configuration with `ConfigService`.
+
 ## Features
 
 * Log service provides both application scoped root logger and category scoped child loggers with `createLogger(categoryName)` method.
@@ -88,6 +102,13 @@ export class AppComponent {
         nonInteraction: true
       }
     });
+
+    // Create child logger with category name and log info
+    const childLogger = this._logService.createLogger('component1');
+    childLogger.info('Testing info');
+
+    // Destroy child logger
+    this._logService.destroyLogger('component1');
   }
 }
 ```

@@ -122,7 +122,7 @@ describe('LogService', () => {
     });
 
     describe('createLogger', () => {
-        it("should create 'DefaultLogger' without 'LOGGER_PROVIDER' registration", () => {
+        it("should create a logger without 'LOGGER_PROVIDER' registration", () => {
             TestBed.configureTestingModule({
                 providers: [
                     LogService
@@ -136,7 +136,7 @@ describe('LogService', () => {
             expect(logger instanceof DefaultLogger).toBeTruthy();
         });
 
-        it("should create 'DefaultLogger' with 'LOGGER_PROVIDER' and 'LOG_CONFIG'", () => {
+        it("should create a logger with 'LOGGER_PROVIDER' and 'LOG_CONFIG'", () => {
             const config: LogConfig = {
                 userId: true,
                 minLevel: 'trace',
@@ -204,7 +204,7 @@ describe('LogService', () => {
             expect((logger.loggerInformations[0].event as { [name: string]: boolean }).add_to_cart).toBeTruthy();
         });
 
-        it("should create same 'DefaultLogger' instance if same category name is passed", () => {
+        it('should create the same logger instance if same category name is passed', () => {
             TestBed.configureTestingModule({
                 providers: [
                     LogService,
@@ -217,13 +217,13 @@ describe('LogService', () => {
             });
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
-            const logger1 = logService.createLogger('test');
-            const logger2 = logService.createLogger('test');
+            const logger1 = logService.createLogger('test1');
+            const logger2 = logService.createLogger('test1');
 
             expect(logger1).toEqual(logger2);
         });
 
-        it("should create unique 'DefaultLogger' instances if unique category name is passed", () => {
+        it('should create a unique logger instance if unique category name is passed', () => {
             TestBed.configureTestingModule({
                 providers: [
                     LogService,
@@ -241,10 +241,34 @@ describe('LogService', () => {
 
             expect(logger1 === logger2).toBeFalsy();
         });
+
+        it('should re-create a unique logger instance if the old one is destroy', () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+
+            const logger1 = logService.createLogger('test1');
+            logService.destroyLogger('test1');
+            // Coverage only
+            logService.destroyLogger('test1');
+
+            const logger2 = logService.createLogger('test1');
+
+            expect(logger1 === logger2).toBeFalsy();
+        });
     });
 
     describe('setConfig', () => {
-        it('should be able to call with empty config value', () => {
+        it('can be called with empty config value', () => {
             TestBed.configureTestingModule({
                 providers: [
                     LogService,
@@ -708,7 +732,6 @@ describe('LogService', () => {
 
             const userId = 'test_user';
             const accountId = 'test_account';
-
             logService.setUserProperties(userId, accountId);
             expect(loggerProvider.setUserProperties).toHaveBeenCalledWith(userId, accountId);
         });
@@ -766,10 +789,8 @@ describe('LogService', () => {
 
             const userId = 'test_user';
             const accountId = 'test_account';
-
             logService.setUserProperties(userId, accountId);
             logService.clearUserProperties();
-
             expect(loggerProvider.clearUserProperties).toHaveBeenCalled();
         });
 
@@ -793,13 +814,11 @@ describe('LogService', () => {
 
             const userId = 'test_user';
             const accountId = 'test_account';
-
             logService.setUserProperties(userId, accountId);
             logService.setConfig({
                 userId: false
             });
             logService.clearUserProperties();
-
             expect(loggerProvider.clearUserProperties).toHaveBeenCalled();
         });
 
@@ -825,10 +844,433 @@ describe('LogService', () => {
             spyOn(loggerProvider, 'clearUserProperties');
 
             logService.clearUserProperties();
-
             // tslint:disable: no-unsafe-any no-any
             expect((loggerProvider.clearUserProperties as any).calls.any()).toEqual(false);
             // tslint:enable: no-unsafe-any no-any
+        });
+    });
+
+    describe('log', () => {
+        it("should call registered logger provider's 'log' method", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'log');
+
+            const logLevel = LogLevel.Info;
+            const msg = 'This is a message.';
+            const logInfo = { properties: { key1: 'value1' } };
+            logService.log(logLevel, msg, logInfo);
+            expect(loggerProvider.log).toHaveBeenCalledWith(logLevel, msg, logInfo);
+        });
+
+        it("should not call registered logger provider's 'log' method if disabled", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'log');
+
+            logService.log(LogLevel.None, 'This message does not log.');
+            logService.setConfig({
+                minLevel: 'warn'
+            });
+            logService.log(LogLevel.Info, 'This message does not log.');
+            // tslint:disable: no-unsafe-any no-any
+            expect((loggerProvider.log as any).calls.any()).toEqual(false);
+            // tslint:enable: no-unsafe-any no-any
+        });
+    });
+
+    describe('startTrackPage', () => {
+        it("should call registered logger provider's 'startTrackPage' method", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'startTrackPage');
+
+            const name = 'page1';
+            logService.startTrackPage(name);
+            expect(loggerProvider.startTrackPage).toHaveBeenCalledWith(name);
+        });
+
+        it("should not call registered logger provider's 'startTrackPage' method if disabled", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'startTrackPage');
+
+            logService.setConfig({
+                pageView: false
+            });
+            logService.startTrackPage('page1');
+            // tslint:disable: no-unsafe-any no-any
+            expect((loggerProvider.startTrackPage as any).calls.any()).toEqual(false);
+            // tslint:enable: no-unsafe-any no-any
+        });
+    });
+
+    describe('stopTrackPage', () => {
+        it("should call registered logger provider's 'stopTrackPage' method", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'stopTrackPage');
+
+            const name = 'page1';
+            const pageViewInfo = { uri: '/page1' };
+            logService.stopTrackPage(name, pageViewInfo);
+            expect(loggerProvider.stopTrackPage).toHaveBeenCalledWith(name, pageViewInfo);
+        });
+
+        it("should not call registered logger provider's 'stopTrackPage' method if disabled", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'stopTrackPage');
+
+            logService.setConfig({
+                pageView: false
+            });
+            logService.stopTrackPage('page1');
+            // tslint:disable: no-unsafe-any no-any
+            expect((loggerProvider.stopTrackPage as any).calls.any()).toEqual(false);
+            // tslint:enable: no-unsafe-any no-any
+        });
+    });
+
+    describe('trackPageView', () => {
+        it("should call registered logger provider's 'trackPageView' method", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'trackPageView');
+
+            const pageViewInfo = { name: 'page1', uri: '/page1' };
+            logService.trackPageView(pageViewInfo);
+            expect(loggerProvider.trackPageView).toHaveBeenCalledWith(pageViewInfo);
+        });
+
+        it("should not call registered logger provider's 'trackPageView' method if disabled", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'trackPageView');
+
+            logService.setConfig({
+                pageView: false
+            });
+            logService.trackPageView({ name: 'page1', uri: '/page1' });
+            // tslint:disable: no-unsafe-any no-any
+            expect((loggerProvider.trackPageView as any).calls.any()).toEqual(false);
+            // tslint:enable: no-unsafe-any no-any
+        });
+    });
+
+    describe('startTrackEvent', () => {
+        it("should call registered logger provider's 'startTrackEvent' method", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'startTrackEvent');
+
+            const name = 'event1';
+            logService.startTrackEvent(name);
+            expect(loggerProvider.startTrackEvent).toHaveBeenCalledWith(name);
+
+            logService.setConfig({
+                event: {
+                    event2: false
+                }
+            });
+            logService.startTrackEvent(name);
+            expect(loggerProvider.startTrackEvent).toHaveBeenCalledWith(name);
+        });
+
+        it("should not call registered logger provider's 'startTrackEvent' method if disabled", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'startTrackEvent');
+
+            logService.setConfig({
+                event: {
+                    event1: false
+                }
+            });
+
+            logService.startTrackEvent('event1');
+            // tslint:disable: no-unsafe-any no-any
+            expect((loggerProvider.startTrackEvent as any).calls.any()).toEqual(false);
+            // tslint:enable: no-unsafe-any no-any
+        });
+    });
+
+    describe('stopTrackEvent', () => {
+        it("should call registered logger provider's 'stopTrackEvent' method", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'stopTrackEvent');
+
+            const name = 'event1';
+            const eventInfo = { eventCategory: 'test' };
+            logService.stopTrackEvent(name, eventInfo);
+            expect(loggerProvider.stopTrackEvent).toHaveBeenCalledWith(name, eventInfo);
+
+            logService.setConfig({
+                event: {
+                    event2: false
+                }
+            });
+            logService.stopTrackEvent(name, eventInfo);
+            expect(loggerProvider.stopTrackEvent).toHaveBeenCalledWith(name, eventInfo);
+        });
+
+        it("should not call registered logger provider's 'stopTrackEvent' method if disabled", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'stopTrackEvent');
+
+            logService.setConfig({
+                event: {
+                    event1: false
+                }
+            });
+            logService.stopTrackEvent('event1');
+            // tslint:disable: no-unsafe-any no-any
+            expect((loggerProvider.stopTrackEvent as any).calls.any()).toEqual(false);
+            // tslint:enable: no-unsafe-any no-any
+        });
+    });
+
+    describe('trackEvent', () => {
+        it("should call registered logger provider's 'trackEvent' method", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'trackEvent');
+
+            const eventInfo = { name: 'event1', eventCategory: 'test' };
+            logService.trackEvent(eventInfo);
+            expect(loggerProvider.trackEvent).toHaveBeenCalledWith(eventInfo);
+
+            logService.setConfig({
+                event: {
+                    event2: false
+                }
+            });
+            logService.trackEvent(eventInfo);
+            expect(loggerProvider.trackEvent).toHaveBeenCalledWith(eventInfo);
+        });
+
+        it("should not call registered logger provider's 'trackEvent' method if disabled", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'trackEvent');
+
+            logService.setConfig({
+                event: {
+                    event1: false
+                }
+            });
+            logService.trackEvent({ name: 'event1' });
+            // tslint:disable: no-unsafe-any no-any
+            expect((loggerProvider.trackEvent as any).calls.any()).toEqual(false);
+            // tslint:enable: no-unsafe-any no-any
+        });
+    });
+
+    describe('flush', () => {
+        it("should call registered logger provider's 'flush' method", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[0];
+
+            spyOn(loggerProvider, 'flush');
+
+            logService.flush();
+            expect(loggerProvider.flush).toHaveBeenCalled();
         });
     });
 });

@@ -16,7 +16,7 @@ import { EventInfo, EventTimingInfo, Logger, LogInfo, LogLevel, PageViewInfo, Pa
 export class ConsoleLogger extends Logger {
     private readonly _eventTiming: Map<string, number> = new Map<string, number>();
 
-    constructor(public enableDebug?: boolean) {
+    constructor(readonly name?: string, public enableDebug?: boolean) {
         super();
     }
 
@@ -26,15 +26,15 @@ export class ConsoleLogger extends Logger {
         }
 
         if (logLevel === LogLevel.Trace) {
-            console.trace(message, logInfo);
+            logInfo ? console.trace(message, logInfo) : console.trace(message);
         } else if (logLevel === LogLevel.Debug) {
-            console.debug(message, logInfo);
+            logInfo ? console.debug(message, logInfo) : console.debug(message);
         } else if (logLevel === LogLevel.Info) {
-            console.info(message, logInfo);
+            logInfo ? console.info(message, logInfo) : console.info(message);
         } else if (logLevel === LogLevel.Warn) {
-            console.warn(message, logInfo);
+            logInfo ? console.warn(message, logInfo) : console.warn(message);
         } else if (logLevel === LogLevel.Error || logLevel === LogLevel.Critical) {
-            console.error(message, logInfo);
+            logInfo ? console.error(message, logInfo) : console.error(message);
         }
     }
 
@@ -56,10 +56,10 @@ export class ConsoleLogger extends Logger {
         }
 
         const start = +new Date();
-        this._eventTiming.set(`page_view_${name}`, start);
+        this._eventTiming.set(name, start);
 
         if (this.enableDebug) {
-            console.log(`START_TRACK_PAGE_VIEW: ${name}, start: ${start}`);
+            console.log(`START_TRACK_PAGE_VIEW: ${name}, start: ${start}.`);
         }
     }
 
@@ -74,7 +74,7 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        const start = this._eventTiming.get(`page_view_${name}`);
+        const start = this._eventTiming.get(name);
         if (start == null || isNaN(start)) {
             console.error(`The 'stopTrackPage' was called without a corresponding start, name: ${name}.`);
 
@@ -82,21 +82,18 @@ export class ConsoleLogger extends Logger {
         }
 
         if (this.enableDebug) {
-            const duration = ConsoleLogger.getDuration(start);
-            const suffix = pageViewInfo != null ? ', properties: ' : '.';
-            console.log(`STOP_TRACK_PAGE_VIEW: ${name}, start: ${start}, duration: ${duration}${suffix}`, pageViewInfo);
+            const duration = Math.max(+new Date() - start, 0);
+            const msg = `STOP_TRACK_PAGE_VIEW: ${name}, start: ${start}, duration: ${duration}.`;
+            pageViewInfo ? console.log(msg, pageViewInfo) : console.log(msg);
         }
 
-        this._eventTiming.delete(`page_view_${name}`);
+        this._eventTiming.delete(name);
     }
 
     trackPageView(pageViewInfo?: PageViewInfo): void {
         let name = pageViewInfo && pageViewInfo.name ? pageViewInfo.name : undefined;
         if (name == null && typeof window === 'object' && window.document) {
             name = window.document.title;
-            if (pageViewInfo) {
-                pageViewInfo.name = name;
-            }
         }
 
         if (!name) {
@@ -106,8 +103,8 @@ export class ConsoleLogger extends Logger {
         }
 
         if (this.enableDebug) {
-            const suffix = pageViewInfo != null ? ', properties: ' : '.';
-            console.log(`TRACK_PAGE_VIEW: ${name}${suffix}`, pageViewInfo);
+            const msg = `TRACK_PAGE_VIEW: ${name}.`;
+            console.log(msg, pageViewInfo);
         }
     }
 
@@ -123,7 +120,7 @@ export class ConsoleLogger extends Logger {
         this._eventTiming.set(name, start);
 
         if (this.enableDebug) {
-            console.log(`START_TRACK_EVENT: ${name}, start: ${start}`);
+            console.log(`START_TRACK_EVENT: ${name}, start: ${start}.`);
         }
     }
 
@@ -136,9 +133,9 @@ export class ConsoleLogger extends Logger {
         }
 
         if (this.enableDebug) {
-            const duration = ConsoleLogger.getDuration(start);
-            const suffix = eventInfo != null ? ', properties: ' : '.';
-            console.log(`STOP_TRACK_EVENT: ${name}, start: ${start}, duration: ${duration}${suffix}`, eventInfo);
+            const duration = Math.max(+new Date() - start, 0);
+            const msg = `STOP_TRACK_EVENT: ${name}, start: ${start}, duration: ${duration}.`;
+            eventInfo ? console.log(msg, eventInfo) : console.log(msg);
         }
 
         this._eventTiming.delete(name);
@@ -146,8 +143,7 @@ export class ConsoleLogger extends Logger {
 
     trackEvent(eventInfo: EventInfo): void {
         if (this.enableDebug) {
-            const suffix = eventInfo != null ? ', properties: ' : '.';
-            console.log(`TRACK_EVENT: ${eventInfo.name}${suffix}`, eventInfo);
+            console.log(`TRACK_EVENT: ${eventInfo.name}.`, eventInfo);
         }
     }
 
@@ -155,17 +151,5 @@ export class ConsoleLogger extends Logger {
         if (this.enableDebug) {
             console.log('FLUSH');
         }
-    }
-
-    private static getDuration(start: number): number | undefined {
-        const end = +new Date();
-
-        let duration: number | undefined;
-
-        if (!(isNaN(start) || isNaN(end))) {
-            duration = Math.max(end - start, 0);
-        }
-
-        return duration;
     }
 }

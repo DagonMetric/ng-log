@@ -34,15 +34,24 @@ export const CONSOLE_LOGGER_OPTIONS = new InjectionToken<ConsoleLoggerOptions>('
     providedIn: 'root'
 })
 export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
-    private readonly _loggers: { [key: string]: ConsoleLogger | null } = {};
     private readonly _options: ConsoleLoggerOptions;
 
-    private _userId: string | undefined;
-    private _accountId: string | undefined;
-    private _currentLogger: ConsoleLogger | undefined;
+    private _userId?: string;
+    private _accountId?: string;
+    private _currentLogger?: ConsoleLogger;
 
     get name(): string {
         return 'console';
+    }
+
+    get currentLogger(): ConsoleLogger {
+        if (this._currentLogger) {
+            return this._currentLogger;
+        }
+
+        this._currentLogger = new ConsoleLogger(undefined, this._options.enableDebug);
+
+        return this._currentLogger;
     }
 
     constructor(
@@ -52,16 +61,7 @@ export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
     }
 
     createLogger(category: string): Logger {
-        const logger = this._loggers[category];
-        if (logger) {
-            return logger;
-        }
-
-        const newLogger = new ConsoleLogger(this._options.enableDebug);
-
-        this._loggers[category] = newLogger;
-
-        return newLogger;
+        return new ConsoleLogger(category, this._options.enableDebug);
     }
 
     setUserProperties(userId: string, accountId?: string): void {
@@ -70,14 +70,14 @@ export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
 
         if (this._options.enableDebug) {
             // tslint:disable-next-line: no-console
-            console.log(`SET_USER_PROPERTIES: userId: ${userId}, accountId: ${accountId}`);
+            console.log(`SET_USER_PROPERTIES: userId: ${userId}, accountId: ${accountId}.`);
         }
     }
 
     clearUserProperties(): void {
         if (this._options.enableDebug) {
             // tslint:disable-next-line: no-console
-            console.log(`CLEAR_USER_PROPERTIES: userId: ${this._userId}, accountId: ${this._accountId}`);
+            console.log(`CLEAR_USER_PROPERTIES: userId: ${this._userId}, accountId: ${this._accountId}.`);
         }
 
         this._userId = undefined;
@@ -114,15 +114,5 @@ export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
 
     flush(): void {
         this.currentLogger.flush();
-    }
-
-    private get currentLogger(): ConsoleLogger {
-        if (this._currentLogger) {
-            return this._currentLogger;
-        }
-
-        this._currentLogger = new ConsoleLogger(this._options.enableDebug);
-
-        return this._currentLogger;
     }
 }

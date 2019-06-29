@@ -9,7 +9,7 @@ describe('ConsoleLogger', () => {
     let logger: ConsoleLogger;
 
     beforeEach(() => {
-        logger = new ConsoleLogger(true);
+        logger = new ConsoleLogger('test', true);
     });
 
     it("should work with 'trace' method", () => {
@@ -126,16 +126,30 @@ describe('ConsoleLogger', () => {
 
     it("should work with 'log' method", () => {
         const msg = 'This is a message.';
-        const params = {
-            properties: {
-                key1: 'value1'
-            }
-        };
 
+        spyOn(console, 'trace');
+        spyOn(console, 'debug');
         spyOn(console, 'info');
+        spyOn(console, 'warn');
+        spyOn(console, 'error');
 
-        logger.log(LogLevel.Info, msg, params);
-        expect(console.info).toHaveBeenCalledWith(msg, params);
+        logger.log(LogLevel.Trace, msg);
+        expect(console.trace).toHaveBeenCalledWith(msg);
+
+        logger.log(LogLevel.Debug, msg);
+        expect(console.debug).toHaveBeenCalledWith(msg);
+
+        logger.log(LogLevel.Info, msg);
+        expect(console.info).toHaveBeenCalledWith(msg);
+
+        logger.log(LogLevel.Warn, msg);
+        expect(console.warn).toHaveBeenCalledWith(msg);
+
+        logger.log(LogLevel.Error, msg);
+        expect(console.error).toHaveBeenCalledWith(msg);
+
+        logger.log(LogLevel.Critical, msg);
+        expect(console.error).toHaveBeenCalledWith(msg);
     });
 
     it("should log nothing when 'LogLevel' is 'None' or unknown", () => {
@@ -146,6 +160,7 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'error');
 
         logger.log(LogLevel.None, 'This message does not log.', {});
+        logger.log(100, 'This message does not log.', {});
 
         // tslint:disable: no-unsafe-any no-any
         expect((console.trace as any).calls.any()).toEqual(false);
@@ -156,65 +171,77 @@ describe('ConsoleLogger', () => {
         // tslint:enable: no-unsafe-any no-any
     });
 
-    it('should work with track page timing', () => {
+    it("should work with 'startTrackPage' and 'stopTrackPage'", () => {
         spyOn(console, 'log');
-
-        // Coverage only - do nothing
-        logger.startTrackPage();
-        logger.stopTrackPage();
 
         // With properties
         logger.startTrackPage('home');
         logger.stopTrackPage('home', { uri: '/home' });
+        expect(console.log).toHaveBeenCalled();
 
         // Without properties
         logger.startTrackPage('about');
         logger.stopTrackPage('about');
-
         expect(console.log).toHaveBeenCalled();
-    });
-
-    it("should log an error when calling 'stopTrackPage' if page names are not the same", () => {
-        spyOn(console, 'error');
-
-        logger.startTrackPage('home1');
-        logger.stopTrackPage('home2');
-
-        expect(console.error).toHaveBeenCalledWith("The 'stopTrackPage' was called without a corresponding start, name: home2.");
     });
 
     it("should work with 'trackPageView'", () => {
         spyOn(console, 'log');
 
-        // Coverage only - do nothing
-        logger.trackPageView();
-
         logger.trackPageView({ name: 'home', uri: '/home' });
         logger.trackPageView({ name: 'about' });
         expect(console.log).toHaveBeenCalled();
+
+        // Coverage only without debug
+        const loggerWithoutDebug = new ConsoleLogger();
+        loggerWithoutDebug.startTrackPage('home');
+        loggerWithoutDebug.stopTrackPage('home');
+        loggerWithoutDebug.trackPageView({ name: 'home' });
     });
 
-    it('should work with track event timing', () => {
+    it("should log an error when 'startTrackPage' was called more than once for this event without calling stop", () => {
+        logger.startTrackPage('home1');
+
+        spyOn(console, 'error');
+        logger.startTrackPage('home1');
+
+        expect(console.error)
+            .toHaveBeenCalledWith("The 'startTrackPage' was called more than once for this event without calling stop, name: home1.");
+    });
+
+    it("should log an error when calling 'startTrackPage', 'stopTrackPage' or 'trackPageView' if name could not be detected", () => {
+        spyOn(console, 'error');
+
+        logger.startTrackPage();
+        expect(console.error).toHaveBeenCalledWith('Could not detect document title, please provide name parameter.');
+
+        logger.stopTrackPage();
+        expect(console.error).toHaveBeenCalledWith('Could not detect document title, please provide name parameter.');
+
+        logger.trackPageView();
+        expect(console.error).toHaveBeenCalledWith('Could not detect document title, please provide name parameter.');
+    });
+
+    it("should log an error when calling 'stopTrackPage' without a corresponding start", () => {
+        spyOn(console, 'error');
+
+        logger.startTrackPage('home1');
+        logger.stopTrackPage('home2');
+        expect(console.error).toHaveBeenCalledWith("The 'stopTrackPage' was called without a corresponding start, name: home2.");
+    });
+
+    it("should work with 'startTrackEvent' and 'stopTrackEvent'", () => {
         spyOn(console, 'log');
 
         // With properties
         logger.startTrackEvent('event1');
         logger.stopTrackEvent('event1', { eventCategory: 'test' });
+        expect(console.log).toHaveBeenCalled();
 
         // Without properties
         logger.startTrackEvent('event2');
         logger.stopTrackEvent('event2');
-
         expect(console.log).toHaveBeenCalled();
-    });
-
-    it("should log an error when calling 'stopTrackEvent' if event names are not the same", () => {
-        spyOn(console, 'error');
-
-        logger.startTrackEvent('event1');
-        logger.stopTrackEvent('event2');
-
-        expect(console.error).toHaveBeenCalledWith("The 'stopTrackEvent' was called without a corresponding start, name: event2.");
     });
 
     it("should work with 'trackEvent'", () => {
@@ -225,10 +252,34 @@ describe('ConsoleLogger', () => {
             eventCategory: 'test'
         });
         logger.trackEvent({ name: 'event2' });
+        expect(console.log).toHaveBeenCalled();
 
         // Coverage only, do nothing
         logger.flush();
 
-        expect(console.log).toHaveBeenCalled();
+        // Coverage only without debug
+        const loggerWithoutDebug = new ConsoleLogger();
+        loggerWithoutDebug.startTrackEvent('event1');
+        loggerWithoutDebug.stopTrackEvent('event1');
+        loggerWithoutDebug.trackEvent({ name: 'event1' });
+        loggerWithoutDebug.flush();
+    });
+
+    it("should log an error when 'startTrackEvent' was called more than once for this event without calling stop", () => {
+        logger.startTrackEvent('event1');
+
+        spyOn(console, 'error');
+
+        logger.startTrackEvent('event1');
+        expect(console.error)
+            .toHaveBeenCalledWith("The 'startTrackEvent' was called more than once for this event without calling stop, name: event1.");
+    });
+
+    it("should log an error when calling 'stopTrackEvent' without a corresponding start", () => {
+        spyOn(console, 'error');
+
+        logger.startTrackEvent('event1');
+        logger.stopTrackEvent('event2');
+        expect(console.error).toHaveBeenCalledWith("The 'stopTrackEvent' was called without a corresponding start, name: event2.");
     });
 });
