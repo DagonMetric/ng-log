@@ -11,7 +11,7 @@
     "angular-logging",
     "angular-log",
     "angular-analytics",
-    "angular-telemetry",
+    "angular-telemetry-client",
     "analytics",
     "logging",
     "log",
