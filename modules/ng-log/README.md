@@ -1,3 +1,10 @@
+[![Build Status](https://dev.azure.com/DagonMetric/ng-log/_apis/build/status/DagonMetric.ng-log?branchName=master)](https://dev.azure.com/DagonMetric/ng-log/_build/latest?definitionId=10&branchName=master)
+[![Build status](https://ci.appveyor.com/api/projects/status/eodngq9exumtqhc2/branch/master?svg=true)](https://ci.appveyor.com/project/admindagonmetriccom/ng-log/branch/master)
+[![codecov](https://codecov.io/gh/DagonMetric/ng-log/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log)
+[![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-log.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log)
+[![Dependency Status](https://david-dm.org/DagonMetric/ng-log.svg)](https://david-dm.org/DagonMetric/ng-log)
+[![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 # Logging and Telemetry Client for Angular
 
 Vendor-agnostic Logging and telemetry client abstractions and some implementations for Angular applications.
