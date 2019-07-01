@@ -7,7 +7,7 @@ export interface PageViewTimingInfo {
     /**
      * Mapping for custom dimensions and metrics.
      */
-    customMap?: { [key: string]: string };
+    custom_map?: { [key: string]: string };
     /**
      * Metrics associated with this event.
      */
@@ -23,15 +23,15 @@ export interface PageViewTimingInfo {
     /**
      * The URL of the source page where current page is loaded from.
      */
-    refUri?: string;
+    ref_uri?: string;
     /**
      * The page type.
      */
-    pageType?: string;
+    page_type?: string;
     /**
      * Is user logged in.
      */
-    isLoggedIn?: boolean;
+    is_logged_in?: boolean;
 }
 
 /**

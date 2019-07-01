@@ -7,7 +7,7 @@ export interface EventTimingInfo {
     /**
      * Mapping for custom dimensions and metrics.
      */
-    customMap?: { [key: string]: string };
+    custom_map?: { [key: string]: string };
     /**
      * Metrics associated with this event.
      */
@@ -19,11 +19,11 @@ export interface EventTimingInfo {
     /**
      * The string that will appear as the event label.
      */
-    eventLabel?: string;
+    event_label?: string;
     /**
      * The string that will appear as the event category.
      */
-    eventCategory?: string;
+    event_category?: string;
 }
 
 /**

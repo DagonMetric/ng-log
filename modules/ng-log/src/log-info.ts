@@ -7,7 +7,7 @@ export interface LogInfo {
     /**
      * Mapping for custom dimensions and metrics.
      */
-    customMap?: { [key: string]: string };
+    custom_map?: { [key: string]: string };
     /**
      * Metrics associated with this event.
      */
