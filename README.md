@@ -7,29 +7,17 @@
 
 # Logging and Telemetry Client for Angular
 
-Vendor-agnostic Logging and telemetry client abstractions and some implementations for Angular applications.
-
-## Modules
-
-[ng-log](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log)
-
-The core log service and telemetry client abstractions
-
-[ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console)
-
-Console logging implementation for `Logger`
-
-[ng-log-config](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config)
-
-`LogConfigModule` for setting logging configuration with `ConfigService`.
+Vendor-agnostic logging, analytics and telemetry client abstractions and some implementations for Angular applications.
 
 ## Features
 
 * Log service provides both application scoped root logger and category scoped child loggers with `createLogger(categoryName)` method.
-* Supports standard logging api (`trace`, `debug`, `info`, `warn`, `error`, `fatal`) and telemetry tracking api (`trackPageView`, `trackEvent`, etc.)
-* Extendable and plugable logging provider (see built-in [ConsoleLoggerProvider](https://github.com/DagonMetric/ng-log/blob/master/modules/ng-log/console/src/console-logger-provider.ts) for implementation demo)
+* Category scoped child loggers can be destroyed with `destroyLogger(categoryName)` method
+* Supports both standard logging api (`trace`, `debug`, `info`, `warn`, `error`, `fatal`) and telemetry tracking api (`trackPageView`, `trackEvent`, etc.)
+* Support measuring user timings for events and page views with `startTrackEvent`, `stopTrackEvent`, `startTrackPage` and `stopTrackPage`
+* Extendable and plugable logging providers (see built-in [ConsoleLoggerProvider](https://github.com/DagonMetric/ng-log/blob/master/modules/ng-log/console/src/console-logger-provider.ts) for implementation demo)
 * Flexable logging configuration (similar and same as [Microsoft ASP.NET Core Logging Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-2.2#configuration))
-* Logging configuration can be set by code or with a configuration loader (see [LogConfigModule](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config) for detail)
+* Logging configuration can be set by code or with a configuration loader service (see [LogConfigModule](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config) for detail)
 * Latest versions of Angular are supported
 * Work with Angular Universal (Server Side Rendering - SSR)
 
@@ -80,7 +68,7 @@ import { LogService } from '@dagonmetric/ng-log';
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   constructor(private readonly _logService: LogService) { }
 
   ngOnInit(): void {
@@ -103,15 +91,17 @@ export class AppComponent {
     // Track custom event
     this._logService.trackEvent({
       name: 'video_auto_play_start',
-      eventLabel: 'My promotional video',
-      eventCategory: 'video_auto_play',
+      event_label: 'My promotional video',
+      event_category: 'video_auto_play',
       properties: {
-        nonInteraction: true
+        non_interaction: true
       }
     });
 
-    // Create child logger with category name and log info
+    // Create child logger with category name
     const childLogger = this._logService.createLogger('component1');
+
+    // Log with child logger
     childLogger.info('Testing info');
 
     // Destroy child logger
@@ -122,7 +112,19 @@ export class AppComponent {
 
 ## Documentation
 
-[Wiki](https://github.com/DagonMetric/ng-log/wiki)
+See [ng-log wiki](https://github.com/DagonMetric/ng-log/wiki) for more information.
+
+## Sub-modules
+
+* [ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console) - Console logging implementation for `Logger`
+
+* [ng-log-config](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config) - `LogConfigModule` for setting logging configuration with `ConfigService`
+
+## Integratgions
+
+* [ng-log-applicationinsights](https://github.com/DagonMetric/ng-log-applicationinsights) - Microsoft Azure Application Insights integration/plugin for ng-log
+
+* [ng-log-gtag](https://github.com/DagonMetric/ng-log-gtag) - Google Analytics Global Site Tag gtag.js integration/plugin for ng-log
 
 ## Feedback and Contributing
 
