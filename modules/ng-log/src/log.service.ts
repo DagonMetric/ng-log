@@ -106,6 +106,12 @@ export class LogService extends Logger {
             // tslint:disable-next-line: no-dynamic-delete
             delete this._loggers[category];
         }
+
+        for (const loggerProvider of this._loggerProviders) {
+            if (loggerProvider.destroyLogger) {
+                loggerProvider.destroyLogger(category);
+            }
+        }
     }
 
     /**
@@ -115,6 +121,10 @@ export class LogService extends Logger {
      */
     setUserProperties(userId: string, accountId?: string): void {
         for (const loggerProvider of this._loggerProviders) {
+            if (!loggerProvider.setUserProperties) {
+                continue;
+            }
+
             const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.userId === false) {
                 continue;
@@ -130,6 +140,10 @@ export class LogService extends Logger {
      */
     clearUserProperties(): void {
         for (const loggerProvider of this._loggerProviders) {
+            if (!loggerProvider.clearUserProperties) {
+                continue;
+            }
+
             const rule = this._rulesByProvider[loggerProvider.name];
             if (rule && rule.userId === false && !this._userIdsByProvider[loggerProvider.name]) {
                 continue;

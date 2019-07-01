@@ -16,8 +16,9 @@ import { Logger, LoggingApi } from './logger';
 export interface LoggerProvider extends LoggingApi {
     readonly name: string;
     createLogger(category: string): Logger;
-    setUserProperties(userId: string, accountId?: string): void;
-    clearUserProperties(): void;
+    setUserProperties?(userId: string, accountId?: string): void;
+    clearUserProperties?(): void;
+    destroyLogger?(category: string): void;
 }
 
 export const LOGGER_PROVIDER = new InjectionToken<LoggerProvider>('LoggerProvider');
