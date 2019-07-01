@@ -1,11 +1,12 @@
 {
   "name": "@dagonmetric/ng-log",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Vendor-agnostic Logging and telemetry client abstractions and some implementations for Angular applications.",
+  "description": "Vendor-agnostic logging, analytics and telemetry client abstractions and some implementations for Angular applications.",
   "author": "",
   "license": "",
   "repository": "",
   "homepage": "",
+  "sideEffects": false,
   "keywords": [
     "angular-logging-service",
     "angular-logging",
@@ -24,6 +25,5 @@
   },
   "peerDependencies": {
     "@angular/core": "^8.0.0-beta.0"
-  },
-  "sideEffects": false
+  }
 }
