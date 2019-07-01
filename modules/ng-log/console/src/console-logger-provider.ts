@@ -6,7 +6,7 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 
 import {
     EventInfo,
@@ -19,13 +19,7 @@ import {
     PageViewTimingInfo
 } from '@dagonmetric/ng-log';
 
-import { ConsoleLogger } from './console-logger';
-
-export interface ConsoleLoggerOptions {
-    enableDebug: boolean;
-}
-
-export const CONSOLE_LOGGER_OPTIONS = new InjectionToken<ConsoleLoggerOptions>('ConsoleLoggerOptions');
+import { CONSOLE_LOGGER_OPTIONS, ConsoleLogger, ConsoleLoggerOptions } from './console-logger';
 
 /**
  * Logger provider implementation for `ConsoleLogger`.
@@ -49,7 +43,7 @@ export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
             return this._currentLogger;
         }
 
-        this._currentLogger = new ConsoleLogger(undefined, this._options.enableDebug);
+        this._currentLogger = new ConsoleLogger('', this._options);
 
         return this._currentLogger;
     }
@@ -61,7 +55,15 @@ export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
     }
 
     createLogger(category: string): Logger {
-        return new ConsoleLogger(category, this._options.enableDebug);
+        return new ConsoleLogger(category, this._options);
+    }
+
+    destroyLogger(category: string): void {
+        // Do nothing
+        if (this._options.enableDebug) {
+            // tslint:disable-next-line: no-console
+            console.log(`Destroying logger: ${category}`);
+        }
     }
 
     setUserProperties(userId: string, accountId?: string): void {

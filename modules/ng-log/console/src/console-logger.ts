@@ -8,7 +8,15 @@
 
 // tslint:disable:no-console
 
+import { InjectionToken } from '@angular/core';
+
 import { EventInfo, EventTimingInfo, Logger, LogInfo, LogLevel, PageViewInfo, PageViewTimingInfo } from '@dagonmetric/ng-log';
+
+export interface ConsoleLoggerOptions {
+    enableDebug: boolean;
+}
+
+export const CONSOLE_LOGGER_OPTIONS = new InjectionToken<ConsoleLoggerOptions>('ConsoleLoggerOptions');
 
 /**
  * Console logging implementation for `Logger`.
@@ -16,7 +24,7 @@ import { EventInfo, EventTimingInfo, Logger, LogInfo, LogLevel, PageViewInfo, Pa
 export class ConsoleLogger extends Logger {
     private readonly _eventTiming: Map<string, number> = new Map<string, number>();
 
-    constructor(readonly name?: string, public enableDebug?: boolean) {
+    constructor(readonly name: string, public options: ConsoleLoggerOptions) {
         super();
     }
 
@@ -58,7 +66,7 @@ export class ConsoleLogger extends Logger {
         const start = +new Date();
         this._eventTiming.set(name, start);
 
-        if (this.enableDebug) {
+        if (this.options.enableDebug) {
             console.log(`START_TRACK_PAGE_VIEW: ${name}, start: ${start}.`);
         }
     }
@@ -81,7 +89,7 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        if (this.enableDebug) {
+        if (this.options.enableDebug) {
             const duration = Math.max(+new Date() - start, 0);
             const msg = `STOP_TRACK_PAGE_VIEW: ${name}, start: ${start}, duration: ${duration}.`;
             pageViewInfo ? console.log(msg, pageViewInfo) : console.log(msg);
@@ -102,7 +110,7 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        if (this.enableDebug) {
+        if (this.options.enableDebug) {
             const msg = `TRACK_PAGE_VIEW: ${name}.`;
             console.log(msg, pageViewInfo);
         }
@@ -119,7 +127,7 @@ export class ConsoleLogger extends Logger {
 
         this._eventTiming.set(name, start);
 
-        if (this.enableDebug) {
+        if (this.options.enableDebug) {
             console.log(`START_TRACK_EVENT: ${name}, start: ${start}.`);
         }
     }
@@ -132,7 +140,7 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        if (this.enableDebug) {
+        if (this.options.enableDebug) {
             const duration = Math.max(+new Date() - start, 0);
             const msg = `STOP_TRACK_EVENT: ${name}, start: ${start}, duration: ${duration}.`;
             eventInfo ? console.log(msg, eventInfo) : console.log(msg);
@@ -142,13 +150,13 @@ export class ConsoleLogger extends Logger {
     }
 
     trackEvent(eventInfo: EventInfo): void {
-        if (this.enableDebug) {
+        if (this.options.enableDebug) {
             console.log(`TRACK_EVENT: ${eventInfo.name}.`, eventInfo);
         }
     }
 
     flush(): void {
-        if (this.enableDebug) {
+        if (this.options.enableDebug) {
             console.log('FLUSH');
         }
     }
