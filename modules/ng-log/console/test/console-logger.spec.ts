@@ -9,7 +9,7 @@ describe('ConsoleLogger', () => {
     let logger: ConsoleLogger;
 
     beforeEach(() => {
-        logger = new ConsoleLogger('test', true);
+        logger = new ConsoleLogger('test', { enableDebug: true });
     });
 
     it("should work with 'trace' method", () => {
@@ -152,7 +152,7 @@ describe('ConsoleLogger', () => {
         expect(console.error).toHaveBeenCalledWith(msg);
     });
 
-    it("should log nothing when 'LogLevel' is 'None' or unknown", () => {
+    it("should not log anything when 'LogLevel' is 'None' or unknown", () => {
         spyOn(console, 'trace');
         spyOn(console, 'debug');
         spyOn(console, 'info');
@@ -191,12 +191,6 @@ describe('ConsoleLogger', () => {
         logger.trackPageView({ name: 'home', uri: '/home' });
         logger.trackPageView({ name: 'about' });
         expect(console.log).toHaveBeenCalled();
-
-        // Coverage only without debug
-        const loggerWithoutDebug = new ConsoleLogger();
-        loggerWithoutDebug.startTrackPage('home');
-        loggerWithoutDebug.stopTrackPage('home');
-        loggerWithoutDebug.trackPageView({ name: 'home' });
     });
 
     it("should log an error when 'startTrackPage' was called more than once for this event without calling stop", () => {
@@ -235,7 +229,7 @@ describe('ConsoleLogger', () => {
 
         // With properties
         logger.startTrackEvent('event1');
-        logger.stopTrackEvent('event1', { eventCategory: 'test' });
+        logger.stopTrackEvent('event1', { event_category: 'test' });
         expect(console.log).toHaveBeenCalled();
 
         // Without properties
@@ -249,20 +243,32 @@ describe('ConsoleLogger', () => {
 
         logger.trackEvent({
             name: 'event1',
-            eventCategory: 'test'
+            event_category: 'test'
         });
         logger.trackEvent({ name: 'event2' });
         expect(console.log).toHaveBeenCalled();
 
         // Coverage only, do nothing
         logger.flush();
+    });
 
-        // Coverage only without debug
-        const loggerWithoutDebug = new ConsoleLogger();
-        loggerWithoutDebug.startTrackEvent('event1');
-        loggerWithoutDebug.stopTrackEvent('event1');
-        loggerWithoutDebug.trackEvent({ name: 'event1' });
-        loggerWithoutDebug.flush();
+    it('should not log anything when enableDebug is false', () => {
+        spyOn(console, 'log');
+
+        logger.options.enableDebug = false;
+
+        logger.startTrackPage('home');
+        logger.stopTrackPage('home');
+        logger.trackPageView({ name: 'home' });
+
+        logger.startTrackEvent('event1');
+        logger.stopTrackEvent('event1');
+        logger.trackEvent({ name: 'event1' });
+
+        logger.flush();
+
+        // tslint:disable-next-line: no-any no-unsafe-any
+        expect((console.log as any).calls.any()).toEqual(false);
     });
 
     it("should log an error when 'startTrackEvent' was called more than once for this event without calling stop", () => {

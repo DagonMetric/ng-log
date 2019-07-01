@@ -53,18 +53,70 @@ export class MockLogger extends Logger {
 }
 
 /**
- * Mock logger provider implementation.
+ * Mock logger provider implementation 1.
  */
 @Injectable({
     providedIn: 'root'
 })
-export class MockLoggerProvider extends Logger implements LoggerProvider {
+export class MockLoggerProvider1 extends Logger implements LoggerProvider {
     get name(): string {
         return 'mock';
     }
 
     createLogger(category: string): Logger {
         return new MockLogger(category);
+    }
+
+    log(): void {
+        // Do nothing
+    }
+
+    startTrackPage(): void {
+        // Do nothing
+    }
+
+    stopTrackPage(): void {
+        // Do nothing
+    }
+
+    trackPageView(): void {
+        // Do nothing
+    }
+
+    startTrackEvent(): void {
+        // Do nothing
+    }
+
+    stopTrackEvent(): void {
+        // Do nothing
+    }
+
+    trackEvent(): void {
+        // Do nothing
+    }
+
+    flush(): void {
+        // Do nothing
+    }
+}
+
+/**
+ * Mock logger provider implementation 2.
+ */
+@Injectable({
+    providedIn: 'root'
+})
+export class MockLoggerProvider2 extends Logger implements LoggerProvider {
+    get name(): string {
+        return 'mock';
+    }
+
+    createLogger(category: string): Logger {
+        return new MockLogger(category);
+    }
+
+    destroyLogger(): void {
+        // Do nothing
     }
 
     setUserProperties(): void {
@@ -183,7 +235,12 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
+                        multi: true
+                    },
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider2,
                         multi: true
                     },
                     {
@@ -197,7 +254,7 @@ describe('LogService', () => {
             const logger = logService.createLogger('test') as DefaultLogger;
 
             expect(logger).toBeDefined();
-            expect(logger.loggerInformations.length).toBe(1);
+            expect(logger.loggerInformations.length).toBe(2);
             expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Info);
             expect(logger.loggerInformations[0].pageView).toBe(true);
             expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
@@ -210,7 +267,12 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
+                        multi: true
+                    },
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider2,
                         multi: true
                     }
                 ]
@@ -229,7 +291,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -248,7 +310,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -267,6 +329,35 @@ describe('LogService', () => {
         });
     });
 
+    describe('destroyLogger', () => {
+        it("should be able to call 'destroyLogger'", () => {
+            TestBed.configureTestingModule({
+                providers: [
+                    LogService,
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider1,
+                        multi: true
+                    },
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider2,
+                        multi: true
+                    }
+                ]
+            });
+
+            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
+
+            spyOn(loggerProvider, 'destroyLogger');
+
+            logService.destroyLogger('test');
+            expect(loggerProvider.destroyLogger).toHaveBeenCalled();
+        });
+    });
+
     describe('setConfig', () => {
         it('can be called with empty config value', () => {
             TestBed.configureTestingModule({
@@ -274,7 +365,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -296,7 +387,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -347,7 +438,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -372,7 +463,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -418,7 +509,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -480,7 +571,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -532,7 +623,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -589,7 +680,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -656,7 +747,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -718,7 +809,12 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
+                        multi: true
+                    },
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider2,
                         multi: true
                     }
                 ]
@@ -726,7 +822,7 @@ describe('LogService', () => {
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
-            const loggerProvider = loggerProviders[0];
+            const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
 
             spyOn(loggerProvider, 'setUserProperties');
 
@@ -742,7 +838,12 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
+                        multi: true
+                    },
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider2,
                         multi: true
                     }
                 ]
@@ -750,7 +851,7 @@ describe('LogService', () => {
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
-            const loggerProvider = loggerProviders[0];
+            const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
             logService.setConfig({
                 userId: false
             });
@@ -775,7 +876,12 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
+                        multi: true
+                    },
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider2,
                         multi: true
                     }
                 ]
@@ -783,24 +889,30 @@ describe('LogService', () => {
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
-            const loggerProvider = loggerProviders[0];
-
-            spyOn(loggerProvider, 'clearUserProperties');
+            const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
 
             const userId = 'test_user';
             const accountId = 'test_account';
             logService.setUserProperties(userId, accountId);
+
+            spyOn(loggerProvider, 'clearUserProperties');
+
             logService.clearUserProperties();
             expect(loggerProvider.clearUserProperties).toHaveBeenCalled();
         });
 
-        it("should call registered logger provider's 'clearUserProperties' method after setting user properties", () => {
+        it("should call registered logger provider's 'clearUserProperties' method after setting userId to false", () => {
             TestBed.configureTestingModule({
                 providers: [
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
+                        multi: true
+                    },
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider2,
                         multi: true
                     }
                 ]
@@ -808,9 +920,7 @@ describe('LogService', () => {
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
-            const loggerProvider = loggerProviders[0];
-
-            spyOn(loggerProvider, 'clearUserProperties');
+            const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
 
             const userId = 'test_user';
             const accountId = 'test_account';
@@ -818,6 +928,9 @@ describe('LogService', () => {
             logService.setConfig({
                 userId: false
             });
+
+            spyOn(loggerProvider, 'clearUserProperties');
+
             logService.clearUserProperties();
             expect(loggerProvider.clearUserProperties).toHaveBeenCalled();
         });
@@ -828,7 +941,12 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
+                        multi: true
+                    },
+                    {
+                        provide: LOGGER_PROVIDER,
+                        useClass: MockLoggerProvider2,
                         multi: true
                     }
                 ]
@@ -836,7 +954,7 @@ describe('LogService', () => {
 
             const logService = TestBed.get<LogService>(LogService) as LogService;
             const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
-            const loggerProvider = loggerProviders[0];
+            const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
             logService.setConfig({
                 userId: false
             });
@@ -857,7 +975,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -882,7 +1000,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -912,7 +1030,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -935,7 +1053,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -964,7 +1082,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -988,7 +1106,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -1017,7 +1135,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -1040,7 +1158,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -1069,7 +1187,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -1100,7 +1218,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -1132,7 +1250,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -1145,7 +1263,7 @@ describe('LogService', () => {
             spyOn(loggerProvider, 'stopTrackEvent');
 
             const name = 'event1';
-            const eventInfo = { eventCategory: 'test' };
+            const eventInfo = { event_category: 'test' };
             logService.stopTrackEvent(name, eventInfo);
             expect(loggerProvider.stopTrackEvent).toHaveBeenCalledWith(name, eventInfo);
 
@@ -1164,7 +1282,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -1195,7 +1313,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -1226,7 +1344,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -1257,7 +1375,7 @@ describe('LogService', () => {
                     LogService,
                     {
                         provide: LOGGER_PROVIDER,
-                        useClass: MockLoggerProvider,
+                        useClass: MockLoggerProvider1,
                         multi: true
                     }
                 ]
@@ -1285,7 +1403,7 @@ describe('DefaultLogger', () => {
                 LogService,
                 {
                     provide: LOGGER_PROVIDER,
-                    useClass: MockLoggerProvider,
+                    useClass: MockLoggerProvider1,
                     multi: true
                 }
             ]
@@ -1500,7 +1618,7 @@ describe('DefaultLogger', () => {
         spyOn(loggerInformation.logger, 'stopTrackEvent');
 
         const eventName = 'event1';
-        const props = { eventCategory: 'test' };
+        const props = { event_category: 'test' };
 
         logger.startTrackEvent(eventName);
         logger.stopTrackEvent(eventName, props);

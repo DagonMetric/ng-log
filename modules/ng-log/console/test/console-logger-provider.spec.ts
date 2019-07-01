@@ -5,8 +5,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { LogLevel } from '../../src';
 
-import { ConsoleLogger } from '../src/console-logger';
-import { CONSOLE_LOGGER_OPTIONS, ConsoleLoggerProvider } from '../src/console-logger-provider';
+import { CONSOLE_LOGGER_OPTIONS, ConsoleLogger } from '../src/console-logger';
+import { ConsoleLoggerProvider } from '../src/console-logger-provider';
 
 describe('ConsoleLoggerProvider', () => {
     let loggerProvider: ConsoleLoggerProvider;
@@ -36,10 +36,16 @@ describe('ConsoleLoggerProvider', () => {
         expect((logger as ConsoleLogger).name).toBe('test');
     });
 
-    it("should return the same 'ConsoleLogger' instance with 'createLogger' method if the same name is provided", () => {
-        const logger1 = loggerProvider.createLogger('test1');
-        const logger2 = loggerProvider.createLogger('test1');
-        expect(logger1).toEqual(logger2);
+    it("should log a message when calling 'destroyLogger' method", () => {
+        spyOn(console, 'log');
+
+        const category = 'test';
+        loggerProvider.destroyLogger(category);
+        expect(console.log).toHaveBeenCalledWith(`Destroying logger: ${category}`);
+
+        // Coverage only without debug
+        const loggerProviderWithoutDebug = new ConsoleLoggerProvider();
+        loggerProviderWithoutDebug.destroyLogger(category);
     });
 
     it("should work with 'setUserProperties'", () => {
@@ -122,7 +128,7 @@ describe('ConsoleLoggerProvider', () => {
         spyOn(currentLogger, 'stopTrackEvent');
 
         const name = 'event1';
-        const eventInfo = { eventCategory: 'test' };
+        const eventInfo = { event_category: 'test' };
         loggerProvider.stopTrackEvent(name, eventInfo);
         expect(currentLogger.stopTrackEvent).toHaveBeenCalledWith(name, eventInfo);
     });

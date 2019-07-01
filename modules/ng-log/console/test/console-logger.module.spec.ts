@@ -4,7 +4,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { LOGGER_PROVIDER, LoggerProvider } from '../../src/logger-provider';
 
-import { CONSOLE_LOGGER_OPTIONS, ConsoleLoggerOptions, ConsoleLoggerProvider } from '../src/console-logger-provider';
+import { CONSOLE_LOGGER_OPTIONS, ConsoleLoggerOptions } from '../src/console-logger';
+import { ConsoleLoggerProvider } from '../src/console-logger-provider';
 import { ConsoleLoggerModule } from '../src/console-logger.module';
 
 describe('ConsoleLoggerModule', () => {
