@@ -10,7 +10,7 @@
       "envOverrides": {
         "prod": {
           "copy": [
-            "README.md",
+            "../../README.md",
             "../../LICENSE"
           ],
           "bundles": true,
@@ -56,7 +56,7 @@
           "copy": [
             {
               "from": "README.md",
-              "to": "console/README.md"
+              "to": "config/README.md"
             }
           ],
           "bundles": true,
