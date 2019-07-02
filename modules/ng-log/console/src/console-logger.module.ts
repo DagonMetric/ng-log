@@ -28,7 +28,7 @@ import { ConsoleLoggerProvider } from './console-logger-provider';
 export class ConsoleLoggerModule {
     /**
      * Call this method to provide options for configuring the `ConsoleLoggerProvider`.
-     * @param options An option object for 'ConsoleLoggerProvider'.
+     * @param options An option object for `ConsoleLoggerProvider`.
      */
     static withOptions(options: ConsoleLoggerOptions): ModuleWithProviders {
         return {

@@ -57,6 +57,10 @@ export class LogService extends Logger {
         }
     }
 
+    /**
+     * Sets logging configuration options.
+     * @param config The logging config options.
+     */
     setConfig(config: LogConfig): void {
         this._loggerFilterOptions = this.parseConfig(config);
 
@@ -75,6 +79,10 @@ export class LogService extends Logger {
         }
     }
 
+    /**
+     * Creates a child logger with category name.
+     * @param category The category name for scoped logger.
+     */
     createLogger(category: string): Logger {
         const logger = this._loggers[category];
         if (logger) {
@@ -101,6 +109,10 @@ export class LogService extends Logger {
         return newLogger;
     }
 
+    /**
+     * Destroys the child logger by category name.
+     * @param category The category name for scoped logger.
+     */
     destroyLogger(category: string): void {
         if (this._loggers[category] != null) {
             // tslint:disable-next-line: no-dynamic-delete
@@ -154,6 +166,12 @@ export class LogService extends Logger {
         }
     }
 
+    /**
+     * Logs message or error with log level.
+     * @param logLevel The log level.
+     * @param message Message string or error object to log.
+     * @param logInfo Optional log telemetry info parameter.
+     */
     log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void {
         if (logLevel === LogLevel.None) {
             return;
@@ -169,6 +187,10 @@ export class LogService extends Logger {
         }
     }
 
+    /**
+     * Starts timing how long the user views a page. Calls this when the page opens.
+     * @param name A string that idenfities this item, unique within the HTML document. Default to document title.
+     */
     startTrackPage(name?: string): void {
         for (const loggerProvider of this._loggerProviders) {
             const rule = this._rulesByProvider[loggerProvider.name];
@@ -180,6 +202,11 @@ export class LogService extends Logger {
         }
     }
 
+    /**
+     * Logs how long a page was visible, after `startTrackPage`. Calls this when the page closes.
+     * @param name The string you used as the name in `startTrackPage`. Default to document title.
+     * @param pageViewInfo Additional data for page view.
+     */
     stopTrackPage(name?: string, pageViewInfo?: PageViewTimingInfo): void {
         for (const loggerProvider of this._loggerProviders) {
             const rule = this._rulesByProvider[loggerProvider.name];
@@ -191,6 +218,10 @@ export class LogService extends Logger {
         }
     }
 
+    /**
+     * Logs that a page was viewed.
+     * @param pageViewInfo Data for page view.
+     */
     trackPageView(pageViewInfo?: PageViewInfo): void {
         for (const loggerProvider of this._loggerProviders) {
             const rule = this._rulesByProvider[loggerProvider.name];
@@ -202,6 +233,10 @@ export class LogService extends Logger {
         }
     }
 
+    /**
+     * Starts timing an event. Calls `stopTrackEvent` to log the event when it ends.
+     * @param name A string that identifies this event uniquely within the HTML document.
+     */
     startTrackEvent(name: string): void {
         for (const loggerProvider of this._loggerProviders) {
             const rule = this._rulesByProvider[loggerProvider.name];
@@ -218,6 +253,11 @@ export class LogService extends Logger {
         }
     }
 
+    /**
+     * Logs an event that you started timing with `startTrackEvent`.
+     * @param name The string you used to identify this event in `startTrackEvent`.
+     * @param eventInfo Additional data for event.
+     */
     stopTrackEvent(name: string, eventInfo?: EventTimingInfo): void {
         for (const loggerProvider of this._loggerProviders) {
             const rule = this._rulesByProvider[loggerProvider.name];
@@ -234,6 +274,10 @@ export class LogService extends Logger {
         }
     }
 
+    /**
+     * Logs a user action or other occurrence.
+     * @param eventInfo Data for event.
+     */
     trackEvent(eventInfo: EventInfo): void {
         for (const loggerProvider of this._loggerProviders) {
             const rule = this._rulesByProvider[loggerProvider.name];
@@ -251,6 +295,9 @@ export class LogService extends Logger {
         }
     }
 
+    /**
+     * Flushes to send or log data immediately.
+     */
     flush(): void {
         for (const loggerProvider of this._loggerProviders) {
             loggerProvider.flush();

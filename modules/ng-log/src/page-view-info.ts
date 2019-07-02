@@ -1,7 +1,7 @@
 // tslint:disable: no-any
 
 /**
- * The page view timing telemetry interface.
+ * The page view timing telemetry info interface.
  */
 export interface PageViewTimingInfo {
     /**
@@ -35,7 +35,7 @@ export interface PageViewTimingInfo {
 }
 
 /**
- * The page view telemetry interface.
+ * The page view telemetry info interface.
  */
 export interface PageViewInfo extends PageViewTimingInfo {
     /**

@@ -1,7 +1,7 @@
 // tslint:disable: no-any
 
 /**
- * The event timing telemetry interface.
+ * The event timing telemetry info interface.
  */
 export interface EventTimingInfo {
     /**
@@ -27,7 +27,7 @@ export interface EventTimingInfo {
 }
 
 /**
- * The event telemetry interface.
+ * The event telemetry info interface.
  */
 export interface EventInfo extends EventTimingInfo {
     /**

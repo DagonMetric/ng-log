@@ -20,6 +20,10 @@ import { LogService } from './log.service';
     ]
 })
 export class LogModule {
+    /**
+     * Call this method to provide options for configuring the `LogService`.
+     * @param options An option object for `LogService`.
+     */
     static withConfig(config: LogConfig): ModuleWithProviders {
         return {
             ngModule: LogModule,

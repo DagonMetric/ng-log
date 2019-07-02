@@ -1,7 +1,7 @@
 // tslint:disable: no-any
 
 /**
- * The logg telemetry interface.
+ * The log telemetry info interface.
  */
 export interface LogInfo {
     /**
