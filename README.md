@@ -1,11 +1,9 @@
+# Angular Logging and Telemetry Client
+
 [![Build Status](https://dev.azure.com/DagonMetric/ng-log/_apis/build/status/DagonMetric.ng-log?branchName=master)](https://dev.azure.com/DagonMetric/ng-log/_build/latest?definitionId=10&branchName=master)
-[![Build status](https://ci.appveyor.com/api/projects/status/eodngq9exumtqhc2/branch/master?svg=true)](https://ci.appveyor.com/project/admindagonmetriccom/ng-log/branch/master)
 [![codecov](https://codecov.io/gh/DagonMetric/ng-log/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log)
 [![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-log.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log)
-[![Dependency Status](https://david-dm.org/DagonMetric/ng-log.svg)](https://david-dm.org/DagonMetric/ng-log)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
-# Logging and Telemetry Client for Angular
 
 Vendor-agnostic logging, analytics and telemetry client abstractions and some implementations for Angular applications.
 
@@ -118,13 +116,13 @@ See [ng-log wiki](https://github.com/DagonMetric/ng-log/wiki) for more informati
 
 * [ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console) - Console logging implementation for `Logger`
 
-* [ng-log-config](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config) - `LogConfigModule` for setting logging configuration with `ConfigService`
+* [ng-log-config](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config) - `LogConfigModule` for loading logging configuration with `ConfigService`
 
 ## Integratgions
 
-* [ng-log-applicationinsights](https://github.com/DagonMetric/ng-log-applicationinsights) - Microsoft Azure Application Insights integration/plugin for ng-log
+* [ng-log-applicationinsights](https://github.com/DagonMetric/ng-log-applicationinsights) - Microsoft Azure Application Insights implementation for `Logger`
 
-* [ng-log-gtag](https://github.com/DagonMetric/ng-log-gtag) - Google Analytics Global Site Tag gtag.js integration/plugin for ng-log
+* [ng-log-gtag](https://github.com/DagonMetric/ng-log-gtag) - Google Analytics Global Site Tag gtag.js implementation for `Logger`
 
 ## Feedback and Contributing
 
