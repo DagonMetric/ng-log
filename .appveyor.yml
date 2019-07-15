@@ -1,16 +1,6 @@
 version: '{build}'
 image: 'Visual Studio 2017'
-# clone_depth: 1
-# only_commits:
-#   files:
-#     - modules/*
-#     - samples/*
-#     - angular-build.json
-#     - angular.json
-#     - package.json
-#     - tsconfig.json
-#     - tslint.json
-#     - .appveyor.yml
+clone_depth: 1
 environment:
   nodejs_version: "10"
 install:
