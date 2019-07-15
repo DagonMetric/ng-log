@@ -30,12 +30,7 @@
       },
       "envOverrides": {
         "prod": {
-          "copy": [
-            {
-              "from": "README.md",
-              "to": "console/README.md"
-            }
-          ],
+          "copy": [],
           "bundles": true,
           "packageJsonCopy": true
         }
@@ -53,12 +48,7 @@
       },
       "envOverrides": {
         "prod": {
-          "copy": [
-            {
-              "from": "README.md",
-              "to": "config/README.md"
-            }
-          ],
+          "copy": [],
           "bundles": true,
           "packageJsonCopy": true
         }
