@@ -6,14 +6,12 @@ git:
 matrix:
   include:
     - os: linux
-      node_js: "stable"
+      node_js: "node"
     - os: osx
-      node_js: "stable"
+      node_js: "node"
   fast_finish: true
-addons:
-  chrome: stable
 install:
-  - yarn install
+  - yarn install --frozen-lockfile
 script:
   - yarn build
   - yarn test -c=ci
