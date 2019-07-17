@@ -21,8 +21,8 @@
     "test": "ng test"
   },
   "dependencies": {
-    "@angular/common": "^8.1.1",
-    "@angular/core": "^8.1.1",
+    "@angular/common": "^8.1.2",
+    "@angular/core": "^8.1.2",
     "@dagonmetric/ng-config": "^2.1.1",
     "rxjs": "^6.5.2",
     "tslib": "^1.10.0"
@@ -30,11 +30,11 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.801.1",
     "@angular/cli": "^8.1.1",
-    "@angular/compiler": "^8.1.1",
-    "@angular/compiler-cli": "^8.1.1",
-    "@angular/language-service": "^8.1.1",
-    "@angular/platform-browser": "^8.1.1",
-    "@angular/platform-browser-dynamic": "^8.1.1",
+    "@angular/compiler": "^8.1.2",
+    "@angular/compiler-cli": "^8.1.2",
+    "@angular/language-service": "^8.1.2",
+    "@angular/platform-browser": "^8.1.2",
+    "@angular/platform-browser-dynamic": "^8.1.2",
     "@dagonmetric/angular-build": "^8.0.5",
     "@types/jasmine": "^3.3.13",
     "@types/jasminewd2": "^2.0.6",
