@@ -358,10 +358,10 @@
     webpack-sources "^1.3.0"
     yargs "^13.2.4"
 
-"@dagonmetric/ng-config@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@dagonmetric/ng-config/-/ng-config-2.1.2.tgz#1e3829b220eefd2e7a01b30b2c8fe98f7f8222be"
-  integrity sha512-w39BOEA+FeHYW+qMTD9ZNl3xrQMb0fnzWjvMXYLWsmibuOBZTY4KzLbZTCU0xIZjFR/YicLUt7piRGkTgIcX1Q==
+"@dagonmetric/ng-config@^2.1.3":
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/@dagonmetric/ng-config/-/ng-config-2.1.3.tgz#295d945235482c2c12131f03c54c8c3a376c3b56"
+  integrity sha512-PTwzetEo270R9CVTTSFJixT3W/Nw9AOqDKThmrbQ5blC7rcMrBwmY6RepgAwQyqJqxVoOIR232cbzoNgLciLdQ==
   dependencies:
     tslib "^1.10.0"
 
