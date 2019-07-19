@@ -36,7 +36,7 @@
     "@angular/platform-browser": "^8.1.2",
     "@angular/platform-browser-dynamic": "^8.1.2",
     "@dagonmetric/angular-build": "^8.0.5",
-    "@types/jasmine": "^3.3.13",
+    "@types/jasmine": "^3.3.14",
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^12.6.8",
     "codelyzer": "^5.1.0",
