@@ -1,4 +1,4 @@
-# Angular Logging and Telemetry Client
+# Angular Logging and Telemetry Service
 
 [![Build Status](https://dev.azure.com/DagonMetric/ng-log/_apis/build/status/DagonMetric.ng-log?branchName=master)](https://dev.azure.com/DagonMetric/ng-log/_build/latest?definitionId=10&branchName=master)
 [![codecov](https://codecov.io/gh/DagonMetric/ng-log/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log)
