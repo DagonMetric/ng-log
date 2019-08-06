@@ -35,7 +35,7 @@
     "@angular/language-service": "^8.2.0",
     "@angular/platform-browser": "^8.2.0",
     "@angular/platform-browser-dynamic": "^8.2.0",
-    "@dagonmetric/angular-build": "^8.0.5",
+    "@dagonmetric/angular-build": "^8.0.6",
     "@types/jasmine": "^3.3.16",
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "^12.6.9",
