@@ -963,10 +963,10 @@
     webpack-sources "^1.4.3"
     yargs "^13.3.0"
 
-"@dagonmetric/ng-config@^2.1.3":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@dagonmetric/ng-config/-/ng-config-2.1.3.tgz#295d945235482c2c12131f03c54c8c3a376c3b56"
-  integrity sha512-PTwzetEo270R9CVTTSFJixT3W/Nw9AOqDKThmrbQ5blC7rcMrBwmY6RepgAwQyqJqxVoOIR232cbzoNgLciLdQ==
+"@dagonmetric/ng-config@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@dagonmetric/ng-config/-/ng-config-2.2.0.tgz#1815ecfd87a8e93dd14bc3a8dceaf8186e067349"
+  integrity sha512-gZXlbZd66BnJOagkKDnzYh5VdAFd0UekrKEuN1FIxI2IptfAZ1tlIH69BK8YPO97EGjAilCt+8tqW6u7C9gUOw==
   dependencies:
     tslib "^1.10.0"
 
