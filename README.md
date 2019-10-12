@@ -1,4 +1,4 @@
-# Angular Logging and Telemetry Service
+# Angular Logging, Analytics and Telemetry Service
 
 [![Build Status](https://dev.azure.com/DagonMetric/ng-log/_apis/build/status/DagonMetric.ng-log?branchName=master)](https://dev.azure.com/DagonMetric/ng-log/_build/latest?definitionId=10&branchName=master)
 [![codecov](https://codecov.io/gh/DagonMetric/ng-log/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log)
@@ -123,6 +123,8 @@ See [ng-log wiki](https://github.com/DagonMetric/ng-log/wiki) for more informati
 * [ng-log-applicationinsights](https://github.com/DagonMetric/ng-log-applicationinsights) - Microsoft Azure Application Insights implementation for `Logger`
 
 * [ng-log-gtag](https://github.com/DagonMetric/ng-log-gtag) - Google Analytics Global Site Tag gtag.js implementation for `Logger`
+
+* [ng-log-firebase-analytics](https://github.com/DagonMetric/ng-log-firebase-analytics) - Firebase Analytics implementation for `Logger`
 
 ## Feedback and Contributing
 
