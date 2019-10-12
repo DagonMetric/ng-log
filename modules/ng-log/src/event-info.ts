@@ -16,14 +16,6 @@ export interface EventTimingInfo {
      * Additional properties.
      */
     properties?: { [key: string]: any };
-    /**
-     * The string that will appear as the event label.
-     */
-    event_label?: string;
-    /**
-     * The string that will appear as the event category.
-     */
-    event_category?: string;
 }
 
 /**
