@@ -47,13 +47,7 @@ export class ConsoleLogger extends Logger {
     }
 
     startTrackPage(name?: string): void {
-        if (name == null && typeof window === 'object' && window.document) {
-            name = window.document.title;
-        }
-
         if (!name) {
-            console.error('Could not detect document title, please provide name parameter.');
-
             return;
         }
 
@@ -72,13 +66,7 @@ export class ConsoleLogger extends Logger {
     }
 
     stopTrackPage(name?: string, pageViewInfo?: PageViewTimingInfo): void {
-        if (name == null && typeof window === 'object' && window.document) {
-            name = window.document.title;
-        }
-
         if (!name) {
-            console.error('Could not detect document title, please provide name parameter.');
-
             return;
         }
 
@@ -99,14 +87,9 @@ export class ConsoleLogger extends Logger {
     }
 
     trackPageView(pageViewInfo?: PageViewInfo): void {
-        let name = pageViewInfo && pageViewInfo.name ? pageViewInfo.name : undefined;
-        if (name == null && typeof window === 'object' && window.document) {
-            name = window.document.title;
-        }
+        const name = pageViewInfo && pageViewInfo.name ? pageViewInfo.name : undefined;
 
         if (!name) {
-            console.error('Could not detect document title, please provide name parameter.');
-
             return;
         }
 
