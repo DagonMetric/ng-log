@@ -1,9 +1,16 @@
 {
   "name": "ng-log",
   "version": "2.2.0",
-  "private": true,
   "author": "DagonMetric",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dagonmetric/ng-log.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dagonmetric/ng-log/issues"
+  },
+  "homepage": "https://github.com/dagonmetric/ng-log",
   "scripts": {
     "ng": "ng",
     "ngb": "ngb",

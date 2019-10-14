@@ -1,28 +1,29 @@
 {
   "name": "@dagonmetric/ng-log",
   "version": "0.0.0-PLACEHOLDER",
-  "description": "Vendor-agnostic logging, analytics and telemetry client abstractions and some implementations for Angular.",
+  "description": "Vendor-agnostic logging, analytics and telemetry service abstractions and some implementations for Angular.",
   "author": "DagonMetric",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Dagonmetric/ng-log.git"
+    "url": "git+https://github.com/Dagonmetric/ng-log.git"
   },
   "bugs": {
-    "url": "https://github.com/Dagonmetric/ng-log/issues"
+    "url": "https://github.com/dagonmetric/ng-log/issues"
   },
-  "homepage": "https://github.com/Dagonmetric/ng-log",
+  "homepage": "https://github.com/dagonmetric/ng-log",
   "sideEffects": false,
   "keywords": [
+    "ng-log",
     "angular-logging-service",
     "angular-logging",
     "angular-log",
     "angular-analytics",
-    "angular-telemetry-client",
+    "angular-telemetry-service",
     "analytics",
     "logging",
     "log",
-    "telemetry-client",
+    "telemetry-service",
     "telemetry",
     "angular"
   ],
