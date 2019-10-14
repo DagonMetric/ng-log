@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-log.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-Vendor-agnostic logging, analytics and telemetry client abstractions and some implementations for Angular applications.
+Vendor-agnostic logging, analytics and telemetry service abstractions and some implementations for Angular applications.
 
 ## Features
 
@@ -89,8 +89,6 @@ export class AppComponent implements OnInit {
     // Track custom event
     this._logService.trackEvent({
       name: 'video_auto_play_start',
-      event_label: 'My promotional video',
-      event_category: 'video_auto_play',
       properties: {
         non_interaction: true
       }
@@ -118,7 +116,7 @@ See [ng-log wiki](https://github.com/DagonMetric/ng-log/wiki) for more informati
 
 * [ng-log-config](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config) - `LogConfigModule` for loading logging configuration with `ConfigService`
 
-## Integratgions
+## Integrations
 
 * [ng-log-applicationinsights](https://github.com/DagonMetric/ng-log-applicationinsights) - Microsoft Azure Application Insights implementation for `Logger`
 
