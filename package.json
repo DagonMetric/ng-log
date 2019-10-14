@@ -22,7 +22,7 @@
   "dependencies": {
     "@angular/common": "^8.2.10",
     "@angular/core": "^8.2.10",
-    "@dagonmetric/ng-config": "^2.2.0",
+    "@dagonmetric/ng-config": "^2.2.1",
     "rxjs": "^6.5.3",
     "tslib": "^1.10.0"
   },
@@ -34,7 +34,7 @@
     "@angular/language-service": "^8.2.10",
     "@angular/platform-browser": "^8.2.10",
     "@angular/platform-browser-dynamic": "^8.2.10",
-    "@dagonmetric/angular-build": "^8.0.6",
+    "@dagonmetric/angular-build": "^8.1.0",
     "@types/jasmine": "^3.4.4",
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "^12.7.12",
