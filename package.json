@@ -23,7 +23,7 @@
     "@angular/common": "^8.2.11",
     "@angular/core": "^8.2.11",
     "@dagonmetric/ng-config": "^2.2.1",
-    "rxjs": "^6.5.3",
+    "rxjs": "^6.5.4",
     "tslib": "^1.10.0"
   },
   "devDependencies": {
