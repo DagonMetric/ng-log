@@ -3,8 +3,8 @@
     "target": "es2015",
     "module": "esnext",
     "moduleResolution": "node",
+
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
 
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
