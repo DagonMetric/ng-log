@@ -2,7 +2,6 @@
 
 root = true
 
-# Don't use tabs for indentation.
 [*]
 charset = utf-8
 indent_style = space
@@ -13,43 +12,9 @@ trim_trailing_whitespace = true
 [*.{ts,tsx,js,jsx,html,css,scss,less}]
 indent_size = 4
 
-# JSON, XML and YML files
-[*.{json,xml,yml}]
-indent_size = 2
-
-# Markdown file
 [*.md]
-insert_final_newline = false
 trim_trailing_whitespace = false
 
-# Server-side code files
-[*.{cs,csx,vb,vbx}]
-indent_size = 4
-# charset = utf-8-bom
-
-# ASP.Net Core server-side file
-[*.cshtml]
-indent_size = 4
-# charset = utf-8-bom
-
-# Solution file
-[*.sln]
-indent_style = tab
-# charset = utf-8-bom
-
-# VS project configuration files
-[*.{config,*proj,projitems,nuspec,props,resx,targets,tasks,ruleset,vsixmanifest,vsct,stylecop}]
+# Configuration Files
+[*.{json,xml,yml}]
 indent_size = 2
-
-# Powershell files
-[*.{ps1,psm1}]
-indent_size = 4
-
-# Windows command script files
-[*.{cmd,bat}]
-end_of_line = crlf
-
-# Shell script file
-[*.sh]
-indent_size = 4
-end_of_line = lf
