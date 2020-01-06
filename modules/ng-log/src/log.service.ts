@@ -96,8 +96,8 @@ export class LogService extends Logger {
 
             return {
                 logger: loggerProvider.createLogger(category),
-                providerType: providerType,
-                category: category,
+                providerType,
+                category,
                 minLevel: rule && rule.minLevel != null ? rule.minLevel : undefined,
                 pageView: rule && rule.pageView != null ? rule.pageView : undefined,
                 event: rule && rule.event != null ? rule.event : undefined
@@ -654,6 +654,7 @@ export class LogService extends Logger {
         }
     }
 
+    // tslint:disable-next-line: ban-types
     private logInvalidLoggingConfigError(value: string | number | Object, propName: string): void {
         console.error(`Invalid logging configuration, ${propName} value '${value}' is not supported.`);
     }

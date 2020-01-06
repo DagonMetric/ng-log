@@ -1,5 +1,6 @@
 // tslint:disable: no-floating-promises
 // tslint:disable: no-console
+// tslint:disable: max-classes-per-file
 
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -193,7 +194,7 @@ describe('LogService', () => {
                 userId: true,
                 minLevel: 'trace',
                 logLevel: {
-                    default: 'debug',
+                    'default': 'debug',
                     'angular*log': 'warn'
                 },
                 pageView: {
@@ -219,7 +220,7 @@ describe('LogService', () => {
                         default: 'error'
                     },
                     event: {
-                        test: {
+                        'test': {
                             payment: false
                         },
                         'angular*log': {
@@ -474,8 +475,8 @@ describe('LogService', () => {
 
             logService.setConfig({
                 logLevel: {
-                    default: 'trace',
-                    angular: 'debug',
+                    'default': 'trace',
+                    'angular': 'debug',
                     'ng-log-test': 'info',
                     'ng-log': 'warn'
                 }
@@ -495,7 +496,7 @@ describe('LogService', () => {
             logService.setConfig({
                 mock: {
                     logLevel: {
-                        default: 'error',
+                        'default': 'error',
                         'ng-log*test': 'critical'
                     }
                 }
