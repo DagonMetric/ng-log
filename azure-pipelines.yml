@@ -2,8 +2,8 @@ resources:
   repositories:
     - repository: templates
       type: github
-      name: DagonMetric/ng-workspace-configs
+      name: DagonMetric/ci-template
       endpoint: github-dagonmetric-connection
 
 stages:
-  - template: azure-pipelines/multi-platform-build-stage.yml@templates
+  - template: azure-pipelines/nodejs/multi-platform-build-stage.yml@templates
