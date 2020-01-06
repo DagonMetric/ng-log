@@ -1,7 +1,7 @@
 # Angular Logging, Analytics and Telemetry Service
 
-[![Build Status](https://dev.azure.com/DagonMetric/ng-log/_apis/build/status/DagonMetric.ng-log?branchName=master)](https://dev.azure.com/DagonMetric/ng-log/_build/latest?definitionId=10&branchName=master)
-[![CircleCI](https://circleci.com/gh/DagonMetric/ng-log.svg?style=svg)](https://circleci.com/gh/DagonMetric/ng-log)
+[![GitHub Actions Status](https://github.com/DagonMetric/ng-log/workflows/Main%20Workflow/badge.svg)](https://github.com/DagonMetric/ng-log/actions)
+[![Azure Pipelines Status](https://dev.azure.com/DagonMetric/ng-log/_apis/build/status/DagonMetric.ng-log?branchName=master)](https://dev.azure.com/DagonMetric/ng-log/_build/latest?definitionId=10&branchName=master)
 [![codecov](https://codecov.io/gh/DagonMetric/ng-log/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log)
 [![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-log.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
@@ -124,6 +124,8 @@ See [ng-log wiki](https://github.com/DagonMetric/ng-log/wiki) for more informati
 * [ng-log-gtag](https://github.com/DagonMetric/ng-log-gtag) - Google Analytics Global Site Tag gtag.js implementation for `Logger`
 
 * [ng-log-firebase-analytics](https://github.com/DagonMetric/ng-log-firebase-analytics) - Firebase Analytics implementation for `Logger`
+
+* [ng-log-facebook-analytics](https://github.com/DagonMetric/ng-log-facebook-analytics) - Facebook Pixel Analytics implementation for `Logger`
 
 ## Feedback and Contributing
 
