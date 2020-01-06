@@ -1,21 +1,16 @@
 {
   "extends": [
-    "tslint-microsoft-contrib"
+    "tslint:recommended",
+    "tslint-microsoft-contrib/recommended"
   ],
   "rulesDirectory": [
     "node_modules/tslint-microsoft-contrib",
     "node_modules/codelyzer"
   ],
   "rules": {
-    // These should be done automatically by a formatter. https://github.com/Microsoft/TypeScript/issues/18340
-    "align": false,
-    "eofline": false,
-    "linebreak-style": false,
-    // "no-consecutive-blank-lines": false,
-    // "space-before-function-paren": false,
-
     // Core rules with custom configurations
     "array-type": [true, "array"],
+    "arrow-parens": [true, "ban-single-arg-parens"],
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
@@ -24,8 +19,6 @@
       "check-space"
     ],
     "curly": true,
-    // TODO: to reivew
-    "cyclomatic-complexity": false,
     "deprecation": {
       "severity": "warn"
     },
@@ -43,6 +36,7 @@
     ],
     "jsdoc-format": true,
     "label-position": true,
+    "linebreak-style": false,
     "max-line-length": [
       true,
       140
@@ -67,11 +61,8 @@
         ]
       }
     ],
-    // TODO: to review
-    "newline-per-chained-call": false,
     "no-angle-bracket-type-assertion": true,
     "no-arg": true,
-    "no-bitwise": true,
     "no-console": [
       true,
       "debug",
@@ -92,7 +83,6 @@
     ],
     "no-misused-new": true,
     "no-non-null-assertion": true,
-    // TODO: to review
     "no-null-keyword": false,
     "no-parameter-properties": false,
     "no-parameter-reassignment": false,
@@ -104,7 +94,6 @@
     "no-unnecessary-class": false,
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
-    "no-use-before-declare": true,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "one-line": [
@@ -170,18 +159,12 @@
     ],
 
     // tslint-microsoft-contrib overides
-    // "completed-docs": false,
     "export-name": false,
     "function-name": false,
-    // "missing-jsdoc": false,
-    // "no-backbone-get-set-outside-model": false,
-    // "no-http-string": false,
-    "no-increment-decrement": false,
-    // "no-suspicious-comment": false,
     "no-relative-imports": false,
     "prefer-type-cast": false,
 
-    // codelyzer
+    // codelyzer overides
     "component-class-suffix": true,
     "component-selector": [
       true,
@@ -190,7 +173,6 @@
       "kebab-case"
     ],
     "contextual-lifecycle": true,
-
     "directive-class-suffix": true,
     "directive-selector": [
       true,
@@ -198,12 +180,10 @@
       "app",
       "camelCase"
     ],
-
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,
     "no-input-rename": true,
     "no-inputs-metadata-property": true,
-
     "no-output-native": true,
     "no-output-on-prefix": true,
     "no-output-rename": true,
