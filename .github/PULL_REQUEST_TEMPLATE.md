@@ -4,5 +4,3 @@ Thanks for submitting a pull request! Please provide enough information so that 
 Refer to CONTRIBUTING.MD for more details.
 https://github.com/DagonMetric/ng-log/blob/master/CONTRIBUTING.md
 -->
-
-Fixes #
