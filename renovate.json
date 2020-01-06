@@ -4,14 +4,11 @@
   ],
   "timezone": "Asia/Yangon",
   "schedule": [
-    "after 11pm and before 6am every weekday",
-    "after 11pm and before 6am every weekend"
+    "after 2am and before 7am every weekday",
+    "after 2am and before 7am every weekend"
   ],
   "packageFiles": ["package.json"],
   "automerge": true,
-  "major": {
-    "automerge": false
-  },
   "rangeStrategy": "bump",
   "packageRules": [
     {
@@ -34,6 +31,12 @@
     },
     {
       "packagePatterns": [
+        "^@myanmartools\/.*"
+      ],
+      "groupName": "myanmartools"
+    },
+    {
+      "packagePatterns": [
         "^@types\/.*"
       ],
       "groupName": "types"
@@ -52,7 +55,6 @@
     },
     {
       "packageNames": ["typescript"],
-      "allowedVersions": "<=3.4.5",
       "automerge": false
     }
   ]
