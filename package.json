@@ -24,7 +24,7 @@
     "@angular/core": "^8.2.14",
     "@dagonmetric/ng-config": "^2.2.2",
     "rxjs": "^6.5.5",
-    "tslib": "^1.11.1"
+    "tslib": "^1.11.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.803.24",
