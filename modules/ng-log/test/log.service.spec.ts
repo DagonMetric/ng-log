@@ -1,6 +1,4 @@
-// tslint:disable: no-floating-promises
-// tslint:disable: no-console
-// tslint:disable: max-classes-per-file
+/* eslint-disable max-classes-per-file */
 
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -164,29 +162,24 @@ export class MockLoggerProvider2 extends Logger implements LoggerProvider {
 describe('LogService', () => {
     it('should be created', () => {
         TestBed.configureTestingModule({
-            providers: [
-                LogService
-            ]
+            providers: [LogService]
         });
 
-        const logService = TestBed.get<LogService>(LogService);
+        const logService = TestBed.inject<LogService>(LogService);
 
-        expect(logService).toBeDefined();
+        void expect(logService).toBeDefined();
     });
 
     describe('createLogger', () => {
         it("should create a logger without 'LOGGER_PROVIDER' registration", () => {
             TestBed.configureTestingModule({
-                providers: [
-                    LogService
-                ]
+                providers: [LogService]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
             const logger = logService.createLogger('test');
 
-            expect(logger).toBeDefined();
-            expect(logger instanceof DefaultLogger).toBeTruthy();
+            void expect(logger instanceof DefaultLogger).toBeTruthy();
         });
 
         it("should create a logger with 'LOGGER_PROVIDER' and 'LOG_CONFIG'", () => {
@@ -194,7 +187,7 @@ describe('LogService', () => {
                 userId: true,
                 minLevel: 'trace',
                 logLevel: {
-                    'default': 'debug',
+                    default: 'debug',
                     'angular*log': 'warn'
                 },
                 pageView: {
@@ -220,7 +213,7 @@ describe('LogService', () => {
                         default: 'error'
                     },
                     event: {
-                        'test': {
+                        test: {
                             payment: false
                         },
                         'angular*log': {
@@ -251,15 +244,15 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
             const logger = logService.createLogger('test') as DefaultLogger;
 
-            expect(logger).toBeDefined();
-            expect(logger.loggerInformations.length).toBe(2);
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Info);
-            expect(logger.loggerInformations[0].pageView).toBe(true);
-            expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
-            expect((logger.loggerInformations[0].event as { [name: string]: boolean }).add_to_cart).toBeTruthy();
+            void expect(logger).toBeDefined();
+            void expect(logger.loggerInformations.length).toBe(2);
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Info);
+            void expect(logger.loggerInformations[0].pageView).toBe(true);
+            void expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
+            void expect((logger.loggerInformations[0].event as { [name: string]: boolean }).add_to_cart).toBeTruthy();
         });
 
         it('should create the same logger instance if same category name is passed', () => {
@@ -279,11 +272,11 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
             const logger1 = logService.createLogger('test1');
             const logger2 = logService.createLogger('test1');
 
-            expect(logger1).toEqual(logger2);
+            void expect(logger1).toEqual(logger2);
         });
 
         it('should create a unique logger instance if unique category name is passed', () => {
@@ -298,11 +291,11 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
             const logger1 = logService.createLogger('test1');
             const logger2 = logService.createLogger('test2');
 
-            expect(logger1 === logger2).toBeFalsy();
+            void expect(logger1 === logger2).toBeFalsy();
         });
 
         it('should re-create a unique logger instance if the old one is destroy', () => {
@@ -317,7 +310,7 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
 
             const logger1 = logService.createLogger('test1');
             logService.destroyLogger('test1');
@@ -326,7 +319,7 @@ describe('LogService', () => {
 
             const logger2 = logService.createLogger('test1');
 
-            expect(logger1 === logger2).toBeFalsy();
+            void expect(logger1 === logger2).toBeFalsy();
         });
     });
 
@@ -348,14 +341,16 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
             const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
             const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
 
             spyOn(loggerProvider, 'destroyLogger');
 
             logService.destroyLogger('test');
-            expect(loggerProvider.destroyLogger).toHaveBeenCalled();
+
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            void expect(loggerProvider.destroyLogger).toHaveBeenCalled();
         });
     });
 
@@ -372,14 +367,14 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
             const logger = logService.createLogger('test') as DefaultLogger;
 
             logService.setConfig({});
 
-            expect(logger.loggerInformations[0].minLevel).toBeUndefined();
-            expect(logger.loggerInformations[0].pageView).toBeUndefined();
-            expect(logger.loggerInformations[0].event).toBeUndefined();
+            void expect(logger.loggerInformations[0].minLevel).toBeUndefined();
+            void expect(logger.loggerInformations[0].pageView).toBeUndefined();
+            void expect(logger.loggerInformations[0].event).toBeUndefined();
         });
 
         it("should be able to set config 'minLevel' values", () => {
@@ -394,43 +389,43 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
             const logger = logService.createLogger('test') as DefaultLogger;
 
             logService.setConfig({
                 minLevel: 'trace'
             });
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Trace);
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Trace);
 
             logService.setConfig({
                 minLevel: 'debug'
             });
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Debug);
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Debug);
 
             logService.setConfig({
                 minLevel: 'info'
             });
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Info);
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Info);
 
             logService.setConfig({
                 minLevel: 'warn'
             });
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Warn);
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Warn);
 
             logService.setConfig({
                 minLevel: 'error'
             });
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Error);
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Error);
 
             logService.setConfig({
                 minLevel: 'critical'
             });
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Critical);
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Critical);
 
             logService.setConfig({
                 minLevel: 'none'
             });
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.None);
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.None);
         });
 
         it("should log an error when invalid 'minLevel' is provided", () => {
@@ -445,17 +440,18 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
 
             spyOn(console, 'error');
 
             logService.setConfig({
                 // Invalid log level
-                // tslint:disable-next-line: no-any
                 minLevel: 'important' as any
             });
 
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, minLevel value 'important' is not supported.");
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, minLevel value 'important' is not supported."
+            );
         });
 
         it("should be able to set config 'logLevel' value", () => {
@@ -475,13 +471,14 @@ describe('LogService', () => {
 
             logService.setConfig({
                 logLevel: {
-                    'default': 'trace',
-                    'angular': 'debug',
+                    default: 'trace',
+                    angular: 'debug',
                     'ng-log-test': 'info',
                     'ng-log': 'warn'
                 }
             });
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Info);
+
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Info);
 
             logService.setConfig({
                 mock: {
@@ -491,17 +488,19 @@ describe('LogService', () => {
                     default: 'critical'
                 }
             });
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Error);
+
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Error);
 
             logService.setConfig({
                 mock: {
                     logLevel: {
-                        'default': 'error',
+                        default: 'error',
                         'ng-log*test': 'critical'
                     }
                 }
             });
-            expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Critical);
+
+            void expect(logger.loggerInformations[0].minLevel).toBe(LogLevel.Critical);
         });
 
         it("should log an error when invalid 'logLevel' value is provided", () => {
@@ -556,14 +555,24 @@ describe('LogService', () => {
                 invalid: 'info'
             });
 
-            expect(console.error)
-                .toHaveBeenCalledWith('Invalid logging configuration, only one wildcard character is allowed in category name.');
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, logLevel value 'important' is not supported.");
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, logLevel value '100' is not supported.");
-            expect(console.error)
-                .toHaveBeenCalledWith('Invalid logging configuration, only one wildcard character is allowed in category name.');
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, logLevel value 'important' is not supported.");
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, logLevel value 'false' is not supported.");
+            expect(console.error).toHaveBeenCalledWith(
+                'Invalid logging configuration, only one wildcard character is allowed in category name.'
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, logLevel value 'important' is not supported."
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, logLevel value '100' is not supported."
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                'Invalid logging configuration, only one wildcard character is allowed in category name.'
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, logLevel value 'important' is not supported."
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, logLevel value 'false' is not supported."
+            );
         });
 
         it("should be able to set config 'pageView' value", () => {
@@ -584,7 +593,8 @@ describe('LogService', () => {
             logService.setConfig({
                 pageView: true
             });
-            expect(logger.loggerInformations[0].pageView).toBeTruthy();
+
+            void expect(logger.loggerInformations[0].pageView).toBeTruthy();
 
             logService.setConfig({
                 pageView: {
@@ -592,7 +602,8 @@ describe('LogService', () => {
                     test: true
                 }
             });
-            expect(logger.loggerInformations[0].pageView).toBeTruthy();
+
+            void expect(logger.loggerInformations[0].pageView).toBeTruthy();
 
             logService.setConfig({
                 // With provider name
@@ -602,7 +613,8 @@ describe('LogService', () => {
                 // Without provider name
                 pageView: false
             });
-            expect(logger.loggerInformations[0].pageView).toBeTruthy();
+
+            void expect(logger.loggerInformations[0].pageView).toBeTruthy();
 
             logService.setConfig({
                 mock: {
@@ -615,7 +627,8 @@ describe('LogService', () => {
                 // Without provider & category name
                 pageView: true
             });
-            expect(logger.loggerInformations[0].pageView === false).toBeTruthy();
+
+            void expect(logger.loggerInformations[0].pageView === false).toBeTruthy();
         });
 
         it("should log an error when invalid 'pageView' value is provided", () => {
@@ -664,15 +677,25 @@ describe('LogService', () => {
                 }
             });
 
-            expect(console.error)
-                .toHaveBeenCalledWith('Invalid logging configuration, only one wildcard character is allowed in category name.');
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, pageView value 'info' is not supported.");
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, pageView value '0' is not supported.");
+            expect(console.error).toHaveBeenCalledWith(
+                'Invalid logging configuration, only one wildcard character is allowed in category name.'
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, pageView value 'info' is not supported."
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, pageView value '0' is not supported."
+            );
 
-            expect(console.error)
-                .toHaveBeenCalledWith('Invalid logging configuration, only one wildcard character is allowed in category name.');
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, pageView value 'info' is not supported.");
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, pageView value '0' is not supported.");
+            expect(console.error).toHaveBeenCalledWith(
+                'Invalid logging configuration, only one wildcard character is allowed in category name.'
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, pageView value 'info' is not supported."
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, pageView value '0' is not supported."
+            );
         });
 
         it("should be able to set config 'event' value", () => {
@@ -697,8 +720,11 @@ describe('LogService', () => {
                     add_to_cart: false
                 }
             });
-            expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
-            expect((logger.loggerInformations[0].event as { [name: string]: boolean }).add_to_cart === false).toBeTruthy();
+
+            void expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
+            void expect(
+                (logger.loggerInformations[0].event as { [name: string]: boolean }).add_to_cart === false
+            ).toBeTruthy();
 
             // event object with category
             logService.setConfig({
@@ -713,8 +739,11 @@ describe('LogService', () => {
                     }
                 }
             });
-            expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment === false).toBeTruthy();
-            expect((logger.loggerInformations[0].event as { [name: string]: boolean }).add_to_cart).toBeTruthy();
+
+            void expect(
+                (logger.loggerInformations[0].event as { [name: string]: boolean }).payment === false
+            ).toBeTruthy();
+            void expect((logger.loggerInformations[0].event as { [name: string]: boolean }).add_to_cart).toBeTruthy();
 
             // event object in logger section
             logService.setConfig({
@@ -724,7 +753,8 @@ describe('LogService', () => {
                     }
                 }
             });
-            expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
+
+            void expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
 
             // event object with category in logger section
             logService.setConfig({
@@ -739,7 +769,8 @@ describe('LogService', () => {
                     }
                 }
             });
-            expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
+
+            void expect((logger.loggerInformations[0].event as { [name: string]: boolean }).payment).toBeTruthy();
         });
 
         it("should log an error when invalid 'event' value is provided", () => {
@@ -793,13 +824,21 @@ describe('LogService', () => {
                 }
             });
 
-            expect(console.error)
-                .toHaveBeenCalledWith('Invalid logging configuration, only one wildcard character is allowed in category name.');
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, event value 'info' is not supported.");
-            expect(console.error)
-                .toHaveBeenCalledWith('Invalid logging configuration, only one wildcard character is allowed in category name.');
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, event value 'info' is not supported.");
-            expect(console.error).toHaveBeenCalledWith("Invalid logging configuration, event value 'info' is not supported.");
+            expect(console.error).toHaveBeenCalledWith(
+                'Invalid logging configuration, only one wildcard character is allowed in category name.'
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, event value 'info' is not supported."
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                'Invalid logging configuration, only one wildcard character is allowed in category name.'
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, event value 'info' is not supported."
+            );
+            expect(console.error).toHaveBeenCalledWith(
+                "Invalid logging configuration, event value 'info' is not supported."
+            );
         });
     });
 
@@ -830,8 +869,9 @@ describe('LogService', () => {
             const userId = 'test_user';
             const accountId = 'test_account';
             logService.setUserProperties(userId, accountId);
+
             // expect(loggerProvider.setUserProperties).toHaveBeenCalledWith(userId, accountId);
-            expect(loggerProvider.setUserProperties).toHaveBeenCalled();
+            void expect(loggerProvider.setUserProperties).toHaveBeenCalled();
         });
 
         it("should not call registered logger provider's 'setUserProperties' method if userId is disabled", () => {
@@ -865,8 +905,8 @@ describe('LogService', () => {
 
             logService.setUserProperties(userId, accountId);
 
-            // tslint:disable: no-unsafe-any no-any
-            expect((loggerProvider.setUserProperties as any).calls.any()).toEqual(false);
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            void expect((loggerProvider.setUserProperties as any).calls.any()).toEqual(false);
             // tslint:enable: no-unsafe-any no-any
         });
     });
@@ -900,7 +940,8 @@ describe('LogService', () => {
             spyOn(loggerProvider, 'clearUserProperties');
 
             logService.clearUserProperties();
-            expect(loggerProvider.clearUserProperties).toHaveBeenCalled();
+
+            void expect(loggerProvider.clearUserProperties).toHaveBeenCalled();
         });
 
         it("should call registered logger provider's 'clearUserProperties' method after setting userId to false", () => {
@@ -934,7 +975,8 @@ describe('LogService', () => {
             spyOn(loggerProvider, 'clearUserProperties');
 
             logService.clearUserProperties();
-            expect(loggerProvider.clearUserProperties).toHaveBeenCalled();
+
+            void expect(loggerProvider.clearUserProperties).toHaveBeenCalled();
         });
 
         it("should not call registered logger provider's 'clearUserProperties' method if userId is disabled", () => {
@@ -964,9 +1006,9 @@ describe('LogService', () => {
             spyOn(loggerProvider, 'clearUserProperties');
 
             logService.clearUserProperties();
-            // tslint:disable: no-unsafe-any no-any
-            expect((loggerProvider.clearUserProperties as any).calls.any()).toEqual(false);
-            // tslint:enable: no-unsafe-any no-any
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            void expect((loggerProvider.clearUserProperties as any).calls.any()).toEqual(false);
         });
     });
 
@@ -993,7 +1035,9 @@ describe('LogService', () => {
             const msg = 'This is a message.';
             const logInfo = { properties: { key1: 'value1' } };
             logService.log(logLevel, msg, logInfo);
-            expect(loggerProvider.log).toHaveBeenCalledWith(logLevel, msg, logInfo);
+
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            void expect(loggerProvider.log).toHaveBeenCalledWith(logLevel, msg, logInfo);
         });
 
         it("should not call registered logger provider's 'log' method if disabled", () => {
@@ -1466,7 +1510,6 @@ describe('DefaultLogger', () => {
         });
         logger.log(LogLevel.Warn, msg, params);
         expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Warn, msg, params);
-
     });
 
     it("should not call registered logger's 'log' method if not enabled", () => {
@@ -1686,7 +1729,7 @@ describe('DefaultLogger', () => {
 
     it("should return empty 'loggerInformations' array if it is null", () => {
         // tslint:disable-next-line: no-any
-        logger.loggerInformations = null as unknown as any;
+        logger.loggerInformations = (null as unknown) as any;
 
         expect(Array.isArray(logger.loggerInformations)).toBeTruthy();
     });

@@ -1,30 +1,23 @@
-// This file is required by karma.conf.js and loads recursively all the .spec and framework files
-
-// tslint:disable: no-implicit-dependencies no-import-side-effect
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable import/no-extraneous-dependencies */
 
 import 'zone.js/dist/zone';
 import 'zone.js/dist/zone-testing';
 
 import { getTestBed } from '@angular/core/testing';
 
-import {
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting
-} from '@angular/platform-browser-dynamic/testing';
+import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 
-// tslint:disable-next-line: no-any no-reserved-keywords
 declare const require: any;
 
 // First, initialize the Angular testing environment.
-getTestBed().initTestEnvironment(
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting()
-);
+getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
 
 // Then we find all the tests.
-// tslint:disable-next-line: no-unsafe-any
 const context = require.context('./', true, /\.spec\.ts$/);
 
 // And load the modules.
-// tslint:disable-next-line: no-unsafe-any
 context.keys().map(context);
