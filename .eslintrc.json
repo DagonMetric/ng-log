@@ -1,0 +1,248 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "ecmaVersion": 11,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "jsdoc",
+    // "no-null",
+    "import",
+    "prefer-arrow",
+    "prettier"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@angular-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    "coverage"
+  ],
+  "rules": {
+    // Incompatible with Prettier
+    // "arrow-body-style": "error",
+
+    // Prefer Prettier's arrowParens
+    // "arrow-parens": ["error", "as-needed"],
+
+    // Incompatible with Prettier
+    // "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+
+    // Prefer Prettier's trailingComma
+    // "comma-dangle": ["error", "never"],
+
+    "constructor-super": "error",
+    "curly": "error",
+    "dot-notation": "error",
+    "eqeqeq": [
+      "error",
+      "smart"
+    ],
+    "guard-for-in": "error",
+    "id-blacklist": [
+      "error",
+      "any",
+      "Number",
+      "number",
+      "String",
+      "string",
+      "Boolean",
+      "boolean",
+      "Undefined",
+      "undefined"
+    ],
+    "id-match": "error",
+
+    // "linebreak-style": "off",
+
+    "max-classes-per-file": [
+      "error",
+      1
+    ],
+
+    // Prefer Prettier's printWidth
+    // "max-len": ["error", { "code": 140 }],
+
+    // Incompatible with Prettier
+    // "new-parens": "error",
+
+    "no-bitwise": "error",
+    "no-caller": "error",
+    "no-cond-assign": "error",
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "warn",
+          "dir",
+          "timeLog",
+          "assert",
+          "clear",
+          "count",
+          "countReset",
+          "group",
+          "groupEnd",
+          "table",
+          "dirxml",
+          "error",
+          "groupCollapsed",
+          "Console",
+          "profile",
+          "profileEnd",
+          "timeStamp",
+          "context"
+        ]
+      }
+    ],
+    "no-debugger": "error",
+    "no-duplicate-case": "error",
+    "no-duplicate-imports": "error",
+    "no-empty": "error",
+    "no-eval": "error",
+    "no-extra-bind": "error",
+    "no-fallthrough": "error",
+    "no-new-func": "error",
+    "no-new-wrappers": "error",
+    "no-return-await": "error",
+    "no-shadow": [
+      "error",
+      {
+        "hoist": "all"
+      }
+    ],
+    "no-sparse-arrays": "error",
+    "no-template-curly-in-string": "error",
+    "no-throw-literal": "error",
+
+    // Incompatible with Prettier
+    // "no-trailing-spaces": "error",
+
+    "no-undef-init": "error",
+    "no-underscore-dangle": "error",
+    "no-unsafe-finally": "error",
+    "no-unused-expressions": "off",
+    "no-unused-labels": "error",
+    "no-var": "error",
+    "object-shorthand": "error",
+    "one-var": [
+      "error",
+      "never"
+    ],
+    "prefer-const": "error",
+    "prefer-object-spread": "error",
+
+    // Prefer @typescript-eslint/quotes
+    "quotes": "off",
+
+    // Prefer Prettier's quoteProps
+    // "quote-props": ["error", "consistent-as-needed"],
+
+    "radix": "error",
+    "semi": "off",
+
+    "sort-imports": [
+      "error",
+      {
+        "ignoreDeclarationSort": true
+      }
+    ],
+
+    "space-before-function-paren": "off",
+
+    // Incompatible with Prettier
+    // "space-in-parens": "error",
+
+    "spaced-comment": "error",
+
+    // Incompatible with Prettier
+    // "unicode-bom": ["error", "never"],
+
+    "use-isnan": "error",
+
+    "@typescript-eslint/adjacent-overload-signatures": "error",
+    "@typescript-eslint/array-type": "error",
+    "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+
+    // Incompatible with Prettier
+    // "@typescript-eslint/indent": "error",
+
+    // Incompatible with Prettier
+    // "@typescript-eslint/member-delimiter-style": [
+    //   "error",
+    //   {
+    //     "multiline": {
+    //       "delimiter": "semi",
+    //       "requireLast": true
+    //     },
+    //     "singleline": {
+    //       "delimiter": "semi",
+    //       "requireLast": false
+    //     }
+    //   }
+    // ],
+
+    "@typescript-eslint/member-ordering": "error",
+    "@typescript-eslint/no-non-null-assertion": "error",
+    "@typescript-eslint/no-unused-expressions": ["error"],
+    "@typescript-eslint/prefer-for-of": "error",
+    "@typescript-eslint/prefer-function-type": "error",
+
+    // Prefer Prettier's singleQuote
+    // "@typescript-eslint/quotes": [ "error", "single", { "avoidEscape": true }],
+
+    // Prefer Prettier's semi
+    // "@typescript-eslint/semi": [ "error", "always"],
+
+    // Incompatible with Prettier
+    // "@typescript-eslint/space-before-function-paren": ["error", { "asyncArrow": "always", "anonymous": "always", "named": "never" }],
+
+    "@typescript-eslint/unbound-method": ["error", { "ignoreStatic": true }],
+
+    "@typescript-eslint/unified-signatures": "error",
+
+    // TODO: To review if necessary?
+    "import/no-deprecated": "warn",
+    "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
+
+    "jsdoc/check-alignment": "error",
+
+    // "no-null/no-null": "error",
+
+    "prefer-arrow/prefer-arrow-functions": "error",
+
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
+
+    // "@angular-eslint/directive-selector": [
+    //   "error",
+    //   {
+    //     "type": "attribute",
+    //     "prefix": "app",
+    //     "style": "camelCase"
+    //   }
+    // ],
+    // "@angular-eslint/component-selecto": [
+    //   "error",
+    //   {
+    //     "type": "element",
+    //     "prefix": "app",
+    //     "style": "kebab-case"
+    //   }
+    // ]
+
+  },
+  "settings": {}
+}
