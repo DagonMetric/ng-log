@@ -11,10 +11,10 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import {
     EventInfo,
     EventTimingInfo,
-    Logger,
-    LoggerProvider,
     LogInfo,
     LogLevel,
+    Logger,
+    LoggerProvider,
     PageViewInfo,
     PageViewTimingInfo
 } from '@dagonmetric/ng-log';
@@ -28,62 +28,61 @@ import { CONSOLE_LOGGER_OPTIONS, ConsoleLogger, ConsoleLoggerOptions } from './c
     providedIn: 'root'
 })
 export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
-    private readonly _options: ConsoleLoggerOptions;
+    private readonly options: ConsoleLoggerOptions;
 
-    private _userId?: string;
-    private _accountId?: string;
-    private _currentLogger?: ConsoleLogger;
+    private userId?: string;
+    private accountId?: string;
+    private currentLoggerInternal?: ConsoleLogger;
 
     get name(): string {
         return 'console';
     }
 
     get currentLogger(): ConsoleLogger {
-        if (this._currentLogger) {
-            return this._currentLogger;
+        if (this.currentLoggerInternal) {
+            return this.currentLoggerInternal;
         }
 
-        this._currentLogger = new ConsoleLogger('', this._options);
+        this.currentLoggerInternal = new ConsoleLogger('', this.options);
 
-        return this._currentLogger;
+        return this.currentLoggerInternal;
     }
 
-    constructor(
-        @Optional() @Inject(CONSOLE_LOGGER_OPTIONS) options?: ConsoleLoggerOptions) {
+    constructor(@Optional() @Inject(CONSOLE_LOGGER_OPTIONS) options?: ConsoleLoggerOptions) {
         super();
-        this._options = options || { enableDebug: false };
+        this.options = options || { enableDebug: false };
     }
 
     createLogger(category: string): Logger {
-        return new ConsoleLogger(category, this._options);
+        return new ConsoleLogger(category, this.options);
     }
 
     destroyLogger(category: string): void {
         // Do nothing
-        if (this._options.enableDebug) {
-            // tslint:disable-next-line: no-console
+        if (this.options.enableDebug) {
+            // eslint-disable-next-line no-console
             console.log(`Destroying logger: ${category}`);
         }
     }
 
     setUserProperties(userId: string, accountId?: string): void {
-        this._userId = userId;
-        this._accountId = accountId;
+        this.userId = userId;
+        this.accountId = accountId;
 
-        if (this._options.enableDebug) {
-            // tslint:disable-next-line: no-console
-            console.log(`SET_USER_PROPERTIES: userId: ${userId}, accountId: ${accountId}.`);
+        if (this.options.enableDebug) {
+            // eslint-disable-next-line no-console
+            console.log(`SET_USER_PROPERTIES: userId: ${userId}, accountId: ${accountId || ''}.`);
         }
     }
 
     clearUserProperties(): void {
-        if (this._options.enableDebug) {
-            // tslint:disable-next-line: no-console
-            console.log(`CLEAR_USER_PROPERTIES: userId: ${this._userId}, accountId: ${this._accountId}.`);
+        if (this.options.enableDebug) {
+            // eslint-disable-next-line no-console
+            console.log(`CLEAR_USER_PROPERTIES: userId: ${this.userId || ''}, accountId: ${this.accountId || ''}.`);
         }
 
-        this._userId = undefined;
-        this._accountId = undefined;
+        this.userId = undefined;
+        this.accountId = undefined;
     }
 
     log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void {

@@ -17,15 +17,7 @@ import { PageViewInfo, PageViewTimingInfo } from './page-view-info';
  * Internal logging implementation for `Logger`.
  */
 export class DefaultLogger extends Logger {
-    private _loggerInformations?: LoggerInformation[];
-
-    get loggerInformations(): LoggerInformation[] {
-        return this._loggerInformations || [];
-    }
-
-    set loggerInformations(value: LoggerInformation[]) {
-        this._loggerInformations = value;
-    }
+    loggerInformations: LoggerInformation[] = [];
 
     log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void {
         for (const loggerInformation of this.loggerInformations) {
@@ -104,8 +96,7 @@ export class DefaultLogger extends Logger {
     }
 
     private isLogLevelEnabled(loggerInformation: LoggerInformation, level: LogLevel): boolean {
-        if (loggerInformation.minLevel != null &&
-            level < loggerInformation.minLevel) {
+        if (loggerInformation.minLevel != null && level < loggerInformation.minLevel) {
             return false;
         }
 
@@ -124,7 +115,7 @@ export class DefaultLogger extends Logger {
         if (loggerInformation.event) {
             const evtOptions = loggerInformation.event;
 
-            return Object.keys(evtOptions).find(key => key === eventName && evtOptions[key] === false) == null;
+            return Object.keys(evtOptions).find((key) => key === eventName && evtOptions[key] === false) == null;
         }
 
         return true;

@@ -15,9 +15,7 @@ import { LogService } from './log.service';
  * The `NGMODULE` for providing `LogService`.
  */
 @NgModule({
-    providers: [
-        LogService
-    ]
+    providers: [LogService]
 })
 export class LogModule {
     /**

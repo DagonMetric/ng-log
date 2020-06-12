@@ -6,11 +6,19 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-// tslint:disable:no-console
+/* eslint-disable no-console */
 
 import { InjectionToken } from '@angular/core';
 
-import { EventInfo, EventTimingInfo, Logger, LogInfo, LogLevel, PageViewInfo, PageViewTimingInfo } from '@dagonmetric/ng-log';
+import {
+    EventInfo,
+    EventTimingInfo,
+    LogInfo,
+    LogLevel,
+    Logger,
+    PageViewInfo,
+    PageViewTimingInfo
+} from '@dagonmetric/ng-log';
 
 export interface ConsoleLoggerOptions {
     enableDebug: boolean;
@@ -22,7 +30,7 @@ export const CONSOLE_LOGGER_OPTIONS = new InjectionToken<ConsoleLoggerOptions>('
  * Console logging implementation for `Logger`.
  */
 export class ConsoleLogger extends Logger {
-    private readonly _eventTiming: Map<string, number> = new Map<string, number>();
+    private readonly eventTiming: Map<string, number> = new Map<string, number>();
 
     constructor(readonly name: string, public options: ConsoleLoggerOptions) {
         super();
@@ -34,15 +42,41 @@ export class ConsoleLogger extends Logger {
         }
 
         if (logLevel === LogLevel.Trace) {
-            logInfo ? console.trace(message, logInfo) : console.trace(message);
+            if (logInfo) {
+                // eslint-disable-next-line no-restricted-syntax
+                console.trace(message, logInfo);
+            } else {
+                // eslint-disable-next-line no-restricted-syntax
+                console.trace(message);
+            }
         } else if (logLevel === LogLevel.Debug) {
-            logInfo ? console.debug(message, logInfo) : console.debug(message);
+            if (logInfo) {
+                // eslint-disable-next-line no-restricted-syntax
+                console.debug(message, logInfo);
+            } else {
+                // eslint-disable-next-line no-restricted-syntax
+                console.debug(message);
+            }
         } else if (logLevel === LogLevel.Info) {
-            logInfo ? console.info(message, logInfo) : console.info(message);
+            if (logInfo) {
+                // eslint-disable-next-line no-restricted-syntax
+                console.info(message, logInfo);
+            } else {
+                // eslint-disable-next-line no-restricted-syntax
+                console.info(message);
+            }
         } else if (logLevel === LogLevel.Warn) {
-            logInfo ? console.warn(message, logInfo) : console.warn(message);
+            if (logInfo) {
+                console.warn(message, logInfo);
+            } else {
+                console.warn(message);
+            }
         } else if (logLevel === LogLevel.Error || logLevel === LogLevel.Critical) {
-            logInfo ? console.error(message, logInfo) : console.error(message);
+            if (logInfo) {
+                console.error(message, logInfo);
+            } else {
+                console.error(message);
+            }
         }
     }
 
@@ -51,14 +85,16 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        if (this._eventTiming.get(name) != null) {
-            console.error(`The 'startTrackPage' was called more than once for this event without calling stop, name: ${name}.`);
+        if (this.eventTiming.get(name) != null) {
+            console.error(
+                `The 'startTrackPage' was called more than once for this event without calling stop, name: ${name}.`
+            );
 
             return;
         }
 
         const start = +new Date();
-        this._eventTiming.set(name, start);
+        this.eventTiming.set(name, start);
 
         if (this.options.enableDebug) {
             console.log(`START_TRACK_PAGE_VIEW: ${name}, start: ${start}.`);
@@ -70,7 +106,7 @@ export class ConsoleLogger extends Logger {
             return;
         }
 
-        const start = this._eventTiming.get(name);
+        const start = this.eventTiming.get(name);
         if (start == null || isNaN(start)) {
             console.error(`The 'stopTrackPage' was called without a corresponding start, name: ${name}.`);
 
@@ -80,10 +116,14 @@ export class ConsoleLogger extends Logger {
         if (this.options.enableDebug) {
             const duration = Math.max(+new Date() - start, 0);
             const msg = `STOP_TRACK_PAGE_VIEW: ${name}, start: ${start}, duration: ${duration}.`;
-            pageViewInfo ? console.log(msg, pageViewInfo) : console.log(msg);
+            if (pageViewInfo) {
+                console.log(msg, pageViewInfo);
+            } else {
+                console.log(msg);
+            }
         }
 
-        this._eventTiming.delete(name);
+        this.eventTiming.delete(name);
     }
 
     trackPageView(pageViewInfo?: PageViewInfo): void {
@@ -100,15 +140,17 @@ export class ConsoleLogger extends Logger {
     }
 
     startTrackEvent(name: string): void {
-        if (this._eventTiming.get(name) != null) {
-            console.error(`The 'startTrackEvent' was called more than once for this event without calling stop, name: ${name}.`);
+        if (this.eventTiming.get(name) != null) {
+            console.error(
+                `The 'startTrackEvent' was called more than once for this event without calling stop, name: ${name}.`
+            );
 
             return;
         }
 
         const start = +new Date();
 
-        this._eventTiming.set(name, start);
+        this.eventTiming.set(name, start);
 
         if (this.options.enableDebug) {
             console.log(`START_TRACK_EVENT: ${name}, start: ${start}.`);
@@ -116,7 +158,7 @@ export class ConsoleLogger extends Logger {
     }
 
     stopTrackEvent(name: string, eventInfo?: EventTimingInfo): void {
-        const start = this._eventTiming.get(name);
+        const start = this.eventTiming.get(name);
         if (start == null || isNaN(start)) {
             console.error(`The 'stopTrackEvent' was called without a corresponding start, name: ${name}.`);
 
@@ -126,10 +168,14 @@ export class ConsoleLogger extends Logger {
         if (this.options.enableDebug) {
             const duration = Math.max(+new Date() - start, 0);
             const msg = `STOP_TRACK_EVENT: ${name}, start: ${start}, duration: ${duration}.`;
-            eventInfo ? console.log(msg, eventInfo) : console.log(msg);
+            if (eventInfo) {
+                console.log(msg, eventInfo);
+            } else {
+                console.log(msg);
+            }
         }
 
-        this._eventTiming.delete(name);
+        this.eventTiming.delete(name);
     }
 
     trackEvent(eventInfo: EventInfo): void {

@@ -15,7 +15,7 @@ export interface EventTimingInfo {
     /**
      * Additional properties.
      */
-    properties?: { [key: string]: any };
+    properties?: { [key: string]: unknown };
 }
 
 /**

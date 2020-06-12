@@ -15,8 +15,8 @@ import {
     LOG_CONFIG,
     LogConfig,
     LogConfigBase,
-    LoggerSection,
     LogLevelSection,
+    LoggerSection,
     PageViewSection
 } from './log-config';
 import { LogInfo } from './log-info';
@@ -41,17 +41,18 @@ interface SelectedRule {
     providedIn: 'root'
 })
 export class LogService extends Logger {
-    private readonly _loggerProviders: LoggerProvider[];
-    private readonly _loggers: { [key: string]: DefaultLogger } = {};
-    private readonly _rulesByProvider: { [key: string]: SelectedRule | undefined } = {};
-    private readonly _userIdsByProvider: { [key: string]: boolean | undefined } = {};
-    private _loggerFilterOptions?: LoggerFilterOptions;
+    private readonly loggerProviders: LoggerProvider[];
+    private readonly loggers: { [key: string]: DefaultLogger } = {};
+    private readonly rulesByProvider: { [key: string]: SelectedRule | undefined } = {};
+    private readonly userIdsByProvider: { [key: string]: boolean | undefined } = {};
+    private loggerFilterOptions?: LoggerFilterOptions;
 
     constructor(
         @Optional() @Inject(LOGGER_PROVIDER) loggerProviders?: LoggerProvider[],
-        @Optional() @Inject(LOG_CONFIG) config?: LogConfig) {
+        @Optional() @Inject(LOG_CONFIG) config?: LogConfig
+    ) {
         super();
-        this._loggerProviders = loggerProviders || [];
+        this.loggerProviders = loggerProviders || [];
         if (config) {
             this.setConfig(config);
         }
@@ -62,19 +63,19 @@ export class LogService extends Logger {
      * @param config The logging config options.
      */
     setConfig(config: LogConfig): void {
-        this._loggerFilterOptions = this.parseConfig(config);
+        this.loggerFilterOptions = this.parseConfig(config);
 
-        for (const loggerProvider of this._loggerProviders) {
+        for (const loggerProvider of this.loggerProviders) {
             const providerName = loggerProvider.name;
 
             const rule = this.selectRule(providerName);
-            this._rulesByProvider[providerName] = rule;
+            this.rulesByProvider[providerName] = rule;
         }
 
-        const categoryNames = Object.keys(this._loggers);
+        const categoryNames = Object.keys(this.loggers);
 
         for (const categoryName of categoryNames) {
-            const logger = this._loggers[categoryName];
+            const logger = this.loggers[categoryName];
             this.refreshFilters(logger.loggerInformations);
         }
     }
@@ -84,13 +85,13 @@ export class LogService extends Logger {
      * @param category The category name for scoped logger.
      */
     createLogger(category: string): Logger {
-        const logger = this._loggers[category];
+        const logger = this.loggers[category];
         if (logger) {
             return logger;
         }
 
         const newLogger = new DefaultLogger();
-        newLogger.loggerInformations = this._loggerProviders.map(loggerProvider => {
+        newLogger.loggerInformations = this.loggerProviders.map((loggerProvider) => {
             const providerType = loggerProvider.name;
             const rule = this.selectRule(providerType, category);
 
@@ -104,7 +105,7 @@ export class LogService extends Logger {
             };
         });
 
-        this._loggers[category] = newLogger;
+        this.loggers[category] = newLogger;
 
         return newLogger;
     }
@@ -114,12 +115,12 @@ export class LogService extends Logger {
      * @param category The category name for scoped logger.
      */
     destroyLogger(category: string): void {
-        if (this._loggers[category] != null) {
+        if (this.loggers[category] != null) {
             // tslint:disable-next-line: no-dynamic-delete
-            delete this._loggers[category];
+            delete this.loggers[category];
         }
 
-        for (const loggerProvider of this._loggerProviders) {
+        for (const loggerProvider of this.loggerProviders) {
             if (loggerProvider.destroyLogger) {
                 loggerProvider.destroyLogger(category);
             }
@@ -132,18 +133,18 @@ export class LogService extends Logger {
      * @param accountId An optional string to represent the account associated with the authenticated user.
      */
     setUserProperties(userId: string, accountId?: string): void {
-        for (const loggerProvider of this._loggerProviders) {
+        for (const loggerProvider of this.loggerProviders) {
             if (!loggerProvider.setUserProperties) {
                 continue;
             }
 
-            const rule = this._rulesByProvider[loggerProvider.name];
+            const rule = this.rulesByProvider[loggerProvider.name];
             if (rule && rule.userId === false) {
                 continue;
             }
 
             loggerProvider.setUserProperties(userId, accountId);
-            this._userIdsByProvider[loggerProvider.name] = true;
+            this.userIdsByProvider[loggerProvider.name] = true;
         }
     }
 
@@ -151,18 +152,18 @@ export class LogService extends Logger {
      * Clears the authenticated user id and the account id from the user context.
      */
     clearUserProperties(): void {
-        for (const loggerProvider of this._loggerProviders) {
+        for (const loggerProvider of this.loggerProviders) {
             if (!loggerProvider.clearUserProperties) {
                 continue;
             }
 
-            const rule = this._rulesByProvider[loggerProvider.name];
-            if (rule && rule.userId === false && !this._userIdsByProvider[loggerProvider.name]) {
+            const rule = this.rulesByProvider[loggerProvider.name];
+            if (rule && rule.userId === false && !this.userIdsByProvider[loggerProvider.name]) {
                 continue;
             }
 
             loggerProvider.clearUserProperties();
-            this._userIdsByProvider[loggerProvider.name] = false;
+            this.userIdsByProvider[loggerProvider.name] = false;
         }
     }
 
@@ -177,8 +178,8 @@ export class LogService extends Logger {
             return;
         }
 
-        for (const loggerProvider of this._loggerProviders) {
-            const rule = this._rulesByProvider[loggerProvider.name];
+        for (const loggerProvider of this.loggerProviders) {
+            const rule = this.rulesByProvider[loggerProvider.name];
             if (rule && rule.minLevel != null && logLevel < rule.minLevel) {
                 continue;
             }
@@ -192,8 +193,8 @@ export class LogService extends Logger {
      * @param name A string that idenfities this item, unique within the HTML document. Default to document title.
      */
     startTrackPage(name?: string): void {
-        for (const loggerProvider of this._loggerProviders) {
-            const rule = this._rulesByProvider[loggerProvider.name];
+        for (const loggerProvider of this.loggerProviders) {
+            const rule = this.rulesByProvider[loggerProvider.name];
             if (rule && rule.pageView === false) {
                 continue;
             }
@@ -208,8 +209,8 @@ export class LogService extends Logger {
      * @param pageViewInfo Additional data for page view.
      */
     stopTrackPage(name?: string, pageViewInfo?: PageViewTimingInfo): void {
-        for (const loggerProvider of this._loggerProviders) {
-            const rule = this._rulesByProvider[loggerProvider.name];
+        for (const loggerProvider of this.loggerProviders) {
+            const rule = this.rulesByProvider[loggerProvider.name];
             if (rule && rule.pageView === false) {
                 continue;
             }
@@ -223,8 +224,8 @@ export class LogService extends Logger {
      * @param pageViewInfo Data for page view.
      */
     trackPageView(pageViewInfo?: PageViewInfo): void {
-        for (const loggerProvider of this._loggerProviders) {
-            const rule = this._rulesByProvider[loggerProvider.name];
+        for (const loggerProvider of this.loggerProviders) {
+            const rule = this.rulesByProvider[loggerProvider.name];
             if (rule && rule.pageView === false) {
                 continue;
             }
@@ -238,11 +239,12 @@ export class LogService extends Logger {
      * @param name A string that identifies this event uniquely within the HTML document.
      */
     startTrackEvent(name: string): void {
-        for (const loggerProvider of this._loggerProviders) {
-            const rule = this._rulesByProvider[loggerProvider.name];
+        for (const loggerProvider of this.loggerProviders) {
+            const rule = this.rulesByProvider[loggerProvider.name];
             if (rule && rule.event) {
                 const evtOptions = rule.event;
-                const foundDisabled = Object.keys(evtOptions).find(key => key === name && evtOptions[key] === false) != null;
+                const foundDisabled =
+                    Object.keys(evtOptions).find((key) => key === name && evtOptions[key] === false) != null;
 
                 if (foundDisabled) {
                     continue;
@@ -259,11 +261,12 @@ export class LogService extends Logger {
      * @param eventInfo Additional data for event.
      */
     stopTrackEvent(name: string, eventInfo?: EventTimingInfo): void {
-        for (const loggerProvider of this._loggerProviders) {
-            const rule = this._rulesByProvider[loggerProvider.name];
+        for (const loggerProvider of this.loggerProviders) {
+            const rule = this.rulesByProvider[loggerProvider.name];
             if (rule && rule.event) {
                 const evtOptions = rule.event;
-                const foundDisabled = Object.keys(evtOptions).find(key => key === name && evtOptions[key] === false) != null;
+                const foundDisabled =
+                    Object.keys(evtOptions).find((key) => key === name && evtOptions[key] === false) != null;
 
                 if (foundDisabled) {
                     continue;
@@ -279,12 +282,13 @@ export class LogService extends Logger {
      * @param eventInfo Data for event.
      */
     trackEvent(eventInfo: EventInfo): void {
-        for (const loggerProvider of this._loggerProviders) {
-            const rule = this._rulesByProvider[loggerProvider.name];
+        for (const loggerProvider of this.loggerProviders) {
+            const rule = this.rulesByProvider[loggerProvider.name];
             if (rule && rule.event) {
                 const evtOptions = rule.event;
                 const name = eventInfo.name;
-                const foundDisabled = Object.keys(evtOptions).find(key => key === name && evtOptions[key] === false) != null;
+                const foundDisabled =
+                    Object.keys(evtOptions).find((key) => key === name && evtOptions[key] === false) != null;
 
                 if (foundDisabled) {
                     continue;
@@ -299,7 +303,7 @@ export class LogService extends Logger {
      * Flushes to send or log data immediately.
      */
     flush(): void {
-        for (const loggerProvider of this._loggerProviders) {
+        for (const loggerProvider of this.loggerProviders) {
             loggerProvider.flush();
         }
     }
@@ -315,11 +319,11 @@ export class LogService extends Logger {
     }
 
     private selectRule(providerName: string, category?: string): SelectedRule | undefined {
-        if (!this._loggerFilterOptions) {
+        if (!this.loggerFilterOptions) {
             return undefined;
         }
 
-        const options = this._loggerFilterOptions;
+        const options = this.loggerFilterOptions;
 
         let userId = options.userId;
         let minLevel = options.minLevel;
@@ -365,7 +369,12 @@ export class LogService extends Logger {
         };
     }
 
-    private isBetter(rule: LoggerFilterRule, current?: LoggerFilterRule, providerName?: string, category?: string): boolean {
+    private isBetter(
+        rule: LoggerFilterRule,
+        current?: LoggerFilterRule,
+        providerName?: string,
+        category?: string
+    ): boolean {
         if (rule.providerName && rule.providerName !== providerName) {
             return false;
         }
@@ -375,7 +384,10 @@ export class LogService extends Logger {
             const prefix = categoryParts[0];
             const suffix = categoryParts.length > 1 ? categoryParts[1] : '';
 
-            if (!category.toLowerCase().startsWith(prefix.toLowerCase()) || !category.toLowerCase().endsWith(suffix.toLowerCase())) {
+            if (
+                !category.toLowerCase().startsWith(prefix.toLowerCase()) ||
+                !category.toLowerCase().endsWith(suffix.toLowerCase())
+            ) {
                 return false;
             }
         }
@@ -442,10 +454,7 @@ export class LogService extends Logger {
         return hasError ? { rules: [] } : options;
     }
 
-    private parseSections(
-        options: LoggerFilterOptions,
-        config: LoggerSection,
-        providerName?: string): boolean {
+    private parseSections(options: LoggerFilterOptions, config: LoggerSection, providerName?: string): boolean {
         let hasError = false;
 
         if (config.userId != null) {
@@ -501,75 +510,81 @@ export class LogService extends Logger {
         return !hasError;
     }
 
-    private parseLogLevelSection(options: LoggerFilterOptions, section: LogLevelSection, providerName?: string): boolean {
+    private parseLogLevelSection(
+        options: LoggerFilterOptions,
+        section: LogLevelSection,
+        providerName?: string
+    ): boolean {
         let hasError = false;
 
-        Object.keys(section)
-            .forEach(key => {
-                if (key.split('*').length > 2) {
-                    this.logInvalidCategoryWildcardError();
-                    hasError = true;
+        Object.keys(section).forEach((key) => {
+            if (key.split('*').length > 2) {
+                this.logInvalidCategoryWildcardError();
+                hasError = true;
 
-                    return;
-                }
+                return;
+            }
 
-                let logLevel: LogLevel | undefined;
-                const value = section[key];
+            let logLevel: LogLevel | undefined;
+            const value = section[key];
 
-                if (typeof value === 'string') {
-                    logLevel = this.toLogLevel(value);
-                    if (logLevel == null) {
-                        hasError = true;
-                    }
-                } else {
-                    this.logInvalidLoggingConfigError(value, 'logLevel');
+            if (typeof value === 'string') {
+                logLevel = this.toLogLevel(value);
+                if (logLevel == null) {
                     hasError = true;
                 }
+            } else {
+                this.logInvalidLoggingConfigError(value, 'logLevel');
+                hasError = true;
+            }
 
-                if (logLevel != null) {
-                    const rule: LoggerFilterRule = { logLevel, providerName };
-                    if (key.toLowerCase() !== 'default') {
-                        rule.categoryName = key;
-                    }
-
-                    options.rules.push(rule);
+            if (logLevel != null) {
+                const rule: LoggerFilterRule = { logLevel, providerName };
+                if (key.toLowerCase() !== 'default') {
+                    rule.categoryName = key;
                 }
-            });
+
+                options.rules.push(rule);
+            }
+        });
 
         return !hasError;
     }
 
-    private parsePageViewSection(options: LoggerFilterOptions, section: PageViewSection, providerName?: string): boolean {
+    private parsePageViewSection(
+        options: LoggerFilterOptions,
+        section: PageViewSection,
+        providerName?: string
+    ): boolean {
         let hasError = false;
 
-        Object.keys(section)
-            .forEach(key => {
-                if (key.split('*').length > 2) {
-                    this.logInvalidCategoryWildcardError();
-                    hasError = true;
+        Object.keys(section).forEach((key) => {
+            if (key.split('*').length > 2) {
+                this.logInvalidCategoryWildcardError();
+                hasError = true;
 
-                    return;
+                return;
+            }
+
+            let pageView: boolean | undefined;
+            const value = section[key];
+
+            if (typeof value === 'boolean') {
+                pageView = value;
+            } else {
+                this.logInvalidLoggingConfigError(value, 'pageView');
+                hasError = true;
+            }
+
+            if (pageView != null) {
+                const rule: LoggerFilterRule = { pageView, providerName };
+                if (key.toLowerCase() !== 'default') {
+                    rule.categoryName = key;
                 }
 
-                let pageView: boolean | undefined;
-                const value = section[key];
-
-                if (typeof value === 'boolean') {
-                    pageView = value;
-                } else {
-                    this.logInvalidLoggingConfigError(value, 'pageView');
-                    hasError = true;
-                }
-
-                if (pageView != null) {
-                    const rule: LoggerFilterRule = { pageView, providerName };
-                    if (key.toLowerCase() !== 'default') {
-                        rule.categoryName = key;
-                    }
-
-                    options.rules.push(rule);
-                }
-            });
+                options.rules.push(rule);
+            }
+        });
 
         return !hasError;
     }
@@ -577,8 +592,9 @@ export class LogService extends Logger {
     private parseEventSection(
         options: LoggerFilterOptions,
         section: EventSection | { [name: string]: boolean },
-        providerName?: string): boolean {
-        const isEventObject = Object.keys(section).find(key => typeof section[key] === 'boolean') != null;
+        providerName?: string
+    ): boolean {
+        const isEventObject = Object.keys(section).find((key) => typeof section[key] === 'boolean') != null;
         if (isEventObject) {
             const event = section as { [name: string]: boolean };
             const rule: LoggerFilterRule = { event, providerName };
@@ -589,34 +605,33 @@ export class LogService extends Logger {
 
         let hasError = false;
 
-        Object.keys(section)
-            .forEach(key => {
-                if (key.split('*').length > 2) {
-                    this.logInvalidCategoryWildcardError();
-                    hasError = true;
+        Object.keys(section).forEach((key) => {
+            if (key.split('*').length > 2) {
+                this.logInvalidCategoryWildcardError();
+                hasError = true;
 
-                    return;
+                return;
+            }
+
+            let event: { [name: string]: boolean } | undefined;
+            const value = section[key];
+
+            if (typeof value === 'object') {
+                event = value;
+            } else {
+                this.logInvalidLoggingConfigError(JSON.stringify(value), 'event');
+                hasError = true;
+            }
+
+            if (event != null) {
+                const rule: LoggerFilterRule = { event, providerName };
+                if (key.toLowerCase() !== 'default') {
+                    rule.categoryName = key;
                 }
 
-                let event: { [name: string]: boolean } | undefined;
-                const value = section[key];
-
-                if (typeof value === 'object') {
-                    event = value;
-                } else {
-                    this.logInvalidLoggingConfigError(value, 'event');
-                    hasError = true;
-                }
-
-                if (event != null) {
-                    const rule: LoggerFilterRule = { event, providerName };
-                    if (key.toLowerCase() !== 'default') {
-                        rule.categoryName = key;
-                    }
-
-                    options.rules.push(rule);
-                }
-            });
+                options.rules.push(rule);
+            }
+        });
 
         return !hasError;
     }
@@ -655,7 +670,7 @@ export class LogService extends Logger {
     }
 
     // tslint:disable-next-line: ban-types
-    private logInvalidLoggingConfigError(value: string | number | Object, propName: string): void {
+    private logInvalidLoggingConfigError(value: string, propName: string): void {
         console.error(`Invalid logging configuration, ${propName} value '${value}' is not supported.`);
     }
 

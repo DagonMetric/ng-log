@@ -38,7 +38,14 @@ export interface LogConfigBase {
 }
 
 export interface LogConfig extends LogConfigBase {
-    [name: string]: LoggerSection | LogLevelSection | EventSection | PageViewSection | LogLevelString | boolean | undefined;
+    [name: string]:
+        | LoggerSection
+        | LogLevelSection
+        | EventSection
+        | PageViewSection
+        | LogLevelString
+        | boolean
+        | undefined;
 }
 
 export const LOG_CONFIG = new InjectionToken<LogConfig>('LogConfig');
