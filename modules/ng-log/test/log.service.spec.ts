@@ -1699,7 +1699,8 @@ describe('DefaultLogger', () => {
         };
 
         logger.trackEvent(props);
-        expect(loggerInformation.logger.trackEvent).toHaveBeenCalledWith(props);
+
+        void expect(loggerInformation.logger.trackEvent).toHaveBeenCalledWith(props);
     });
 
     it("should not call registered loggers's 'trackEvent' method if disabled", () => {
@@ -1714,9 +1715,8 @@ describe('DefaultLogger', () => {
 
         logger.trackEvent({ name: 'event1' });
 
-        // tslint:disable: no-unsafe-any no-any
-        expect((loggerInformation.logger.trackEvent as any).calls.any()).toEqual(false);
-        // tslint:enable: no-unsafe-any no-any
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        void expect((loggerInformation.logger.trackEvent as any).calls.any()).toEqual(false);
     });
 
     it("should call registered loggers's 'flush' method", () => {
@@ -1724,13 +1724,15 @@ describe('DefaultLogger', () => {
         spyOn(loggerInformation.logger, 'flush');
 
         logger.flush();
-        expect(loggerInformation.logger.flush).toHaveBeenCalled();
+
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        void expect(loggerInformation.logger.flush).toHaveBeenCalled();
     });
 
     it("should return empty 'loggerInformations' array if it is null", () => {
-        // tslint:disable-next-line: no-any
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         logger.loggerInformations = (null as unknown) as any;
 
-        expect(Array.isArray(logger.loggerInformations)).toBeTruthy();
+        void expect(Array.isArray(logger.loggerInformations)).toBeTruthy();
     });
 });
