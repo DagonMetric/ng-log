@@ -17,11 +17,10 @@ import { LogConfig, LogService } from '@dagonmetric/ng-log';
 @NgModule()
 export class LogConfigModule {
     constructor(configService: ConfigService, logService: LogService) {
-        configService.loadEvent
-            .subscribe(evt => {
-                if (evt.status === 'loaded' && evt.data.logging) {
-                    logService.setConfig(evt.data.logging as LogConfig);
-                }
-            });
+        configService.ensureInitialized().subscribe(() => {
+            // TODO: To review
+            const logConfig = configService.getValue('logging');
+            logService.setConfig(logConfig as LogConfig);
+        });
     }
 }
