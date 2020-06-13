@@ -528,14 +528,12 @@ describe('LogService', () => {
             logService.setConfig({
                 logLevel: {
                     // Invalid log level
-                    // tslint:disable-next-line: no-any
                     default: 'important' as any
                 }
             });
             logService.setConfig({
                 logLevel: {
                     // Invalid log level
-                    // tslint:disable-next-line: no-any
                     test: 100 as any
                 }
             });
@@ -546,7 +544,6 @@ describe('LogService', () => {
                     }
                 },
                 debug: {
-                    // tslint:disable-next-line: no-any
                     logLevel: 'important' as any
                 },
                 test: {
@@ -653,11 +650,9 @@ describe('LogService', () => {
                 }
             });
             logService.setConfig({
-                // tslint:disable-next-line: no-any
                 pageView: 'info' as any
             });
             logService.setConfig({
-                // tslint:disable-next-line: no-any
                 pageView: 0 as any
             });
             logService.setConfig({
@@ -671,7 +666,6 @@ describe('LogService', () => {
                 },
                 test: {
                     pageView: {
-                        // tslint:disable-next-line: no-any
                         default: 0 as any
                     }
                 }
@@ -799,7 +793,6 @@ describe('LogService', () => {
             });
             logService.setConfig({
                 // Invalid event value
-                // tslint:disable-next-line: no-any
                 event: 'info' as any
             });
             logService.setConfig({
@@ -814,7 +807,6 @@ describe('LogService', () => {
                 mock: {
                     event: {
                         // Invalid event value
-                        // tslint:disable-next-line: no-any
                         test: 'info' as any
                     }
                 },
@@ -907,7 +899,6 @@ describe('LogService', () => {
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             void expect((loggerProvider.setUserProperties as any).calls.any()).toEqual(false);
-            // tslint:enable: no-unsafe-any no-any
         });
     });
 
@@ -1063,9 +1054,8 @@ describe('LogService', () => {
                 minLevel: 'warn'
             });
             logService.log(LogLevel.Info, 'This message does not log.');
-            // tslint:disable: no-unsafe-any no-any
-            expect((loggerProvider.log as any).calls.any()).toEqual(false);
-            // tslint:enable: no-unsafe-any no-any
+
+            void expect((loggerProvider.log as any).calls.any()).toEqual(false);
         });
     });
 
@@ -1090,7 +1080,8 @@ describe('LogService', () => {
 
             const name = 'page1';
             logService.startTrackPage(name);
-            expect(loggerProvider.startTrackPage).toHaveBeenCalledWith(name);
+
+            void expect(loggerProvider.startTrackPage).toHaveBeenCalledWith(name);
         });
 
         it("should not call registered logger provider's 'startTrackPage' method if disabled", () => {
@@ -1115,9 +1106,8 @@ describe('LogService', () => {
                 pageView: false
             });
             logService.startTrackPage('page1');
-            // tslint:disable: no-unsafe-any no-any
-            expect((loggerProvider.startTrackPage as any).calls.any()).toEqual(false);
-            // tslint:enable: no-unsafe-any no-any
+
+            void expect((loggerProvider.startTrackPage as any).calls.any()).toEqual(false);
         });
     });
 
@@ -1143,7 +1133,8 @@ describe('LogService', () => {
             const name = 'page1';
             const pageViewInfo = { uri: '/page1' };
             logService.stopTrackPage(name, pageViewInfo);
-            expect(loggerProvider.stopTrackPage).toHaveBeenCalledWith(name, pageViewInfo);
+
+            void expect(loggerProvider.stopTrackPage).toHaveBeenCalledWith(name, pageViewInfo);
         });
 
         it("should not call registered logger provider's 'stopTrackPage' method if disabled", () => {
@@ -1168,9 +1159,8 @@ describe('LogService', () => {
                 pageView: false
             });
             logService.stopTrackPage('page1');
-            // tslint:disable: no-unsafe-any no-any
-            expect((loggerProvider.stopTrackPage as any).calls.any()).toEqual(false);
-            // tslint:enable: no-unsafe-any no-any
+
+            void expect((loggerProvider.stopTrackPage as any).calls.any()).toEqual(false);
         });
     });
 
@@ -1195,7 +1185,8 @@ describe('LogService', () => {
 
             const pageViewInfo = { name: 'page1', uri: '/page1' };
             logService.trackPageView(pageViewInfo);
-            expect(loggerProvider.trackPageView).toHaveBeenCalledWith(pageViewInfo);
+
+            void expect(loggerProvider.trackPageView).toHaveBeenCalledWith(pageViewInfo);
         });
 
         it("should not call registered logger provider's 'trackPageView' method if disabled", () => {
@@ -1220,9 +1211,8 @@ describe('LogService', () => {
                 pageView: false
             });
             logService.trackPageView({ name: 'page1', uri: '/page1' });
-            // tslint:disable: no-unsafe-any no-any
-            expect((loggerProvider.trackPageView as any).calls.any()).toEqual(false);
-            // tslint:enable: no-unsafe-any no-any
+
+            void expect((loggerProvider.trackPageView as any).calls.any()).toEqual(false);
         });
     });
 
@@ -1247,7 +1237,8 @@ describe('LogService', () => {
 
             const name = 'event1';
             logService.startTrackEvent(name);
-            expect(loggerProvider.startTrackEvent).toHaveBeenCalledWith(name);
+
+            void expect(loggerProvider.startTrackEvent).toHaveBeenCalledWith(name);
 
             logService.setConfig({
                 event: {
@@ -1255,7 +1246,8 @@ describe('LogService', () => {
                 }
             });
             logService.startTrackEvent(name);
-            expect(loggerProvider.startTrackEvent).toHaveBeenCalledWith(name);
+
+            void expect(loggerProvider.startTrackEvent).toHaveBeenCalledWith(name);
         });
 
         it("should not call registered logger provider's 'startTrackEvent' method if disabled", () => {
@@ -1283,9 +1275,8 @@ describe('LogService', () => {
             });
 
             logService.startTrackEvent('event1');
-            // tslint:disable: no-unsafe-any no-any
-            expect((loggerProvider.startTrackEvent as any).calls.any()).toEqual(false);
-            // tslint:enable: no-unsafe-any no-any
+
+            void expect((loggerProvider.startTrackEvent as any).calls.any()).toEqual(false);
         });
     });
 
@@ -1311,7 +1302,8 @@ describe('LogService', () => {
             const name = 'event1';
             const eventInfo = { properties: { prop1: 'value1' } };
             logService.stopTrackEvent(name, eventInfo);
-            expect(loggerProvider.stopTrackEvent).toHaveBeenCalledWith(name, eventInfo);
+
+            void expect(loggerProvider.stopTrackEvent).toHaveBeenCalledWith(name, eventInfo);
 
             logService.setConfig({
                 event: {
@@ -1319,7 +1311,8 @@ describe('LogService', () => {
                 }
             });
             logService.stopTrackEvent(name, eventInfo);
-            expect(loggerProvider.stopTrackEvent).toHaveBeenCalledWith(name, eventInfo);
+
+            void expect(loggerProvider.stopTrackEvent).toHaveBeenCalledWith(name, eventInfo);
         });
 
         it("should not call registered logger provider's 'stopTrackEvent' method if disabled", () => {
@@ -1346,9 +1339,8 @@ describe('LogService', () => {
                 }
             });
             logService.stopTrackEvent('event1');
-            // tslint:disable: no-unsafe-any no-any
-            expect((loggerProvider.stopTrackEvent as any).calls.any()).toEqual(false);
-            // tslint:enable: no-unsafe-any no-any
+
+            void expect((loggerProvider.stopTrackEvent as any).calls.any()).toEqual(false);
         });
     });
 
@@ -1373,7 +1365,8 @@ describe('LogService', () => {
 
             const eventInfo = { name: 'event1', eventCategory: 'test' };
             logService.trackEvent(eventInfo);
-            expect(loggerProvider.trackEvent).toHaveBeenCalledWith(eventInfo);
+
+            void expect(loggerProvider.trackEvent).toHaveBeenCalledWith(eventInfo);
 
             logService.setConfig({
                 event: {
@@ -1381,7 +1374,8 @@ describe('LogService', () => {
                 }
             });
             logService.trackEvent(eventInfo);
-            expect(loggerProvider.trackEvent).toHaveBeenCalledWith(eventInfo);
+
+            void expect(loggerProvider.trackEvent).toHaveBeenCalledWith(eventInfo);
         });
 
         it("should not call registered logger provider's 'trackEvent' method if disabled", () => {
@@ -1408,9 +1402,8 @@ describe('LogService', () => {
                 }
             });
             logService.trackEvent({ name: 'event1' });
-            // tslint:disable: no-unsafe-any no-any
-            expect((loggerProvider.trackEvent as any).calls.any()).toEqual(false);
-            // tslint:enable: no-unsafe-any no-any
+
+            void expect((loggerProvider.trackEvent as any).calls.any()).toEqual(false);
         });
     });
 
@@ -1434,7 +1427,8 @@ describe('LogService', () => {
             spyOn(loggerProvider, 'flush');
 
             logService.flush();
-            expect(loggerProvider.flush).toHaveBeenCalled();
+
+            void expect(loggerProvider.flush).toHaveBeenCalled();
         });
     });
 });
@@ -1475,25 +1469,25 @@ describe('DefaultLogger', () => {
         spyOn(loggerInformation.logger, 'log');
 
         logger.log(LogLevel.Trace, msg, params);
-        expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Trace, msg, params);
+        void expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Trace, msg, params);
 
         logger.log(LogLevel.Debug, msg, params);
-        expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Debug, msg, params);
+        void expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Debug, msg, params);
 
         logger.log(LogLevel.Info, msg, params);
-        expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Info, msg, params);
+        void expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Info, msg, params);
 
         logger.log(LogLevel.Warn, msg, params);
-        expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Warn, msg, params);
+        void expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Warn, msg, params);
 
         logger.log(LogLevel.Error, msg, params);
-        expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Error, msg, params);
+        void expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Error, msg, params);
 
         logger.log(LogLevel.Critical, msg, params);
         expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Critical, msg, params);
 
         logger.log(LogLevel.None, msg, params);
-        expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.None, msg, params);
+        void expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.None, msg, params);
 
         logService.setConfig({
             logLevel: {
@@ -1501,7 +1495,7 @@ describe('DefaultLogger', () => {
             }
         });
         logger.log(LogLevel.Info, msg, params);
-        expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Info, msg, params);
+        void expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Info, msg, params);
 
         logService.setConfig({
             mock: {
@@ -1509,7 +1503,7 @@ describe('DefaultLogger', () => {
             }
         });
         logger.log(LogLevel.Warn, msg, params);
-        expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Warn, msg, params);
+        void expect(loggerInformation.logger.log).toHaveBeenCalledWith(LogLevel.Warn, msg, params);
     });
 
     it("should not call registered logger's 'log' method if not enabled", () => {
@@ -1537,9 +1531,7 @@ describe('DefaultLogger', () => {
         });
         logger.log(LogLevel.Debug, 'This is a message.');
 
-        // tslint:disable: no-unsafe-any no-any
-        expect((loggerInformation.logger.log as any).calls.any()).toEqual(false);
-        // tslint:enable: no-unsafe-any no-any
+        void expect((loggerInformation.logger.log as any).calls.any()).toEqual(false);
     });
 
     it("should call registered loggers's 'startTrackPage' method", () => {
@@ -1549,7 +1541,8 @@ describe('DefaultLogger', () => {
         const pageName = 'home';
 
         logger.startTrackPage(pageName);
-        expect(loggerInformation.logger.startTrackPage).toHaveBeenCalledWith(pageName);
+
+        void expect(loggerInformation.logger.startTrackPage).toHaveBeenCalledWith(pageName);
     });
 
     it("should not call registered loggers's 'startTrackPage' method if disabled", () => {
@@ -1562,9 +1555,7 @@ describe('DefaultLogger', () => {
 
         logger.startTrackPage('home');
 
-        // tslint:disable: no-unsafe-any no-any
-        expect((loggerInformation.logger.startTrackPage as any).calls.any()).toEqual(false);
-        // tslint:enable: no-unsafe-any no-any
+        void expect((loggerInformation.logger.startTrackPage as any).calls.any()).toEqual(false);
     });
 
     it("should call registered loggers's 'stopTrackPage' method", () => {
@@ -1579,7 +1570,8 @@ describe('DefaultLogger', () => {
 
         logger.startTrackPage(pageName);
         logger.stopTrackPage(pageName, props);
-        expect(loggerInformation.logger.stopTrackPage).toHaveBeenCalledWith(pageName, props);
+
+        void expect(loggerInformation.logger.stopTrackPage).toHaveBeenCalledWith(pageName, props);
     });
 
     it("should not call registered loggers's 'stopTrackPage' method if disabled", () => {
@@ -1593,9 +1585,7 @@ describe('DefaultLogger', () => {
         logger.startTrackPage('home');
         logger.stopTrackPage('home');
 
-        // tslint:disable: no-unsafe-any no-any
-        expect((loggerInformation.logger.stopTrackPage as any).calls.any()).toEqual(false);
-        // tslint:enable: no-unsafe-any no-any
+        void expect((loggerInformation.logger.stopTrackPage as any).calls.any()).toEqual(false);
     });
 
     it("should call registered loggers's 'trackPageView' method", () => {
@@ -1609,7 +1599,8 @@ describe('DefaultLogger', () => {
         };
 
         logger.trackPageView(props);
-        expect(loggerInformation.logger.trackPageView).toHaveBeenCalledWith(props);
+
+        void expect(loggerInformation.logger.trackPageView).toHaveBeenCalledWith(props);
     });
 
     it("should not call registered loggers's 'trackPageView' method if disabled", () => {
@@ -1625,9 +1616,7 @@ describe('DefaultLogger', () => {
             uri: '/home'
         });
 
-        // tslint:disable: no-unsafe-any no-any
-        expect((loggerInformation.logger.trackPageView as any).calls.any()).toEqual(false);
-        // tslint:enable: no-unsafe-any no-any
+        void expect((loggerInformation.logger.trackPageView as any).calls.any()).toEqual(false);
     });
 
     it("should call registered loggers's 'startTrackEvent' method", () => {
@@ -1638,7 +1627,8 @@ describe('DefaultLogger', () => {
         const eventName = 'event1';
 
         logger.startTrackEvent(eventName);
-        expect(loggerInformation.logger.startTrackEvent).toHaveBeenCalledWith(eventName);
+
+        void expect(loggerInformation.logger.startTrackEvent).toHaveBeenCalledWith(eventName);
     });
 
     it("should not call registered loggers's 'startTrackEvent' method if disabled", () => {
@@ -1652,9 +1642,8 @@ describe('DefaultLogger', () => {
         spyOn(loggerInformation.logger, 'startTrackEvent');
 
         logger.startTrackEvent('event1');
-        // tslint:disable: no-unsafe-any no-any
-        expect((loggerInformation.logger.startTrackEvent as any).calls.any()).toEqual(false);
-        // tslint:enable: no-unsafe-any no-any
+
+        void expect((loggerInformation.logger.startTrackEvent as any).calls.any()).toEqual(false);
     });
 
     it("should call registered loggers's 'stopTrackEvent' method", () => {
@@ -1667,7 +1656,8 @@ describe('DefaultLogger', () => {
 
         logger.startTrackEvent(eventName);
         logger.stopTrackEvent(eventName, eventInfo);
-        expect(loggerInformation.logger.stopTrackEvent).toHaveBeenCalledWith(eventName, eventInfo);
+
+        void expect(loggerInformation.logger.stopTrackEvent).toHaveBeenCalledWith(eventName, eventInfo);
     });
 
     it("should not call registered loggers's 'stopTrackEvent' method if disabled", () => {
@@ -1683,9 +1673,7 @@ describe('DefaultLogger', () => {
         logger.startTrackEvent('event1');
         logger.stopTrackEvent('event1');
 
-        // tslint:disable: no-unsafe-any no-any
-        expect((loggerInformation.logger.stopTrackEvent as any).calls.any()).toEqual(false);
-        // tslint:enable: no-unsafe-any no-any
+        void expect((loggerInformation.logger.stopTrackEvent as any).calls.any()).toEqual(false);
     });
 
     it("should call registered loggers's 'trackEvent' method", () => {
@@ -1725,12 +1713,10 @@ describe('DefaultLogger', () => {
 
         logger.flush();
 
-        // eslint-disable-next-line @typescript-eslint/unbound-method
         void expect(loggerInformation.logger.flush).toHaveBeenCalled();
     });
 
     it("should return empty 'loggerInformations' array if it is null", () => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         logger.loggerInformations = (null as unknown) as any;
 
         void expect(Array.isArray(logger.loggerInformations)).toBeTruthy();
