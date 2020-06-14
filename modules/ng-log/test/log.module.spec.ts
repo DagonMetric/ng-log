@@ -1,5 +1,3 @@
-// tslint:disable: no-floating-promises
-
 import { TestBed } from '@angular/core/testing';
 
 import { LOG_CONFIG, LogConfig } from '../src/log-config';
