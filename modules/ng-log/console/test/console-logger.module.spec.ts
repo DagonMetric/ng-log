@@ -12,10 +12,9 @@ describe('ConsoleLoggerModule', () => {
             imports: [ConsoleLoggerModule]
         });
 
-        const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER);
+        const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
 
-        expect(loggerProviders).toBeDefined();
-        expect((loggerProviders as LoggerProvider[])[0] instanceof ConsoleLoggerProvider).toBeTruthy();
+        void expect(loggerProviders[0] instanceof ConsoleLoggerProvider).toBeTruthy();
     });
 
     describe('withOptions', () => {
@@ -30,8 +29,7 @@ describe('ConsoleLoggerModule', () => {
 
             const options = TestBed.get<ConsoleLoggerOptions>(CONSOLE_LOGGER_OPTIONS) as ConsoleLoggerOptions;
 
-            expect(options).toBeDefined();
-            expect(options.enableDebug).toBeTruthy();
+            void expect(options.enableDebug).toBeTruthy();
         });
     });
 });
