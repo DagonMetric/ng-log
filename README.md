@@ -111,8 +111,6 @@ export class AppComponent implements OnInit {
 
 * [ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console) - Console logging implementation for `Logger`
 
-* [ng-log-config](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config) - `LogConfigModule` for loading logging configuration with `ConfigService`
-
 ## Integrations
 
 * [ng-log-applicationinsights](https://github.com/DagonMetric/ng-log-applicationinsights) - Microsoft Azure Application Insights implementation for `Logger`
