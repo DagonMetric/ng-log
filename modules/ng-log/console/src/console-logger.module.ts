@@ -30,7 +30,7 @@ export class ConsoleLoggerModule {
      * Call this method to provide options for configuring the `ConsoleLoggerProvider`.
      * @param options An option object for `ConsoleLoggerProvider`.
      */
-    static withOptions(options: ConsoleLoggerOptions): ModuleWithProviders {
+    static withOptions(options: ConsoleLoggerOptions): ModuleWithProviders<ConsoleLoggerModule> {
         return {
             ngModule: ConsoleLoggerModule,
             providers: [
