@@ -14,9 +14,7 @@
   "scripts": {
     "ng": "ng",
     "ngb": "ngb",
-    "lint": "eslint -c .eslintrc.json --ext .js,.ts .",
-    "build": "ngb build --env.prod",
-    "test": "ng test"
+    "build": "ngb build --env.prod"
   },
   "dependencies": {
     "@angular/common": "^9.1.11",
