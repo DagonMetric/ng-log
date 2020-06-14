@@ -24,7 +24,7 @@
 
     "baseUrl": ".",
     "rootDir": ".",
-    "outDir": "./dist/out-tsc",
+    "outDir": "./out-tsc",
 
     "paths": {
       "@dagonmetric/ng-log": ["./modules/ng-log"]
