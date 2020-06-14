@@ -897,6 +897,7 @@ describe('LogService', () => {
 
             logService.setUserProperties(userId, accountId);
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
             void expect((loggerProvider.setUserProperties as any).calls.any()).toEqual(false);
         });
     });
@@ -997,6 +998,7 @@ describe('LogService', () => {
 
             logService.clearUserProperties();
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
             void expect((loggerProvider.clearUserProperties as any).calls.any()).toEqual(false);
         });
     });
@@ -1053,6 +1055,7 @@ describe('LogService', () => {
             });
             logService.log(LogLevel.Info, 'This message does not log.');
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
             void expect((loggerProvider.log as any).calls.any()).toEqual(false);
         });
     });
@@ -1105,6 +1108,7 @@ describe('LogService', () => {
             });
             logService.startTrackPage('page1');
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
             void expect((loggerProvider.startTrackPage as any).calls.any()).toEqual(false);
         });
     });
@@ -1158,6 +1162,7 @@ describe('LogService', () => {
             });
             logService.stopTrackPage('page1');
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
             void expect((loggerProvider.stopTrackPage as any).calls.any()).toEqual(false);
         });
     });
@@ -1210,6 +1215,7 @@ describe('LogService', () => {
             });
             logService.trackPageView({ name: 'page1', uri: '/page1' });
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
             void expect((loggerProvider.trackPageView as any).calls.any()).toEqual(false);
         });
     });
@@ -1274,6 +1280,7 @@ describe('LogService', () => {
 
             logService.startTrackEvent('event1');
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
             void expect((loggerProvider.startTrackEvent as any).calls.any()).toEqual(false);
         });
     });
@@ -1338,6 +1345,7 @@ describe('LogService', () => {
             });
             logService.stopTrackEvent('event1');
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
             void expect((loggerProvider.stopTrackEvent as any).calls.any()).toEqual(false);
         });
     });
@@ -1401,6 +1409,7 @@ describe('LogService', () => {
             });
             logService.trackEvent({ name: 'event1' });
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
             void expect((loggerProvider.trackEvent as any).calls.any()).toEqual(false);
         });
     });
@@ -1529,6 +1538,7 @@ describe('DefaultLogger', () => {
         });
         logger.log(LogLevel.Debug, 'This is a message.');
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
         void expect((loggerInformation.logger.log as any).calls.any()).toEqual(false);
     });
 
@@ -1553,6 +1563,7 @@ describe('DefaultLogger', () => {
 
         logger.startTrackPage('home');
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
         void expect((loggerInformation.logger.startTrackPage as any).calls.any()).toEqual(false);
     });
 
@@ -1583,6 +1594,7 @@ describe('DefaultLogger', () => {
         logger.startTrackPage('home');
         logger.stopTrackPage('home');
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
         void expect((loggerInformation.logger.stopTrackPage as any).calls.any()).toEqual(false);
     });
 
@@ -1614,6 +1626,7 @@ describe('DefaultLogger', () => {
             uri: '/home'
         });
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
         void expect((loggerInformation.logger.trackPageView as any).calls.any()).toEqual(false);
     });
 
@@ -1641,6 +1654,7 @@ describe('DefaultLogger', () => {
 
         logger.startTrackEvent('event1');
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
         void expect((loggerInformation.logger.startTrackEvent as any).calls.any()).toEqual(false);
     });
 
@@ -1671,6 +1685,7 @@ describe('DefaultLogger', () => {
         logger.startTrackEvent('event1');
         logger.stopTrackEvent('event1');
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
         void expect((loggerInformation.logger.stopTrackEvent as any).calls.any()).toEqual(false);
     });
 
@@ -1701,6 +1716,7 @@ describe('DefaultLogger', () => {
 
         logger.trackEvent({ name: 'event1' });
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
         void expect((loggerInformation.logger.trackEvent as any).calls.any()).toEqual(false);
     });
 

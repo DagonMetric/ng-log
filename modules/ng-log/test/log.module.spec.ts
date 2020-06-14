@@ -9,14 +9,12 @@ import { LogService } from '../src/log.service';
 describe('LogModule', () => {
     it("should provide 'LogService' instance", () => {
         TestBed.configureTestingModule({
-            imports: [
-                LogModule
-            ]
+            imports: [LogModule]
         });
 
-        const logService = TestBed.get<LogService>(LogService);
+        const logService = TestBed.inject<LogService>(LogService);
 
-        expect(logService).toBeDefined();
+        void expect(logService).toBeDefined();
     });
 
     describe('withConfig', () => {
@@ -29,10 +27,9 @@ describe('LogModule', () => {
                 ]
             });
 
-            const config = TestBed.get<LogConfig>(LOG_CONFIG);
+            const config = TestBed.inject<LogConfig>(LOG_CONFIG);
 
-            expect(config).toBeDefined();
-            expect((config as LogConfig).minLevel).toBe('info');
+            void expect(config.minLevel).toBe('info');
         });
     });
 });
