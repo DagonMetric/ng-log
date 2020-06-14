@@ -13,16 +13,13 @@
 
     "baseUrl": ".",
     "rootDir": ".",
-    "outDir": "../../dist/packages/ng-log",
-
-    "paths": {
-      "@angular/core": [ "../../node_modules/@angular/core" ]
-    }
+    "outDir": "../../dist/packages/ng-log"
   },
   "files": [
     "public_api.ts"
   ],
   "angularCompilerOptions": {
+    "enableIvy": false,
     "annotateForClosureCompiler": true,
     "strictMetadataEmit": true,
     "skipTemplateCodegen": true,
