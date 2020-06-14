@@ -3,7 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "../",
-    "outDir": "../../../dist/packages/ng-log"
+    "outDir": "../../../dist/packages/ng-log",
+
+    "paths": {
+      "@dagonmetric/ng-log": [ "../../../dist/packages/ng-log" ]
+    }
   },
   "files": [
     "public_api.ts"
