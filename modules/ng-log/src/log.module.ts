@@ -22,7 +22,7 @@ export class LogModule {
      * Call this method to provide options for configuring the `LogService`.
      * @param options An option object for `LogService`.
      */
-    static withConfig(config: LogConfig): ModuleWithProviders {
+    static withConfig(config: LogConfig): ModuleWithProviders<LogModule> {
         return {
             ngModule: LogModule,
             providers: [
