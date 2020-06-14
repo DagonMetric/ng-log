@@ -6,8 +6,6 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /**
  * The page view timing telemetry info interface.
  */
@@ -23,7 +21,7 @@ export interface PageViewTimingInfo {
     /**
      * Additional properties.
      */
-    properties?: { [key: string]: any };
+    properties?: { [key: string]: unknown };
     /**
      * The page's URL.
      */
