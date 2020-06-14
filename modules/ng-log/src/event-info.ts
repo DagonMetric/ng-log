@@ -1,5 +1,3 @@
-// tslint:disable: no-any
-
 /**
  * The event timing telemetry info interface.
  */
