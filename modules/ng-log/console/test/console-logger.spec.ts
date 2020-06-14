@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { LogLevel } from '../../src/log-level';
 
 import { ConsoleLogger } from '../src/console-logger';
@@ -20,6 +22,7 @@ describe('ConsoleLogger', () => {
         };
 
         logger.trace(msg, params);
+
         expect(console.trace).toHaveBeenCalledWith(msg, params);
     });
 
@@ -34,6 +37,7 @@ describe('ConsoleLogger', () => {
         };
 
         logger.debug(msg, params);
+
         expect(console.debug).toHaveBeenCalledWith(msg, params);
     });
 
@@ -48,6 +52,7 @@ describe('ConsoleLogger', () => {
         };
 
         logger.info(msg, params);
+
         expect(console.info).toHaveBeenCalledWith(msg, params);
     });
 
@@ -62,6 +67,7 @@ describe('ConsoleLogger', () => {
         };
 
         logger.warn(msg, params);
+
         expect(console.warn).toHaveBeenCalledWith(msg, params);
     });
 
@@ -76,6 +82,7 @@ describe('ConsoleLogger', () => {
         };
 
         logger.error(msg, params);
+
         expect(console.error).toHaveBeenCalledWith(msg, params);
     });
 
@@ -90,6 +97,7 @@ describe('ConsoleLogger', () => {
         };
 
         logger.error(err, params);
+
         expect(console.error).toHaveBeenCalledWith(err, params);
     });
 
@@ -104,6 +112,7 @@ describe('ConsoleLogger', () => {
         };
 
         logger.fatal(msg, params);
+
         expect(console.error).toHaveBeenCalledWith(msg, params);
     });
 
@@ -118,6 +127,7 @@ describe('ConsoleLogger', () => {
         };
 
         logger.fatal(err, params);
+
         expect(console.error).toHaveBeenCalledWith(err, params);
     });
 
@@ -159,13 +169,16 @@ describe('ConsoleLogger', () => {
         logger.log(LogLevel.None, 'This message does not log.', {});
         logger.log(100, 'This message does not log.', {});
 
-        // tslint:disable: no-unsafe-any no-any
-        expect((console.trace as any).calls.any()).toEqual(false);
-        expect((console.debug as any).calls.any()).toEqual(false);
-        expect((console.info as any).calls.any()).toEqual(false);
-        expect((console.warn as any).calls.any()).toEqual(false);
-        expect((console.error as any).calls.any()).toEqual(false);
-        // tslint:enable: no-unsafe-any no-any
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
+        void expect((console.trace as any).calls.any()).toEqual(false);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
+        void expect((console.debug as any).calls.any()).toEqual(false);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
+        void expect((console.info as any).calls.any()).toEqual(false);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
+        void expect((console.warn as any).calls.any()).toEqual(false);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
+        void expect((console.error as any).calls.any()).toEqual(false);
     });
 
     it("should work with 'startTrackPage' and 'stopTrackPage'", () => {
@@ -174,12 +187,13 @@ describe('ConsoleLogger', () => {
         // With properties
         logger.startTrackPage('home');
         logger.stopTrackPage('home', { uri: '/home' });
-        expect(console.log).toHaveBeenCalled();
+        void expect(console.log).toHaveBeenCalled();
 
         // Without properties
         logger.startTrackPage('about');
         logger.stopTrackPage('about');
-        expect(console.log).toHaveBeenCalled();
+
+        void expect(console.log).toHaveBeenCalled();
     });
 
     it("should work with 'trackPageView'", () => {
@@ -187,7 +201,8 @@ describe('ConsoleLogger', () => {
 
         logger.trackPageView({ name: 'home', uri: '/home' });
         logger.trackPageView({ name: 'about' });
-        expect(console.log).toHaveBeenCalled();
+
+        void expect(console.log).toHaveBeenCalled();
     });
 
     it("should log an error when 'startTrackPage' was called more than once for this event without calling stop", () => {
@@ -201,24 +216,12 @@ describe('ConsoleLogger', () => {
         );
     });
 
-    // it("should log an error when calling 'startTrackPage', 'stopTrackPage' or 'trackPageView' if name could not be detected", () => {
-    //     spyOn(console, 'error');
-
-    //     logger.startTrackPage();
-    //     expect(console.error).toHaveBeenCalledWith('Could not detect document title, please provide name parameter.');
-
-    //     logger.stopTrackPage();
-    //     expect(console.error).toHaveBeenCalledWith('Could not detect document title, please provide name parameter.');
-
-    //     logger.trackPageView();
-    //     expect(console.error).toHaveBeenCalledWith('Could not detect document title, please provide name parameter.');
-    // });
-
     it("should log an error when calling 'stopTrackPage' without a corresponding start", () => {
         spyOn(console, 'error');
 
         logger.startTrackPage('home1');
         logger.stopTrackPage('home2');
+
         expect(console.error).toHaveBeenCalledWith(
             "The 'stopTrackPage' was called without a corresponding start, name: home2."
         );
@@ -231,12 +234,14 @@ describe('ConsoleLogger', () => {
         logger.startTrackEvent('event1');
         const eventInfo = { properties: { prop1: 'value1' } };
         logger.stopTrackEvent('event1', eventInfo);
-        expect(console.log).toHaveBeenCalled();
+
+        void expect(console.log).toHaveBeenCalled();
 
         // Without properties
         logger.startTrackEvent('event2');
         logger.stopTrackEvent('event2');
-        expect(console.log).toHaveBeenCalled();
+
+        void expect(console.log).toHaveBeenCalled();
     });
 
     it("should work with 'trackEvent'", () => {
@@ -246,7 +251,8 @@ describe('ConsoleLogger', () => {
             name: 'event1'
         });
         logger.trackEvent({ name: 'event2' });
-        expect(console.log).toHaveBeenCalled();
+
+        void expect(console.log).toHaveBeenCalled();
 
         // Coverage only, do nothing
         logger.flush();
@@ -267,8 +273,8 @@ describe('ConsoleLogger', () => {
 
         logger.flush();
 
-        // tslint:disable-next-line: no-any no-unsafe-any
-        expect((console.log as any).calls.any()).toEqual(false);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
+        void expect((console.log as any).calls.any()).toEqual(false);
     });
 
     it("should log an error when 'startTrackEvent' was called more than once for this event without calling stop", () => {
@@ -277,6 +283,7 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'error');
 
         logger.startTrackEvent('event1');
+
         expect(console.error).toHaveBeenCalledWith(
             "The 'startTrackEvent' was called more than once for this event without calling stop, name: event1."
         );
@@ -287,6 +294,7 @@ describe('ConsoleLogger', () => {
 
         logger.startTrackEvent('event1');
         logger.stopTrackEvent('event2');
+
         expect(console.error).toHaveBeenCalledWith(
             "The 'stopTrackEvent' was called without a corresponding start, name: event2."
         );
