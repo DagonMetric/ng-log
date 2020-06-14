@@ -15,10 +15,8 @@ Vendor-agnostic logging, analytics and telemetry service abstractions and some i
 * Supports both standard logging api (`trace`, `debug`, `info`, `warn`, `error`, `fatal`) and telemetry tracking api (`trackPageView`, `trackEvent`, etc.)
 * Support measuring user timings for events and page views with `startTrackEvent`, `stopTrackEvent`, `startTrackPage` and `stopTrackPage`
 * Extendable and plugable logging providers (see built-in [ConsoleLoggerProvider](https://github.com/DagonMetric/ng-log/blob/master/modules/ng-log/console/src/console-logger-provider.ts) for implementation demo)
-* Flexable logging configuration (similar and same as [Microsoft ASP.NET Core Logging Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?view=aspnetcore-2.2#configuration))
-* Logging configuration can be set by code or with a configuration loader service (see [LogConfigModule](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/config) for detail)
-* Latest versions of Angular are supported
-* Work with Angular Universal (Server Side Rendering - SSR)
+* Flexable logging configuration
+* Latest version of Angular and compatible with server side rendering (SSR / Angular Universal)
 
 ## Getting Started
 
@@ -123,7 +121,7 @@ export class AppComponent implements OnInit {
 
 ## Feedback and Contributing
 
-Check out the [Contributing](https://github.com/DagonMetric/ng-log/blob/master/CONTRIBUTING.md) page to see the best places to log issues and start discussions.
+Check out the [Contributing](https://github.com/DagonMetric/ng-log/blob/master/CONTRIBUTING.md) page.
 
 ## License
 
