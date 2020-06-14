@@ -6,9 +6,8 @@ The `NGMODULE` for setting logging configuration with `ConfigService`.
 
 ### Prerequisite
 
-* @angular/core >= v8.0.0-beta.0
-* @dagonmetric/ng-config >= v2.2.0
-* @dagonmetric/ng-log >= v2.2.0
+* @dagonmetric/ng-config >= v4.0.0
+* @dagonmetric/ng-log >= v3.0.0
 
 ### Module Setup (app.module.ts)
 
@@ -23,9 +22,9 @@ import { LogConfigModule } from '@dagonmetric/ng-log/config';
     // Other module imports
 
     // ng-config modules
-    ConfigModule.init(),
-    HttpConfigLoaderModule.withOptions({
-        endpoint: '/appsettings.json'
+    ConfigModule.configure(),
+    HttpConfigProviderModule.configure({
+        endpoint: '/api/configuration'
     }),
 
     // ng-log modules
