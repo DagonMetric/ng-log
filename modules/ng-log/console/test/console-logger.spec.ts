@@ -1,6 +1,3 @@
-// tslint:disable: no-floating-promises
-// tslint:disable: no-console
-
 import { LogLevel } from '../../src/log-level';
 
 import { ConsoleLogger } from '../src/console-logger';
@@ -199,8 +196,9 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'error');
         logger.startTrackPage('home1');
 
-        expect(console.error)
-            .toHaveBeenCalledWith("The 'startTrackPage' was called more than once for this event without calling stop, name: home1.");
+        expect(console.error).toHaveBeenCalledWith(
+            "The 'startTrackPage' was called more than once for this event without calling stop, name: home1."
+        );
     });
 
     // it("should log an error when calling 'startTrackPage', 'stopTrackPage' or 'trackPageView' if name could not be detected", () => {
@@ -221,7 +219,9 @@ describe('ConsoleLogger', () => {
 
         logger.startTrackPage('home1');
         logger.stopTrackPage('home2');
-        expect(console.error).toHaveBeenCalledWith("The 'stopTrackPage' was called without a corresponding start, name: home2.");
+        expect(console.error).toHaveBeenCalledWith(
+            "The 'stopTrackPage' was called without a corresponding start, name: home2."
+        );
     });
 
     it("should work with 'startTrackEvent' and 'stopTrackEvent'", () => {
@@ -277,8 +277,9 @@ describe('ConsoleLogger', () => {
         spyOn(console, 'error');
 
         logger.startTrackEvent('event1');
-        expect(console.error)
-            .toHaveBeenCalledWith("The 'startTrackEvent' was called more than once for this event without calling stop, name: event1.");
+        expect(console.error).toHaveBeenCalledWith(
+            "The 'startTrackEvent' was called more than once for this event without calling stop, name: event1."
+        );
     });
 
     it("should log an error when calling 'stopTrackEvent' without a corresponding start", () => {
@@ -286,6 +287,8 @@ describe('ConsoleLogger', () => {
 
         logger.startTrackEvent('event1');
         logger.stopTrackEvent('event2');
-        expect(console.error).toHaveBeenCalledWith("The 'stopTrackEvent' was called without a corresponding start, name: event2.");
+        expect(console.error).toHaveBeenCalledWith(
+            "The 'stopTrackEvent' was called without a corresponding start, name: event2."
+        );
     });
 });

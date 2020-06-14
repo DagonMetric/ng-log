@@ -1,5 +1,3 @@
-// tslint:disable: no-floating-promises
-
 import { TestBed } from '@angular/core/testing';
 
 import { LOGGER_PROVIDER, LoggerProvider } from '../../src/logger-provider';
@@ -11,9 +9,7 @@ import { ConsoleLoggerModule } from '../src/console-logger.module';
 describe('ConsoleLoggerModule', () => {
     it("should provide 'ConsoleLoggerProvider'", () => {
         TestBed.configureTestingModule({
-            imports: [
-                ConsoleLoggerModule
-            ]
+            imports: [ConsoleLoggerModule]
         });
 
         const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER);

@@ -1,5 +1,5 @@
-// tslint:disable: no-floating-promises
-// tslint:disable: no-console
+/* eslint-disable @typescript-eslint/unbound-method */
+/* eslint-disable no-console */
 
 import { TestBed } from '@angular/core/testing';
 
@@ -22,18 +22,17 @@ describe('ConsoleLoggerProvider', () => {
             ]
         });
 
-        loggerProvider = TestBed.get<ConsoleLoggerProvider>(ConsoleLoggerProvider) as ConsoleLoggerProvider;
+        loggerProvider = TestBed.inject<ConsoleLoggerProvider>(ConsoleLoggerProvider);
     });
 
     it('should be created', () => {
-        expect(loggerProvider).toBeDefined();
-        expect(loggerProvider.name).toBe('console');
+        void expect(loggerProvider.name).toBe('console');
     });
 
     it("should create a new 'ConsoleLogger' instance with 'createLogger' method", () => {
         const logger = loggerProvider.createLogger('test');
-        expect(logger instanceof ConsoleLogger).toBeTruthy();
-        expect((logger as ConsoleLogger).name).toBe('test');
+
+        void expect((logger as ConsoleLogger).name).toBe('test');
     });
 
     it("should log a message when calling 'destroyLogger' method", () => {
@@ -41,6 +40,7 @@ describe('ConsoleLoggerProvider', () => {
 
         const category = 'test';
         loggerProvider.destroyLogger(category);
+
         expect(console.log).toHaveBeenCalledWith(`Destroying logger: ${category}`);
 
         // Coverage only without debug
@@ -93,6 +93,7 @@ describe('ConsoleLoggerProvider', () => {
         spyOn(currentLogger, 'startTrackPage');
 
         loggerProvider.startTrackPage('page1');
+
         expect(currentLogger.startTrackPage).toHaveBeenCalledWith('page1');
     });
 
@@ -147,6 +148,7 @@ describe('ConsoleLoggerProvider', () => {
         spyOn(currentLogger, 'flush');
 
         loggerProvider.flush();
-        expect(currentLogger.flush).toHaveBeenCalled();
+
+        void expect(currentLogger.flush).toHaveBeenCalled();
     });
 });
