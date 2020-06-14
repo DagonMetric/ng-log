@@ -9,18 +9,25 @@
 import { NgModule } from '@angular/core';
 
 import { ConfigService } from '@dagonmetric/ng-config';
-import { LogConfig, LogService } from '@dagonmetric/ng-log';
+import { LOG_CONFIG, LogConfig } from '@dagonmetric/ng-log';
+
+// eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+export function logConfigFactory(configService: ConfigService): LogConfig {
+    const loggingSection = configService.getValue('logging');
+
+    return loggingSection as LogConfig;
+}
 
 /**
  * The `NGMODULE` for setting logging configuration with `ConfigService`.
  */
-@NgModule()
-export class LogConfigModule {
-    constructor(configService: ConfigService, logService: LogService) {
-        configService.ensureInitialized().subscribe(() => {
-            // TODO: To review
-            const logConfig = configService.getValue('logging');
-            logService.setConfig(logConfig as LogConfig);
-        });
-    }
-}
+@NgModule({
+    providers: [
+        {
+            provide: LOG_CONFIG,
+            useFactory: logConfigFactory,
+            deps: [ConfigService]
+        }
+    ]
+})
+export class LogConfigModule {}
