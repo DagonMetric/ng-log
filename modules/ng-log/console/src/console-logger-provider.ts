@@ -25,7 +25,7 @@ import { CONSOLE_LOGGER_OPTIONS, ConsoleLogger, ConsoleLoggerOptions } from './c
  * Logger provider implementation for `ConsoleLogger`.
  */
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'any'
 })
 export class ConsoleLoggerProvider extends Logger implements LoggerProvider {
     private readonly options: ConsoleLoggerOptions;
