@@ -23,7 +23,7 @@ module.exports = (config) => {
             clearContext: false // leave Jasmine Spec Runner output visible in browser
         },
         coverageIstanbulReporter: {
-            dir: require('path').join(__dirname, '../../dist/coverage/ng-log'),
+            dir: require('path').join(__dirname, '../../coverage/ng-log'),
             reports: ['html', 'lcovonly', 'text-summary', 'cobertura'],
             fixWebpackSourcePaths: true,
             thresholds: {
@@ -35,7 +35,7 @@ module.exports = (config) => {
         },
         reporters: ['progress', 'kjhtml'],
         junitReporter: {
-            outputDir: '../../dist/junit/ng-log'
+            outputDir: '../../junit/ng-log'
         },
         port: 9876,
         colors: true,
