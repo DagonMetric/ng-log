@@ -116,7 +116,6 @@ export class LogService extends Logger {
      */
     destroyLogger(category: string): void {
         if (this.loggers[category] != null) {
-            // tslint:disable-next-line: no-dynamic-delete
             delete this.loggers[category];
         }
 
@@ -669,7 +668,6 @@ export class LogService extends Logger {
         }
     }
 
-    // tslint:disable-next-line: ban-types
     private logInvalidLoggingConfigError(value: string, propName: string): void {
         console.error(`Invalid logging configuration, ${propName} value '${value}' is not supported.`);
     }
