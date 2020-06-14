@@ -1,5 +1,3 @@
-// tslint:disable: no-any
-
 /**
  * The log telemetry info interface.
  */
