@@ -34,7 +34,7 @@
           },
           "configurations": {
             "ci": {
-              "browsers": "ChromeHeadless",
+              "browsers": "ChromeHeadlessCI",
               "reporters": ["progress", "junit"],
               "codeCoverage": true,
               "watch": false,
