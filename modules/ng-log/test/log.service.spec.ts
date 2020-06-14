@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable max-classes-per-file */
 
 import { Injectable } from '@angular/core';
@@ -5,7 +6,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { DefaultLogger } from '../src/default-logger';
 import { LOG_CONFIG, LogConfig } from '../src/log-config';
-import { LogLevel } from '../src/log-level';
+import { LogLevel, LogLevelString } from '../src/log-level';
 import { LogService } from '../src/log.service';
 import { Logger } from '../src/logger';
 import { LOGGER_PROVIDER, LoggerProvider } from '../src/logger-provider';
@@ -446,7 +447,7 @@ describe('LogService', () => {
 
             logService.setConfig({
                 // Invalid log level
-                minLevel: 'important' as any
+                minLevel: ('important' as unknown) as undefined
             });
 
             expect(console.error).toHaveBeenCalledWith(
@@ -528,13 +529,13 @@ describe('LogService', () => {
             logService.setConfig({
                 logLevel: {
                     // Invalid log level
-                    default: 'important' as any
+                    default: ('important' as unknown) as LogLevelString
                 }
             });
             logService.setConfig({
                 logLevel: {
                     // Invalid log level
-                    test: 100 as any
+                    test: (100 as unknown) as LogLevelString
                 }
             });
             logService.setConfig({
@@ -544,7 +545,7 @@ describe('LogService', () => {
                     }
                 },
                 debug: {
-                    logLevel: 'important' as any
+                    logLevel: ('important' as unknown) as LogLevelString
                 },
                 test: {
                     logLevel: false
@@ -650,10 +651,10 @@ describe('LogService', () => {
                 }
             });
             logService.setConfig({
-                pageView: 'info' as any
+                pageView: ('info' as unknown) as undefined
             });
             logService.setConfig({
-                pageView: 0 as any
+                pageView: (0 as unknown) as undefined
             });
             logService.setConfig({
                 console: {
@@ -666,7 +667,7 @@ describe('LogService', () => {
                 },
                 test: {
                     pageView: {
-                        default: 0 as any
+                        default: (0 as unknown) as boolean
                     }
                 }
             });
@@ -793,7 +794,7 @@ describe('LogService', () => {
             });
             logService.setConfig({
                 // Invalid event value
-                event: 'info' as any
+                event: ('info' as unknown) as undefined
             });
             logService.setConfig({
                 console: {
@@ -807,7 +808,7 @@ describe('LogService', () => {
                 mock: {
                     event: {
                         // Invalid event value
-                        test: 'info' as any
+                        test: ('info' as unknown) as boolean
                     }
                 },
                 debug: {
@@ -862,7 +863,6 @@ describe('LogService', () => {
             const accountId = 'test_account';
             logService.setUserProperties(userId, accountId);
 
-            // expect(loggerProvider.setUserProperties).toHaveBeenCalledWith(userId, accountId);
             void expect(loggerProvider.setUserProperties).toHaveBeenCalled();
         });
 
@@ -897,7 +897,6 @@ describe('LogService', () => {
 
             logService.setUserProperties(userId, accountId);
 
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             void expect((loggerProvider.setUserProperties as any).calls.any()).toEqual(false);
         });
     });
@@ -998,7 +997,6 @@ describe('LogService', () => {
 
             logService.clearUserProperties();
 
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             void expect((loggerProvider.clearUserProperties as any).calls.any()).toEqual(false);
         });
     });
@@ -1703,7 +1701,6 @@ describe('DefaultLogger', () => {
 
         logger.trackEvent({ name: 'event1' });
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         void expect((loggerInformation.logger.trackEvent as any).calls.any()).toEqual(false);
     });
 
@@ -1714,11 +1711,5 @@ describe('DefaultLogger', () => {
         logger.flush();
 
         void expect(loggerInformation.logger.flush).toHaveBeenCalled();
-    });
-
-    it("should return empty 'loggerInformations' array if it is null", () => {
-        logger.loggerInformations = (null as unknown) as any;
-
-        void expect(Array.isArray(logger.loggerInformations)).toBeTruthy();
     });
 });
