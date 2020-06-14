@@ -27,7 +27,8 @@
     "outDir": "./out-tsc",
 
     "paths": {
-      "@dagonmetric/ng-log": ["./modules/ng-log"]
+      "@dagonmetric/ng-log": ["./modules/ng-log"],
+      "@dagonmetric/ng-log/console": ["./modules/ng-log/console"]
     }
   }
 }

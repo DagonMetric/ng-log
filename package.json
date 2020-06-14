@@ -16,7 +16,9 @@
     "ngb": "ngb",
     "lint": "eslint -c .eslintrc.json --ext .js,.ts .",
     "build": "ngb build --env.prod",
-    "test": "ng test"
+    "test": "ng test",
+    "e2e": "ng e2e",
+    "serve": "ng serve"
   },
   "dependencies": {
     "@angular/common": "^9.1.11",

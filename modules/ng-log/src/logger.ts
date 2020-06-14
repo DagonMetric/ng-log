@@ -90,7 +90,7 @@ export abstract class Logger implements LoggingApi {
      * @param message Error description string or object to log.
      * @param logInfo Optional log telemetry info parameter.
      */
-    fatal(message: string | Error, logInfo: LogInfo): void {
+    fatal(message: string | Error, logInfo?: LogInfo): void {
         this.log(LogLevel.Critical, message, logInfo);
     }
 
