@@ -21,5 +21,3 @@ import { ConsoleLoggerModule } from '@dagonmetric/ng-log/console';
 })
 export class AppModule { }
 ```
-
-For more configuring information, see [ConsoleLoggerModule wiki](https://github.com/DagonMetric/ng-log/wiki/ConsoleLoggerModule).

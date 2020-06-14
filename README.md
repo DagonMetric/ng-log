@@ -107,10 +107,6 @@ export class AppComponent implements OnInit {
 }
 ```
 
-## Documentation
-
-See [ng-log wiki](https://github.com/DagonMetric/ng-log/wiki) for more information.
-
 ## Sub-modules
 
 * [ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console) - Console logging implementation for `Logger`

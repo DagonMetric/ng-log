@@ -35,5 +35,3 @@ import { LogConfigModule } from '@dagonmetric/ng-log/config';
 })
 export class AppModule { }
 ```
-
-For more configuring information, see [LogConfigModule wiki](https://github.com/DagonMetric/ng-log/wiki/LogConfigModule).
