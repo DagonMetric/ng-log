@@ -107,7 +107,7 @@ export class AppComponent implements OnInit {
 }
 ```
 
-Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonmetric/ng-config/tree/master/samples/demo-app?file=src%2Fapp%2Fapp.component.ts)
+Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonmetric/ng-log/tree/master/samples/demo-app?file=src%2Fapp%2Fapp.component.ts)
 
 ## Sub-modules
 
