@@ -54,6 +54,8 @@ import { ConsoleLoggerModule } from '@dagonmetric/ng-log/console';
 export class AppModule { }
 ```
 
+Live edit [app.module.ts in stackblitz](https://stackblitz.com/github/dagonmetric/ng-log/tree/master/samples/demo-app?file=src%2Fapp%2Fapp.module.ts)
+
 ### Usage (app.component.ts)
 
 ```typescript
@@ -105,6 +107,8 @@ export class AppComponent implements OnInit {
 }
 ```
 
+Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonmetric/ng-config/tree/master/samples/demo-app?file=src%2Fapp%2Fapp.component.ts)
+
 ## Sub-modules
 
 * [ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console) - Console logging implementation for `Logger`
@@ -118,6 +122,11 @@ export class AppComponent implements OnInit {
 * [ng-log-firebase-analytics](https://github.com/DagonMetric/ng-log-firebase-analytics) - Firebase Analytics implementation for `Logger`
 
 * [ng-log-facebook-analytics](https://github.com/DagonMetric/ng-log-facebook-analytics) - Facebook Pixel Analytics implementation for `Logger`
+
+## Related Projects
+
+* [ng-config](https://github.com/DagonMetric/ng-config) - The core configuration & options service for Angular applications
+* [ng-cache](https://github.com/DagonMetric/ng-cache) - Caching service for Angular applications
 
 ## Feedback and Contributing
 
