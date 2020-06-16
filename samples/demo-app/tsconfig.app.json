@@ -1,27 +1,14 @@
 {
-  "compileOnSave": false,
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es2015",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "importHelpers": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "baseUrl": "./",
-    "outDir": "./out-tsc"
+    "outDir": "./out-tsc/demo-app",
+    "types": []
   },
-  "angularCompilerOptions": {
-    "enableIvy": true,
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
 }
