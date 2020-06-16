@@ -38,7 +38,7 @@
     "@angular/language-service": "^9.1.11",
     "@angular/platform-browser": "^9.1.11",
     "@angular/platform-browser-dynamic": "^9.1.11",
-    "@dagonmetric/angular-build": "^9.1.0",
+    "@dagonmetric/angular-build": "^9.1.1",
     "@types/cors": "^2.8.6",
     "@types/jasmine": "^3.5.10",
     "@types/jasminewd2": "^2.0.8",
