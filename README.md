@@ -3,7 +3,7 @@
 [![GitHub Actions Status](https://github.com/DagonMetric/ng-log/workflows/Main%20Workflow/badge.svg)](https://github.com/DagonMetric/ng-log/actions)
 [![Azure Pipelines Status](https://dev.azure.com/DagonMetric/ng-log/_apis/build/status/DagonMetric.ng-log?branchName=master)](https://dev.azure.com/DagonMetric/ng-log/_build?definitionId=10)
 [![codecov](https://codecov.io/gh/DagonMetric/ng-log/branch/master/graph/badge.svg)](https://codecov.io/gh/DagonMetric/ng-log)
-[![npm version](https://img.shields.io/npm/v/@dagonmetric/ng-log.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log)
+[![npm version](https://badge.fury.io/js/%40dagonmetric%2Fng-log.svg)](https://www.npmjs.com/package/@dagonmetric/ng-log)
 [![Gitter](https://badges.gitter.im/DagonMetric/general.svg)](https://gitter.im/DagonMetric/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Vendor-agnostic logging, analytics and telemetry service abstractions and some implementations for Angular applications.
