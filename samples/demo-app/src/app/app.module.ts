@@ -19,7 +19,9 @@ import { AppComponent } from './app.component';
         LogModule.withConfig({
             minLevel: 'debug'
         }),
-        ConsoleLoggerModule
+        ConsoleLoggerModule.withOptions({
+            enableDebug: true
+        })
     ],
     bootstrap: [AppComponent]
 })

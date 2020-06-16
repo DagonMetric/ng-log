@@ -21,11 +21,11 @@ export class AppComponent implements OnInit, OnDestroy {
         this.logger.trace('Testing trace');
         this.logger.debug('Testing debug');
         this.logger.info('Testing info');
-        this.logger.warn('Testing warn');
+        // this.logger.warn('Testing warn');
 
         // Track exceptions
-        this.logger.error(new Error('Testing error'));
-        this.logger.fatal(new Error('Testing critical'));
+        // this.logger.error(new Error('Testing error'));
+        // this.logger.fatal(new Error('Testing critical'));
 
         // Track page view
         this.logger.trackPageView({
