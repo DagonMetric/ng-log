@@ -11,7 +11,7 @@ describe('workspace-project App', () => {
     it('should display title', () => {
         void page.navigateTo();
 
-        void expect(page.getTitleText()).toEqual('NG-LOG DEMO');
+        void expect(page.getTitleText()).toEqual('NG-LOG Demo');
     });
 
     afterEach(async () => {
