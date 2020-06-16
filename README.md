@@ -109,6 +109,10 @@ export class AppComponent implements OnInit {
 
 Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonmetric/ng-log/tree/master/samples/demo-app?file=src%2Fapp%2Fapp.component.ts)
 
+## Samples
+
+* Demo app [view source](https://github.com/DagonMetric/ng-log/tree/master/samples/demo-app) / [live edit in stackblitz](https://stackblitz.com/github/dagonmetric/ng-log/tree/master/samples/demo-app)
+
 ## Sub-modules
 
 * [ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console) - Console logging implementation for `Logger`
