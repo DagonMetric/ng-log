@@ -125,7 +125,7 @@ Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonme
 
 ## Related Projects
 
-* [ng-config](https://github.com/DagonMetric/ng-config) - The core configuration & options service for Angular applications
+* [ng-config](https://github.com/DagonMetric/ng-config) - The configuration & options service for Angular applications
 * [ng-cache](https://github.com/DagonMetric/ng-cache) - Caching service for Angular applications
 
 ## Feedback and Contributing
