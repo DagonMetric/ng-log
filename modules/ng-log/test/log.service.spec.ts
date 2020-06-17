@@ -343,7 +343,7 @@ describe('LogService', () => {
             });
 
             const logService = TestBed.inject<LogService>(LogService);
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
 
             spyOn(loggerProvider, 'destroyLogger');
@@ -467,7 +467,7 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
             const logger = logService.createLogger('ng-log-test') as DefaultLogger;
 
             logService.setConfig({
@@ -516,7 +516,7 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
 
             spyOn(console, 'error');
 
@@ -585,7 +585,7 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
             const logger = logService.createLogger('test') as DefaultLogger;
 
             logService.setConfig({
@@ -641,7 +641,7 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
 
             spyOn(console, 'error');
 
@@ -705,7 +705,7 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
             const logger = logService.createLogger('test') as DefaultLogger;
 
             // event object
@@ -780,7 +780,7 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
+            const logService = TestBed.inject<LogService>(LogService);
 
             spyOn(console, 'error');
 
@@ -853,8 +853,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
 
             spyOn(loggerProvider, 'setUserProperties');
@@ -883,8 +883,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
             logService.setConfig({
                 userId: false
@@ -920,8 +920,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
 
             const userId = 'test_user';
@@ -952,8 +952,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
 
             const userId = 'test_user';
@@ -987,8 +987,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[1] as MockLoggerProvider2;
             logService.setConfig({
                 userId: false
@@ -1016,8 +1016,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'log');
@@ -1043,8 +1043,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'log');
@@ -1073,8 +1073,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'startTrackPage');
@@ -1097,8 +1097,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'startTrackPage');
@@ -1126,8 +1126,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'stopTrackPage');
@@ -1151,8 +1151,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'stopTrackPage');
@@ -1180,8 +1180,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'trackPageView');
@@ -1204,8 +1204,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'trackPageView');
@@ -1233,8 +1233,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'startTrackEvent');
@@ -1266,8 +1266,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'startTrackEvent');
@@ -1298,8 +1298,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'stopTrackEvent');
@@ -1332,8 +1332,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'stopTrackEvent');
@@ -1363,8 +1363,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'trackEvent');
@@ -1396,8 +1396,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'trackEvent');
@@ -1427,8 +1427,8 @@ describe('LogService', () => {
                 ]
             });
 
-            const logService = TestBed.get<LogService>(LogService) as LogService;
-            const loggerProviders = TestBed.get<LoggerProvider[]>(LOGGER_PROVIDER) as LoggerProvider[];
+            const logService = TestBed.inject<LogService>(LogService);
+            const loggerProviders = TestBed.inject<LoggerProvider[]>(LOGGER_PROVIDER);
             const loggerProvider = loggerProviders[0];
 
             spyOn(loggerProvider, 'flush');
@@ -1456,7 +1456,7 @@ describe('DefaultLogger', () => {
             ]
         });
 
-        logService = TestBed.get<LogService>(LogService) as LogService;
+        logService = TestBed.inject<LogService>(LogService);
         logger = logService.createLogger('test') as DefaultLogger;
     });
 

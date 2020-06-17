@@ -27,7 +27,7 @@ describe('ConsoleLoggerModule', () => {
                 ]
             });
 
-            const options = TestBed.get<ConsoleLoggerOptions>(CONSOLE_LOGGER_OPTIONS) as ConsoleLoggerOptions;
+            const options = TestBed.inject<ConsoleLoggerOptions>(CONSOLE_LOGGER_OPTIONS);
 
             void expect(options.enableDebug).toBeTruthy();
         });
