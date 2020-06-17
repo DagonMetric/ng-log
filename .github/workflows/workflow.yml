@@ -27,7 +27,7 @@ jobs:
     - uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage/ng-config/lcov.info
+        file: ./coverage/ng-log/lcov.info
         flags: unit
         # fail_ci_if_error: true #optional (default = false)
       env:
