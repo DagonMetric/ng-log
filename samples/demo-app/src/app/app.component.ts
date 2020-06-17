@@ -13,7 +13,7 @@ export class AppComponent implements OnDestroy {
 
     constructor(private readonly logService: LogService) {
         // Create a child logger named 'AppComponent'
-        this.logger = this.logService.createLogger('app-logger');
+        this.logger = this.logService.createLogger('app');
     }
 
     logTrace(): void {
@@ -59,6 +59,6 @@ export class AppComponent implements OnDestroy {
 
     ngOnDestroy(): void {
         // Destroy child logger
-        this.logService.destroyLogger(AppComponent.name);
+        this.logService.destroyLogger('app');
     }
 }
