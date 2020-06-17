@@ -2,5 +2,94 @@
     <h1>NG-LOG Demo</h1>
 </header>
 <main>
-    <p>Please see Console output.</p>
+    <p>
+        See output in Console.
+    </p>
+    <section>
+        <div class="title">
+            <code>
+                logger.trace()
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="logTrace()">Log trace</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="title">
+            <code>
+                logger.debug()
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="logDebug()">Log debug</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="title">
+            <code>
+                logger.info()
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="logInfo()">Log info</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="title">
+            <code>
+                logger.warn()
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="logWarn()">Log warn</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="title">
+            <code>
+                logger.error()
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="logError()">Log error</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="title">
+            <code>
+                logger.fatal()
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="logFatal()">Log fatal</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="title">
+            <code>
+                logger.trackPageView()
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="trackPageView()">Track page view</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="title">
+            <code>
+                logger.trackEvent()
+            </code>
+        </div>
+        <div class="action-buttons">
+            <button type="button" (click)="trackEvent()">Track custom event</button>
+        </div>
+    </section>
 </main>
