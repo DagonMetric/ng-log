@@ -68,27 +68,27 @@ import { LogService } from '@dagonmetric/ng-log';
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
-  constructor(private readonly _logService: LogService) { }
+  constructor(private readonly logService: LogService) { }
 
   ngOnInit(): void {
     // Track traces
-    this._logService.trace('Testing trace');
-    this._logService.debug('Testing debug');
-    this._logService.info('Testing info');
-    this._logService.warn('Testing warn');
+    this.logService.trace('Testing trace');
+    this.logService.debug('Testing debug');
+    this.logService.info('Testing info');
+    this.logService.warn('Testing warn');
 
     // Track exceptions
-    this._logService.error(new Error('Testing error'));
-    this._logService.fatal(new Error('Testing critical'));
+    this.logService.error(new Error('Testing error'));
+    this.logService.fatal(new Error('Testing critical'));
 
     // Track page view
-    this._logService.trackPageView({
+    this.logService.trackPageView({
       name: 'My Angular App',
       uri: '/home'
     });
 
     // Track custom event
-    this._logService.trackEvent({
+    this.logService.trackEvent({
       name: 'video_auto_play_start',
       properties: {
         non_interaction: true
@@ -96,13 +96,13 @@ export class AppComponent implements OnInit {
     });
 
     // Create child logger with category name
-    const childLogger = this._logService.createLogger('component1');
+    const childLogger = this.logService.createLogger('component1');
 
     // Log with child logger
     childLogger.info('Testing info');
 
     // Destroy child logger
-    this._logService.destroyLogger('component1');
+    this.logService.destroyLogger('component1');
   }
 }
 ```
@@ -115,21 +115,21 @@ Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonme
 
 ## Sub-modules
 
-* [ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console) - Console logging implementation for `Logger`
+* [ng-log-console](https://github.com/DagonMetric/ng-log/tree/master/modules/ng-log/console) - Console logging implementation for `ng-log`
 
 ## Integrations
 
-* [ng-log-applicationinsights](https://github.com/DagonMetric/ng-log-applicationinsights) - Microsoft Azure Application Insights implementation for `Logger`
+* [ng-log-applicationinsights](https://github.com/DagonMetric/ng-log-applicationinsights) - Microsoft Azure Application Insights implementation for `ng-log`
 
-* [ng-log-gtag](https://github.com/DagonMetric/ng-log-gtag) - Google Analytics Global Site Tag gtag.js implementation for `Logger`
+* [ng-log-gtag](https://github.com/DagonMetric/ng-log-gtag) - Google Analytics Global Site Tag gtag.js implementation for `ng-log`
 
-* [ng-log-firebase-analytics](https://github.com/DagonMetric/ng-log-firebase-analytics) - Firebase Analytics implementation for `Logger`
+* [ng-log-firebase-analytics](https://github.com/DagonMetric/ng-log-firebase-analytics) - Google Firebase Analytics implementation for `ng-log`
 
-* [ng-log-facebook-analytics](https://github.com/DagonMetric/ng-log-facebook-analytics) - Facebook Pixel Analytics implementation for `Logger`
+* [ng-log-facebook-analytics](https://github.com/DagonMetric/ng-log-facebook-analytics) - Facebook Pixel Analytics implementation for `ng-log`
 
 ## Related Projects
 
-* [ng-config](https://github.com/DagonMetric/ng-config) - The configuration & options service for Angular applications
+* [ng-config](https://github.com/DagonMetric/ng-config) - Configuration & options service for Angular applications
 * [ng-cache](https://github.com/DagonMetric/ng-cache) - Caching service for Angular applications
 
 ## Feedback and Contributing
