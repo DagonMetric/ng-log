@@ -38,7 +38,7 @@ interface SelectedRule {
  * Log service implementation.
  */
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'any'
 })
 export class LogService extends Logger {
     private readonly loggerProviders: LoggerProvider[];
