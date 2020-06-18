@@ -54,6 +54,8 @@ import { ConsoleLoggerModule } from '@dagonmetric/ng-log/console';
 export class AppModule { }
 ```
 
+See [log-config.ts](https://github.com/DagonMetric/ng-log/blob/master/modules/ng-log/src/log-config.ts) source file to learn more about options for `LogModule`.
+
 Live edit [app.module.ts in stackblitz](https://stackblitz.com/github/dagonmetric/ng-log/tree/master/samples/demo-app?file=src%2Fapp%2Fapp.module.ts)
 
 ### Usage (app.component.ts)
@@ -120,11 +122,8 @@ Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonme
 ## Integrations
 
 * [ng-log-applicationinsights](https://github.com/DagonMetric/ng-log-applicationinsights) - Microsoft Azure Application Insights implementation for `ng-log`
-
 * [ng-log-gtag](https://github.com/DagonMetric/ng-log-gtag) - Google Analytics Global Site Tag gtag.js implementation for `ng-log`
-
 * [ng-log-firebase-analytics](https://github.com/DagonMetric/ng-log-firebase-analytics) - Google Firebase Analytics implementation for `ng-log`
-
 * [ng-log-facebook-analytics](https://github.com/DagonMetric/ng-log-facebook-analytics) - Facebook Pixel Analytics implementation for `ng-log`
 
 ## Related Projects
