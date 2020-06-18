@@ -112,6 +112,10 @@ button {
 .action-buttons {
     margin-top: $gap-width;
     margin-bottom: $gap-width;
+
+    button + button {
+        margin-left: $gap-width / 2;
+    }
 }
 
 footer {
