@@ -49,5 +49,6 @@
       "packageNames": ["tslib"],
       "automerge": false
     }
-  ]
+  ],
+  "suppressNotifications": ["prIgnoreNotification", "prEditNotification", "onboardingClose"]
 }
