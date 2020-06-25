@@ -4,8 +4,8 @@
   ],
   "timezone": "Asia/Yangon",
   "schedule": [
-    "after 2am and before 7am every weekday",
-    "after 2am and before 7am every weekend"
+    "after 1am and before 7am every weekday",
+    "after 1am and before 7am every weekend"
   ],
   "packageFiles": ["package.json", "samples/demo-app/package.json"],
   "automerge": true,
@@ -43,10 +43,6 @@
     },
     {
       "packageNames": ["typescript"],
-      "automerge": false
-    },
-    {
-      "packageNames": ["tslib"],
       "automerge": false
     }
   ],
