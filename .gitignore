@@ -411,10 +411,10 @@ pids
 *.pid.lock
 
 # Coverage directory used by tools like istanbul
-coverage
+coverage/
 
 # junit outputs
-junit
+junit/
 
 # Optional npm cache directory
 .npm
@@ -446,6 +446,6 @@ chrome-profiler-events*.json
 speed-measure-plugin*.json
 
 # Output Dirs
-/dist
-/out-tsc
-/bazel-out
+dist/
+out-tsc/
+bazel-out/
