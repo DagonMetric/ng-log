@@ -3,66 +3,6 @@
   "version": 1,
   "newProjectRoot": "modules",
   "projects": {
-    "ng-log": {
-      "root": "modules/ng-log",
-      "sourceRoot": "modules/ng-log",
-      "projectType": "library",
-      "architect": {
-        "build": {
-          "builder": "@dagonmetric/angular-build:lib",
-          "options": {
-            "extends": "file:angular-build.json:lib:ng-log",
-            "outputPath": "dist/packages/ng-log"
-          },
-          "configurations": {
-            "production": {
-              "environment": "prod"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "modules/ng-log/test.ts",
-            "tsConfig": "modules/ng-log/tsconfig.test.json",
-            "karmaConfig": "modules/ng-log/karma.conf.js",
-            "codeCoverageExclude": [
-              "**/test.ts",
-              "**/index.ts",
-              "**/public_api.ts"
-            ]
-          },
-          "configurations": {
-            "ci": {
-              "browsers": "ChromeHeadlessCI",
-              "reporters": ["progress", "junit"],
-              "codeCoverage": true,
-              "watch": false,
-              "progress": false
-            }
-          }
-        }
-      }
-    },
-    "ng-log-console": {
-      "root": "modules/ng-log/console",
-      "sourceRoot": "modules/ng-log/console/src",
-      "projectType": "library",
-      "architect": {
-        "build": {
-          "builder": "@dagonmetric/angular-build:lib",
-          "options": {
-            "extends": "file:angular-build.json:lib:ng-log-console",
-            "outputPath": "dist/packages/ng-log"
-          },
-          "configurations": {
-            "production": {
-              "environment": "prod"
-            }
-          }
-        }
-      }
-    },
     "demo-app": {
       "projectType": "application",
       "schematics": {
