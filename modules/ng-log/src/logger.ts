@@ -33,14 +33,6 @@ export interface LoggingApi {
  */
 export abstract class Logger implements LoggingApi {
     /**
-     * Logs message or error with log level.
-     * @param logLevel The log level.
-     * @param message Message string or error object to log.
-     * @param logInfo Optional log telemetry info parameter.
-     */
-    abstract log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void;
-
-    /**
      * Logs that contain the most detailed messages.
      * @param message Message string or error object to log.
      * @param logInfo Optional log telemetry info parameter.
@@ -93,6 +85,14 @@ export abstract class Logger implements LoggingApi {
     fatal(message: string | Error, logInfo?: LogInfo): void {
         this.log(LogLevel.Critical, message, logInfo);
     }
+
+    /**
+     * Logs message or error with log level.
+     * @param logLevel The log level.
+     * @param message Message string or error object to log.
+     * @param logInfo Optional log telemetry info parameter.
+     */
+    abstract log(logLevel: LogLevel, message: string | Error, logInfo?: LogInfo): void;
 
     /**
      * Starts timing how long the user views a page. Calls this when the page opens.

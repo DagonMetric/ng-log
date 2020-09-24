@@ -635,7 +635,7 @@ export class LogService extends Logger {
         return !hasError;
     }
 
-    private toLogLevel(value: string, propName: string = 'logLevel'): LogLevel | undefined {
+    private toLogLevel(value: string, propName = 'logLevel'): LogLevel | undefined {
         switch (value) {
             case 'trace':
             case 'Trace':

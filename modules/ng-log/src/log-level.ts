@@ -6,9 +6,12 @@
  * found under the LICENSE file in the root directory of this source tree.
  */
 
+/* eslint-disable no-shadow */
+
 /**
  * Defines logging severity levels.
  */
+
 export enum LogLevel {
     /**
      * Logs that contain the most detailed messages.
