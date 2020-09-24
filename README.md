@@ -131,6 +131,12 @@ Live edit [app.component.ts in stackblitz](https://stackblitz.com/github/dagonme
 * [ng-config](https://github.com/DagonMetric/ng-config) - Configuration & options service for Angular applications
 * [ng-cache](https://github.com/DagonMetric/ng-cache) - Caching service for Angular applications
 
+## Build & Test Tools
+
+We use [lib-tools](https://github.com/lib-tools/lib-tools) for bundling, testing and packaging our library projects.
+
+[![Lib Tools](https://repository-images.githubusercontent.com/273890506/28038a00-dcea-11ea-8b4a-7d655158ccf2)](https://github.com/lib-tools/lib-tools)
+
 ## Feedback and Contributing
 
 Check out the [Contributing](https://github.com/DagonMetric/ng-log/blob/master/CONTRIBUTING.md) page.
