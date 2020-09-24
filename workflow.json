@@ -1,0 +1,55 @@
+{
+    "$schema": "./node_modules/lib-tools/schemas/schema.json",
+    "projects": {
+      "ng-log": {
+        "root": "modules/ng-log",
+        "tasks": {
+          "build": {
+            "outputPath": "../../dist/packages/ng-log",
+            "script": {
+              "compilations": "auto",
+              "umdId": "ngLog"              
+            }
+          },
+          "test": {
+            "testIndexFile": "test.ts",
+            "tsConfig": "tsconfig.test.json",
+            "envOverrides": {
+              "ci": {
+                "codeCoverageExclude": [
+                  "**/test.ts",
+                  "**/index.ts",
+                  "**/public_api.ts"
+                ],
+                "reporters": [
+                  "junit",
+                  "coverage-istanbul"
+                ],
+                "browsers": [
+                  "ChromeHeadlessCI"
+                ],
+                "singleRun": true
+              }
+            }
+          }
+        }
+      },
+      "ng-log-console": {
+        "root": "modules/ng-log/console",
+        "tasks": {
+          "build": {
+            "outputPath": "../../../dist/packages/ng-log",
+            "copy": [],
+            "script": {
+              "compilations": "auto",
+              "umdId": "ngLog.console",
+              "externals": {
+                "@dagonmetric/ng-log": "ngLog"
+              }
+            }
+          }
+        }
+      }   
+    }
+  }
+  
