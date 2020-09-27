@@ -42,7 +42,7 @@
     "@typescript-eslint/parser": "^4.2.0",
     "eslint": "^7.10.0",
     "eslint-config-prettier": "^6.12.0",
-    "eslint-plugin-jsdoc": "^30.5.2",
+    "eslint-plugin-jsdoc": "^30.6.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jasmine-core": "^3.6.0",
     "lib-tools": "^1.2.2",
