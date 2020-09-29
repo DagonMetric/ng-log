@@ -2,6 +2,7 @@
 
 | Date (UTC) | Version |  |  |
 | :-- | :-- | :--: | :-- |
+| 2020-09-29 | 2.3.1 | [release notes](v2.3.1/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-log/v/2.3.1) | - |
 | 2020-09-25 | 2.3.0 | [release notes](v2.3.0/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-log/v/2.3.0) | - |
 | 2020-06-25 | 2.2.6 | [release notes](v2.2.6/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-log/v/2.2.6) | - |
 | 2020-06-17 | 2.2.5 | [release notes](v2.2.5/README.md)/[npm](https://www.npmjs.com/package/@dagonmetric/ng-log/v/2.2.5) | - |
