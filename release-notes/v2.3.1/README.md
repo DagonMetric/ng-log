@@ -1,6 +1,5 @@
 ## Changes
 
-* Fix warnings - Unable to fully load sourcemap
 * Update package dependencies
 
 npm package are available on:
