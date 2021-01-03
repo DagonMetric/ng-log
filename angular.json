@@ -39,8 +39,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
+              "sourceMap": false,              
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -78,6 +77,38 @@
             },
             "production": {
               "devServerTarget": "demo-app:serve:production"
+            }
+          }
+        }
+      }
+    },
+    "ng-log": {
+      "root": "modules/ng-log",
+      "sourceRoot": "modules/ng-log",
+      "projectType": "library",
+      "architect": {        
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "modules/ng-log/test.ts",
+            "tsConfig": "modules/ng-log/tsconfig.test.json",
+            "karmaConfig": "modules/ng-log/karma.conf.js",
+            "codeCoverageExclude": [
+              "**/test.ts",
+              "**/index.ts",
+              "**/public_api.ts"
+            ]
+          },
+          "configurations": {
+            "ci": {
+              "browsers": "ChromeHeadlessCI",
+              "reporters": [
+                "progress",
+                "junit"
+              ],
+              "codeCoverage": true,
+              "watch": false,
+              "progress": false
             }
           }
         }
