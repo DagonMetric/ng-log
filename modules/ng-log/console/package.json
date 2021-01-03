@@ -3,7 +3,7 @@
   "version": "0.0.0-PLACEHOLDER",
   "sideEffects": false,
   "peerDependencies": {
-    "@angular/core": "^8.0.0-beta.0 || ^9.0.0-rc.0 || ^10.0.0-rc.0",
+    "@angular/core": "^8.0.0-beta.0 || ^9.0.0-rc.0 || ^10.0.0-rc.0 || ^11.0.0-rc.0",
     "@dagonmetric/ng-log": "^0.0.0-PLACEHOLDER",
     "tslib": "^2.0.0"
   }
