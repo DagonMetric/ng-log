@@ -22,16 +22,6 @@
         "^@angular\/.*"
       ],
       "groupName": "angular"
-    },
-    {
-      "packagePatterns": [
-        "^@types\/.*"
-      ],
-      "groupName": "types"
-    },
-    {
-      "packagePatterns": ["^jasmine.*"],
-      "groupName": "jasmine"
     }    
   ],
   "suppressNotifications": ["prIgnoreNotification", "prEditNotification", "onboardingClose"]
