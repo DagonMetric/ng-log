@@ -1,9 +1,63 @@
-resources:
-  repositories:
-    - repository: templates
-      type: github
-      name: DagonMetric/ci-template
-      endpoint: github-dagonmetric-connection
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-stages:
-  - template: azure-pipelines/nodejs/multi-platform-build-stage.yml@templates
+trigger:
+- master
+- refs/tags/v*
+
+jobs:
+  - job: linux
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: UseNode@1
+        inputs:
+          version: '14.x'
+        displayName: 'Use Node 14.x'
+      - script: |
+          npm ci
+        displayName: 'Install dependencies'
+      - script: |
+          npm run lint
+        displayName: 'Run linting'
+      - script: |
+          npm run build
+        displayName: "Run build"
+      - script: |
+          npm run test
+        displayName: "Run test"
+      - bash: |
+          packageName=`node -p "require('./package.json').name.replace(/^@.+\//,'');"`
+          echo "##vso[task.setvariable variable=packageName]$packageName"
+          packageVersion=`node -p "require('./package.json').version;"`
+          echo "##vso[task.setvariable variable=packageVersion]$packageVersion"
+        displayName: 'Set package info variables'
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: 'dist'
+          targetPath: 'dist'
+        displayName: 'Publish build artifacts'
+      - task: PublishTestResults@2
+        inputs:
+          testRunTitle: $(packageName)
+          searchFolder: $(System.DefaultWorkingDirectory)/junit/$(packageName)
+          testResultsFormat: JUnit
+          testResultsFiles: "**/TESTS*.xml"
+        condition: succeededOrFailed()
+        displayName: Publish test results
+      - task: PublishCodeCoverageResults@1
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: coverage/$(packageName)/cobertura-coverage.xml
+          reportDirectory: coverage/$(packageName)
+          failIfCoverageEmpty: true
+        condition: succeededOrFailed()
+        displayName: Publish code coverage results
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: 'release-notes'
+          targetPath: release-notes/v$(packageVersion)
+        condition: and(succeeded(), contains(variables['Build.SourceBranch'], 'refs/tags/'))
+        displayName: 'Publish release notes'
