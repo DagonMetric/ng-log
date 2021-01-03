@@ -23,7 +23,7 @@
                 ],
                 "reporters": [
                   "junit",
-                  "coverage-istanbul"
+                  "coverage"
                 ],
                 "browsers": [
                   "ChromeHeadlessCI"
