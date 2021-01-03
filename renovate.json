@@ -7,7 +7,7 @@
     "after 2am and before 7am every weekday",
     "after 2am and before 7am every weekend"
   ],
-  "packageFiles": ["package.json", "samples/demo-app/package.json", "samples/firebase-functions/package.json"],
+  "packageFiles": ["package.json", "samples/demo-app/package.json"],
   "automerge": true,
   "rangeStrategy": "bump",
   "packageRules": [
