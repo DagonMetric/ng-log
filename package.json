@@ -46,7 +46,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jasmine-core": "^4.1.1",
     "lib-tools": "^2.0.4",
-    "prettier": "^2.2.1",
+    "prettier": "^2.8.8",
     "protractor": "~7.0.0",
     "ts-node": "^10.8.0",
     "tsickle": "^0.39.1",
